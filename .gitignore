@@ -2,3 +2,5 @@
 /node_modules/
 /_cacache/
 /_locks/
+/.cache/
+/dist/
