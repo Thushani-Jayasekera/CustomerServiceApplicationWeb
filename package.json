@@ -2,7 +2,6 @@
   "name": "customer-service-application-web",
   "version": "1.0.0",
   "description": "Customer service application get it done",
-  "main": "index.js",
   "scripts": {
     "dev": "parcel serve index.html",
     "deploy": "parcel build index.html --public-url ./"
