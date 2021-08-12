@@ -1,11 +1,10 @@
 import React from "react";
-
+import Layout from "../components/Layout";
+import TwoColumnWithInput from "../components/hero/TwoColumnWithInput";
 const Home = ()=>{
     return(
         <React.Fragment>
-            <div>
-                <h1>Hello World !!</h1>
-            </div>
+          <TwoColumnWithInput/>
         </React.Fragment>
     )
 }
