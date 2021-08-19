@@ -3,9 +3,9 @@ import Layout from "../components/Layout";
 import TwoColumnWithInput from "../components/hero/TwoColumnWithInput";
 const Home = ()=>{
     return(
-        <React.Fragment>
+        <Layout>
           <TwoColumnWithInput/>
-        </React.Fragment>
+        </Layout>
     )
 }
 export default Home

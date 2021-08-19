@@ -29,7 +29,6 @@ function AnimationReveal({ disabled, children }) {
 
 function AnimatedSlideInComponent({ direction = "left", offset = 30, children }) {
   const [ref, inView] = useInView(30);
-
   const x = { target: "0%" };
 
   if (direction === "left") x.initial = "-150%";
