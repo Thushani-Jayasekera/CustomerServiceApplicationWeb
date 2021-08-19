@@ -1,0 +1,35 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Mutation {
+    addLocation(address: String!, city: String!, postalCode: String!, town: String!): ID!
+    deleteServiceRequester(user_id: ID!): String!
+    loginServiceRequester(password: String!, username: String!): ServiceRequesterUser!
+    registerServiceRequester(address: String!, city: String!, confirmPassword: String!, contactNum: String!, email: String!, password: String!, postalCode: String!, town: String!, username: String!): String!
+    signIn(email: String!, password: String!): String!
+    signUp(email: String!, password: String!, username: String!): String!
+}
+
+type Query {
+    me: User!
+    users: [User!]!
+}
+
+type ServiceRequesterUser {
+    createdAt: String!
+    email: String!
+    id: ID!
+    token: String!
+    username: String!
+}
+
+type User {
+    email: String!
+    id: ID!
+    service_provider: Boolean!
+    username: String!
+}
