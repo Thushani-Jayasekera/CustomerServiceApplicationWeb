@@ -1,5 +1,5 @@
 import React from "react";
-// import AnimationRevealPage from "helpers/AnimationRevealPage.js";
+import AnimationRevealPage from "../components/helpers/AnimationRevealPage";
 import { Container as ContainerBase } from "/components/misc/Layouts";
 import tw from "twin.macro";
 import styled from "styled-components";
@@ -63,7 +63,7 @@ export default ({
                   forgotPasswordUrl = "#",
                   signupUrl = "#",
                 }) => (
-  // <AnimationRevealPage>
+  <AnimationRevealPage>
     <Container>
       <Content>
         <MainContainer>
@@ -100,5 +100,5 @@ export default ({
         </IllustrationContainer>
       </Content>
     </Container>
-  // </AnimationRevealPage>
+    </AnimationRevealPage>
 );
