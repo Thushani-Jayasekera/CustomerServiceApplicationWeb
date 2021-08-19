@@ -55,7 +55,16 @@ export const DesktopNavLinks = tw.nav`
   hidden lg:flex flex-1 justify-between items-center
 `;
 
-export default ({ roundedHeaderButton = false, logoLink, links, className, collapseBreakpointClass = "lg" }) => {
+
+// Check for logged in
+import {useQuery,gql} from "@apollo/client";
+const IS_LOGGED_IN = gql`
+    {
+        isLoggedIn @client
+    }
+`
+// End of logged in check
+export default ({ roundedHeaderButton = false, logoLink, links, className, collapseBreakpointClass = "lg" ,history}) => {
   /*
    * This header component accepts an optionals "links" prop that specifies the links to render in the navbar.
    * This links props should be an array of "NavLinks" components which is exported from this file.
@@ -69,16 +78,35 @@ export default ({ roundedHeaderButton = false, logoLink, links, className, colla
    * changing the defaultLinks variable below below.
    * If you manipulate links here, all the styling on the links is already done for you. If you pass links yourself though, you are responsible for styling the links or use the helper styled components that are defined here (NavLink)
    */
+  const {data,client} = useQuery(IS_LOGGED_IN);
+
   const defaultLinks = [
     <NavLinks key={1}>
       <NavLink href="/#">About</NavLink>
       <NavLink href="/#">Blog</NavLink>
       <NavLink href="/#">Pricing</NavLink>
       <NavLink href="/#">Contact Us</NavLink>
-      <NavLink href="/login" tw="lg:ml-12!">
-        Login
-      </NavLink>
-      <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/signup">Sign Up</PrimaryLink>
+      {
+        data.isLoggedIn ? (
+         <React.Fragment>
+           <NavLink tw="lg:ml-12!" href={"/"} onClick={
+             ()=>{
+               localStorage.removeItem('token');
+               client.resetStore();
+               client.writeData({data:{isLoggedIn:false}});
+             } }>
+             LogOut
+           </NavLink>
+         </React.Fragment>
+        ):(
+          <React.Fragment>
+            <NavLink href="/login" tw="lg:ml-12!">
+              Login
+            </NavLink>
+            <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/signup">Sign Up</PrimaryLink>
+          </React.Fragment>
+        )
+      }
     </NavLinks>
   ];
 

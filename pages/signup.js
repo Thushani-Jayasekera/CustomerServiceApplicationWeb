@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container as ContainerBase } from "../components/misc/Layouts";
 import tw from "twin.macro";
 import styled from "styled-components";
@@ -8,6 +8,8 @@ import illustration from "../images/signup-illustration.svg";
 import {UserPlus as SignUpIcon } from "react-feather";
 import Layout from "../components/Layout";
 
+
+// Styling the components
 const Container = tw(ContainerBase)`min-h-screen bg-primary-900 text-white font-medium flex justify-center -m-8`;
 const Content = tw.div`max-w-screen-xl m-0 sm:mx-20 sm:my-16 bg-white text-gray-900 shadow sm:rounded-lg flex justify-center flex-1`;
 const MainContainer = tw.div`lg:w-1/2 xl:w-5/12 p-6 sm:p-12`;
@@ -50,6 +52,17 @@ const IllustrationImage = styled.div`
   ${props => `background-image: url("${props.imageSrc}");`}
   ${tw`m-12 xl:m-16 w-full max-w-lg bg-contain bg-center bg-no-repeat`}
 `;
+//End of styling
+
+//Start of graphql
+import {useMutation,useApolloClient,gql} from "@apollo/client";
+
+const SIGNUP_USER = gql`
+    mutation SignUpMutation($signUpUsername: String!, $signUpEmail: String!, $signUpPassword: String!){
+        signUp(username: $signUpUsername, email: $signUpEmail, password: $signUpPassword)
+}
+`
+//End of graph ql
 
 export default ({
                   logoLinkUrl = "#",
@@ -59,54 +72,86 @@ export default ({
                   SubmitButtonIcon = SignUpIcon,
                   tosUrl = "#",
                   privacyPolicyUrl = "#",
-                  signInUrl = "/login"
-                }) => (
-  <Layout>
-    <Container>
-      <Content>
-        <MainContainer>
-          {/*<LogoLink href={logoLinkUrl}>*/}
-          {/*  <LogoImage src={logo} />*/}
-          {/*</LogoLink>*/}
-          <MainContent>
-            <Heading>{headingText}</Heading>
-            <FormContainer>
-              <DividerTextContainer>
-                <DividerText>Sign up with your email</DividerText>
-              </DividerTextContainer>
-              <Form>
-                <Input type="email" placeholder="Email" />
-                <Input type="text" placeholder="Username" />
-                <Input type="password" placeholder="Password" />
-                <SubmitButton type="submit">
-                  <SubmitButtonIcon className="icon" />
-                  <span className="text">{submitButtonText}</span>
-                </SubmitButton>
-                <p tw="mt-6 text-xs text-gray-600 text-center">
-                  I agree to abide by get it done's{" "}
-                  <a href={tosUrl} tw="border-b border-gray-500 border-dotted">
-                    Terms of Service
-                  </a>{" "}
-                  and its{" "}
-                  <a href={privacyPolicyUrl} tw="border-b border-gray-500 border-dotted">
-                    Privacy Policy
-                  </a>
-                </p>
+                  signInUrl = "/login",
+                  history
+                }) => {
 
-                <p tw="mt-8 text-sm text-gray-600 text-center">
-                  Already have an account?{" "}
-                  <a href={signInUrl} tw="border-b border-gray-500 border-dotted">
-                    Sign In
-                  </a>
-                </p>
-              </Form>
-            </FormContainer>
-          </MainContent>
-        </MainContainer>
-        <IllustrationContainer>
-          <IllustrationImage imageSrc={illustrationImageSrc} />
-        </IllustrationContainer>
-      </Content>
-    </Container>
-  </Layout>
-);
+  //Hooks
+  const [values,setValues] = useState({});
+  const handleChange = event=>{
+    setValues({
+      ...values,
+      [event.target.name]:event.target.value
+    })
+  };
+  const client = useApolloClient();
+  const [signUp,{loading,error}] = useMutation(SIGNUP_USER,{
+    onCompleted:data => {
+      console.log(data.signUp);
+      localStorage.setItem('token',data.signUp);
+      client.writeData({data:{isLoggedIn:true}})
+      history.push('/');
+    }
+  })
+
+  //End of hooks
+  return(
+    <Layout>
+      <Container>
+        <Content>
+          <MainContainer>
+            {/*<LogoLink href={logoLinkUrl}>*/}
+            {/*  <LogoImage src={logo} />*/}
+            {/*</LogoLink>*/}
+            <MainContent>
+              <Heading>{headingText}</Heading>
+              <FormContainer>
+                <DividerTextContainer>
+                  <DividerText>Sign up with your email</DividerText>
+                </DividerTextContainer>
+                <Form onSubmit={
+                  event=>{
+                    event.preventDefault();
+                    console.log(values);
+                    signUp({
+                      variables:{
+                        ...values
+                      }
+                    })
+                  }
+                }>
+                  <Input type="email" name={"signUpEmail"} placeholder="Email" onChange={handleChange} />
+                  <Input type="text" name={"signUpUsername"} placeholder="Username" onChange={handleChange} />
+                  <Input type="password" name={"signUpPassword"} placeholder="Password" onChange={handleChange} />
+                  <SubmitButton type="submit">
+                    <SubmitButtonIcon className="icon" />
+                    <span className="text">{submitButtonText}</span>
+                  </SubmitButton>
+                  <p tw="mt-6 text-xs text-gray-600 text-center">
+                    I agree to abide by get it done's{" "}
+                    <a href={tosUrl} tw="border-b border-gray-500 border-dotted">
+                      Terms of Service
+                    </a>{" "}
+                    and its{" "}
+                    <a href={privacyPolicyUrl} tw="border-b border-gray-500 border-dotted">
+                      Privacy Policy
+                    </a>
+                  </p>
+
+                  <p tw="mt-8 text-sm text-gray-600 text-center">
+                    Already have an account?{" "}
+                    <a href={signInUrl} tw="border-b border-gray-500 border-dotted">
+                      Sign In
+                    </a>
+                  </p>
+                </Form>
+              </FormContainer>
+            </MainContent>
+          </MainContainer>
+          <IllustrationContainer>
+            <IllustrationImage imageSrc={illustrationImageSrc} />
+          </IllustrationContainer>
+        </Content>
+      </Container>
+    </Layout>
+)};
