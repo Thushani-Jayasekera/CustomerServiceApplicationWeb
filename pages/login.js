@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import { Container as ContainerBase } from "/components/misc/Layouts";
 import tw from "twin.macro";
 import styled from "styled-components";
@@ -55,6 +55,16 @@ const IllustrationImage = styled.div`
   ${tw`m-12 xl:m-16 w-full max-w-sm bg-contain bg-center bg-no-repeat`}
 `;
 
+
+//Graph ql
+import {useMutation,useApolloClient,gql} from "@apollo/client";
+// import { convertTransitionToAnimationOptions } from "framer-motion/types/animation/utils/transitions";
+const SIGNIN_USER = gql`
+    mutation SignInMutation($signInEmail: String!, $signInPassword: String!) {
+        signIn(email: $signInEmail, password: $signInPassword)
+    }
+`
+//end of graph ql
 export default ({
                   logoLinkUrl = "#",
                   illustrationImageSrc = illustration,
@@ -62,45 +72,72 @@ export default ({
                   submitButtonText = "Sign In",
                   SubmitButtonIcon = LoginIcon,
                   forgotPasswordUrl = "#",
-                  signupUrl = "#",
-                }) => (
-    <Layout>
-    <Container>
-      <Content>
-        <MainContainer>
-          <MainContent>
-            <Heading>{headingText}</Heading>
-            <FormContainer>
-              <DividerTextContainer>
-                <DividerText>Or Sign in with your e-mail</DividerText>
-              </DividerTextContainer>
-              <Form>
-                <Input type="email" placeholder="Email" />
-                <Input type="password" placeholder="Password" />
-                <SubmitButton type="submit">
-                  <SubmitButtonIcon className="icon" />
-                  <span className="text">{submitButtonText}</span>
-                </SubmitButton>
-              </Form>
-              <p tw="mt-6 text-xs text-gray-600 text-center">
-                <a href={forgotPasswordUrl} tw="border-b border-gray-500 border-dotted">
-                  Forgot Password ?
-                </a>
-              </p>
-              <p tw="mt-8 text-sm text-gray-600 text-center">
-                Dont have an account?{" "}
-                <a href={signupUrl} tw="border-b border-gray-500 border-dotted">
-                  Sign Up
-                </a>
-              </p>
-            </FormContainer>
-          </MainContent>
-        </MainContainer>
-        <IllustrationContainer>
-          <IllustrationImage imageSrc={illustrationImageSrc} />
-        </IllustrationContainer>
-      </Content>
-    </Container>
-    </Layout>
+                  signupUrl = "/signup",
+                  history
+                }) =>
+{
+  const [values,setValues] = useState({});
+  const handleChange = event=>{
+    setValues({
+      ...values,
+      [event.target.name] :event.target.value
+    })
+  }
+  const client = useApolloClient()
+  const [signIn,{loading,error}] = useMutation(SIGNIN_USER,{
+    onCompleted:(data)=>{
+      console.log(data)
+      localStorage.setItem('token',data.signIn);
+      client.writeData({data:{isLoggedIn:true}});
+      history.push('/')
+    }
+  })
 
-);
+  return(
+      <Layout>
+      <Container>
+        <Content>
+          <MainContainer>
+            <MainContent>
+              <Heading>{headingText}</Heading>
+              <FormContainer>
+                <DividerTextContainer>
+                  <DividerText>Or Sign in with your e-mail</DividerText>
+                </DividerTextContainer>
+                <Form onSubmit={e=>{
+                  e.preventDefault();
+                  console.log(values)
+                  signIn({
+                    variables:{
+                      ...values
+                    }
+                  })
+                }}>
+                  <Input type="email" name="signInEmail" placeholder="Email" onChange={handleChange} />
+                  <Input type="password" name={"signInPassword"}  placeholder="Password" onChange={handleChange} />
+                  <SubmitButton type="submit">
+                    <SubmitButtonIcon className="icon" />
+                    <span className="text">{submitButtonText}</span>
+                  </SubmitButton>
+                </Form>
+                <p tw="mt-6 text-xs text-gray-600 text-center">
+                  <a href={forgotPasswordUrl} tw="border-b border-gray-500 border-dotted">
+                    Forgot Password ?
+                  </a>
+                </p>
+                <p tw="mt-8 text-sm text-gray-600 text-center">
+                  Dont have an account?{" "}
+                  <a href={signupUrl} tw="border-b border-gray-500 border-dotted">
+                    Sign Up
+                  </a>
+                </p>
+              </FormContainer>
+            </MainContent>
+          </MainContainer>
+          <IllustrationContainer>
+            <IllustrationImage imageSrc={illustrationImageSrc} />
+          </IllustrationContainer>
+        </Content>
+      </Container>
+      </Layout>)
+};
