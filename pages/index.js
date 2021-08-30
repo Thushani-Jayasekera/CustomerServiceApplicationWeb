@@ -14,7 +14,7 @@ const Pages = () => {
               <Route exact path="/" component={Home} />
               <Route exact path="/login" component={Login}/>
               <Route exact path="/signup" component={SignUp}/>
-              <Route exact path="/service_provider/register" component={ServiceProviderRegisterPage}/>
+              <LoggedInRoute exact path="/service_provider/register" component={ServiceProviderRegisterPage}/>
               <ServiceProviderRoute exact path={"/service_provider"} component={ServiceProviderProfilePage}/>
               <Route exact path={"/test"} component={Loader}/>
         </Router>

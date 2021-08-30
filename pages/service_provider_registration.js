@@ -49,7 +49,9 @@ const ServiceProviderRegisterPage = ({history})=>{
     return <Loader/>
   }
   if(error){
-    return <p>error</p>
+    return (<div>
+      Error
+    </div>)
   }
   const handleChange = event=>{
     setValues({
