@@ -6,7 +6,7 @@ import styled from "styled-components"
 import { gql, useMutation, useQuery } from "@apollo/client";
 import  Loader from "../components/utils/Loader";
 import {GET_ME} from "../gql/query";
-
+import {MAKE_ME_SERVICE_PROVIDER} from "../gql/mutation";
 // Styling
 const Container = tw.div`relative flex justify-center`;
 const Content = tw.div`max-w-screen-xl m-0 sm:mx-20 sm:my-16 bg-white text-gray-900 shadow sm:rounded-lg flex justify-center flex-1 items-center`;
@@ -35,15 +35,7 @@ const SubmitButton = styled.button`
 // GQL
 
 //
-const MAKE_ME_SERVICE_PROVIDER = gql`
-    mutation Mutation($makeMeServiceProviderNic: String!, $makeMeServiceProviderProfession: String!, $makeMeServiceProviderProvince: String!, $makeMeServiceProviderCity: String!, $makeMeServiceProviderTown: String!, $makeMeServiceProviderBio: String) {
-        makeMeServiceProvider(nic: $makeMeServiceProviderNic, profession: $makeMeServiceProviderProfession, province: $makeMeServiceProviderProvince, city: $makeMeServiceProviderCity, town: $makeMeServiceProviderTown, bio: $makeMeServiceProviderBio) {
-            id
-            bio
-            roles
-        }
-    }
-`
+
 const ServiceProviderRegisterPage = ({history})=>{
   const [values,setValues] = useState({});
   const {loading,error,data} = useQuery(GET_ME);

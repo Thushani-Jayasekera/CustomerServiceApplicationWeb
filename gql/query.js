@@ -16,4 +16,21 @@ const GET_ME = gql`
         }
     }
 `;
-export {IS_LOGGED_IN,GET_ME}
+
+const GET_ME_AS_SERVICE_PROVIDER  = gql`
+    query Query {
+        me {
+            username
+            email
+            nic
+            profession
+            province
+            city
+            town
+            bio
+            service_providing_status
+            roles
+        }
+    }
+`
+export {IS_LOGGED_IN,GET_ME,GET_ME_AS_SERVICE_PROVIDER}

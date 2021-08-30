@@ -41,3 +41,6 @@ type User {
     town: String
     username: String!
 }
+extend type Query {
+    isLoggedIn: Boolean
+}
