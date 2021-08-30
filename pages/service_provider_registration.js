@@ -5,7 +5,7 @@ import tw from "twin.macro";
 import styled from "styled-components"
 import { gql, useMutation, useQuery } from "@apollo/client";
 import  Loader from "../components/utils/Loader";
-
+import {GET_ME} from "../gql/query";
 
 // Styling
 const Container = tw.div`relative flex justify-center`;
@@ -33,14 +33,7 @@ const SubmitButton = styled.button`
 // End of styling
 
 // GQL
-const GET_ME  = gql`
-    query Query {
-        me {
-            username
-            email
-        }
-    }
-`
+
 //
 const MAKE_ME_SERVICE_PROVIDER = gql`
     mutation Mutation($makeMeServiceProviderNic: String!, $makeMeServiceProviderProfession: String!, $makeMeServiceProviderProvince: String!, $makeMeServiceProviderCity: String!, $makeMeServiceProviderTown: String!, $makeMeServiceProviderBio: String) {
@@ -60,8 +53,11 @@ const ServiceProviderRegisterPage = ({history})=>{
       history.push('/')
     }
   })
-  if(loading){
+  if(loading) {
     return <Loader/>
+  }
+  if(error){
+    return <p>error</p>
   }
   const handleChange = event=>{
     setValues({

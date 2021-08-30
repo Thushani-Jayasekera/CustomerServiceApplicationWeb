@@ -1,13 +1,7 @@
 import React from "react";
 import {BrowserRouter as Router , Route , Redirect} from "react-router-dom";
 import { useQuery ,gql} from "@apollo/client";
-
-
-const IS_LOGGED_IN = gql`
-    {
-        isLoggedIn @client
-    }
-`;
+import { IS_LOGGED_IN } from "/gql/query";
 const LoggedInRoute = ({ component: Component, ...rest }) => {
   const { loading, error, data } = useQuery(IS_LOGGED_IN);
   // if the data is loading, display a loading message
