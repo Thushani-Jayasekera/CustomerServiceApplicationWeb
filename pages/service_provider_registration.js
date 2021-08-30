@@ -43,8 +43,8 @@ const GET_ME  = gql`
 `
 //
 const MAKE_ME_SERVICE_PROVIDER = gql`
-    mutation Mutation($makeServiceProviderNic: String!, $makeServiceProviderProfession: String!, $makeServiceProviderProvince: String!, $makeServiceProviderCity: String!, $makeServiceProviderTown: String!) {
-        makeMeServiceProvider(nic: $makeServiceProviderNic, profession: $makeServiceProviderProfession, province: $makeServiceProviderProvince, city: $makeServiceProviderCity, town: $makeServiceProviderTown) {
+    mutation Mutation($makeMeServiceProviderNic: String!, $makeMeServiceProviderProfession: String!, $makeMeServiceProviderProvince: String!, $makeMeServiceProviderCity: String!, $makeMeServiceProviderTown: String!, $makeMeServiceProviderBio: String) {
+        makeMeServiceProvider(nic: $makeMeServiceProviderNic, profession: $makeMeServiceProviderProfession, province: $makeMeServiceProviderProvince, city: $makeMeServiceProviderCity, town: $makeMeServiceProviderTown, bio: $makeMeServiceProviderBio) {
             id
             bio
             roles
@@ -98,28 +98,28 @@ const ServiceProviderRegisterPage = ({history})=>{
               }>
                 <div>
                   <Label>NIC</Label>
-                  <Input type={"text"} name={"makeServiceProviderNic"} placeholder={"NIC"} onChange={handleChange}/>
+                  <Input type={"text"} name={"makeMeServiceProviderNic"} placeholder={"NIC"} onChange={handleChange}/>
                 </div>                <div>
                  <Label>Profession</Label>
-                 <Select  name={"makeServiceProviderProfession"} onChange={handleChange}>
+                 <Select  name={"makeMeServiceProviderProfession"} onChange={handleChange}>
                    <option>Plumber</option>
                    <option>Electrician</option>
                  </Select>
                 </div>
                 <div>
                   <Label>Province</Label>
-                  <Input  name={"makeServiceProviderProvince"} placeholder={"Province"} onChange={handleChange} />
+                  <Input  name={"makeMeServiceProviderProvince"} placeholder={"Province"} onChange={handleChange} />
                 </div>                <div>
                   <Label>City</Label>
-                  <Input  name={"makeServiceProviderCity"} placeholder={"City"} onChange={handleChange} />
+                  <Input  name={"makeMeServiceProviderCity"} placeholder={"City"} onChange={handleChange} />
                 </div>
                 <div>
                   <Label>Town/SubUrb</Label>
-                  <Input  name={"makeServiceProviderTown"} placeholder={"Town"} onChange={handleChange} />
+                  <Input  name={"makeMeServiceProviderTown"} placeholder={"Town"} onChange={handleChange} />
                 </div>
                 <div>
                   <Label>Short Bio</Label>
-                  <TextArea/>
+                  <TextArea name={"makeMeServiceProviderBio"} onChange={handleChange} />
                 </div>
               <SubmitButton>
                 Send request
