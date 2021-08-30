@@ -6,7 +6,7 @@ import Pages from './pages';
 import GlobalStyles from "./styles/GlobalStyles";
 
 //Setting up apollo client
-import {ApolloClient,ApolloProvider,InMemoryCache,createHttpLink} from "@apollo/client";
+import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
 import {setContext} from "apollo-link-context";
 const uri = process.env.API_URI;
 const httpLink = createHttpLink({uri});
@@ -31,7 +31,11 @@ const data = {
 }
 cache.writeData({data});
 client.onResetStore(()=>cache.writeData({data}))
+
+
+//End of query
 const App = () => {
+
     return (
       <ApolloProvider client={client}>
         <GlobalStyles/>
