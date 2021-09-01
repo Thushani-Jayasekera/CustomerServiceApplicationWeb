@@ -6,7 +6,7 @@ import Loader from "./Loader";
 const LoggedInRoute = ({ component: Component, ...rest }) => {
   const { loading, error, data } = useQuery(IS_LOGGED_IN);
   // if the data is loading, display a loading message
-  if (loading) return <Loader/>;
+  if (loading) return <p>Loading</p>;
   // if there is an error fetching the data, display an error message
   return (
     <Route
