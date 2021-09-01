@@ -82,8 +82,10 @@ export default ({ roundedHeaderButton = false, logoLink, links, className, colla
 
   const defaultLinks = [
     <NavLinks key={1}>
-      <NavLink href="/#">Find Service</NavLink>
+
+      <NavLink href="/service_requester/addDetails">Find Service</NavLink>
       <NavLink href="/service_provider/find_jobs">Find Job</NavLink>
+
       <NavLink href="/#">Contact Us</NavLink>
       {
         data.isLoggedIn ? (
