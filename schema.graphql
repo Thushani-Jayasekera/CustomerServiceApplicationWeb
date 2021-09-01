@@ -5,8 +5,36 @@ schema {
     mutation: Mutation
 }
 
+type BudgetRange {
+    lowerLimit: Float!
+    upperLimit: Float!
+}
+
+type JobPosting {
+    budgetRange: BudgetRange
+    category: String!
+    description: String
+    id: ID!
+    location: Location!
+    postedBy: User!
+    skills: [String]!
+}
+
+type JobPostingFeed {
+    cursor: String!
+    hasNextPage: Boolean!
+    jobPostings: [JobPosting]!
+}
+
+type Location {
+    city: String!
+    province: String!
+    town: String!
+}
+
 type Mutation {
     addLocation(address: String!, city: String!, postalCode: String!, town: String!): ID!
+    createJobPosting(category: String!, city: String!, description: String!, lowerLimit: Float!, province: String!, skills: [String], town: String!, upperLimit: Float!): JobPosting!
     deleteServiceRequester(user_id: ID!): String!
     loginServiceRequester(password: String!, username: String!): ServiceRequesterUser!
     makeMeServiceProvider(bio: String, city: String!, nic: String!, profession: String!, province: String!, town: String!): User!
@@ -16,6 +44,9 @@ type Mutation {
 }
 
 type Query {
+    jobPosting(id: ID!): JobPosting!
+    jobPostingFeed(category: String!, city: String!, cursor: String, province: String!, town: String!): JobPostingFeed
+    jobs: [JobPosting!]
     me: User!
     users: [User!]!
 }
@@ -40,7 +71,4 @@ type User {
     service_providing_status: Boolean
     town: String
     username: String!
-}
-extend type Query {
-    isLoggedIn: Boolean
 }
