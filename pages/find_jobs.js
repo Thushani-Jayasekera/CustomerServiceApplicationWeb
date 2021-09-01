@@ -33,7 +33,6 @@ const FindJobsPage = ()=>{
     nextFetchPolicy:"network-only"
   })
   if(loading || job_query.loading) return <Loader/>
-  if(error || job_query.error) return <p>Error</p>
   return(
     <Layout>
       <Header roundedHeaderButton={true}/>

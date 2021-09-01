@@ -8,7 +8,6 @@ const LoggedInRoute = ({ component: Component, ...rest }) => {
   // if the data is loading, display a loading message
   if (loading) return <Loader/>;
   // if there is an error fetching the data, display an error message
-  if (error) return <p>Error!</p>;
   return (
     <Route
       {...rest}
