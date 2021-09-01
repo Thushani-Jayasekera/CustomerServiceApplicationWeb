@@ -10,7 +10,7 @@ import illustration from "url:/images/login-illustration.svg";
 // import { ReactComponent as LoginIcon } from "feather-icons/dist/icons/log-in.svg";
 import {LogIn as LoginIcon} from "react-feather";
 import Layout from "../components/Layout";
-
+import {ToastProvider,useToasts} from "react-toast-notifications";
 
 const Container = tw(ContainerBase)`min-h-screen bg-primary-900 text-white font-medium flex justify-center -m-8`;
 const Content = tw.div`max-w-screen-xl m-0 sm:mx-20 sm:my-16 bg-white text-gray-900 shadow sm:rounded-lg flex justify-center flex-1`;
@@ -55,15 +55,19 @@ const IllustrationImage = styled.div`
   ${tw`m-12 xl:m-16 w-full max-w-sm bg-contain bg-center bg-no-repeat`}
 `;
 
-
+const StyledProgress = tw(Progress)`
+    mt-5 
+`
 //Graph ql
 import {useMutation,useApolloClient,gql} from "@apollo/client";
+import { Progress } from "react-bulma-components";
 // import { convertTransitionToAnimationOptions } from "framer-motion/types/animation/utils/transitions";
 const SIGNIN_USER = gql`
     mutation SignInMutation($signInEmail: String!, $signInPassword: String!) {
         signIn(email: $signInEmail, password: $signInPassword)
     }
 `
+
 //end of graph ql
 export default ({
                   logoLinkUrl = "#",
@@ -77,6 +81,7 @@ export default ({
                 }) =>
 {
   const [values,setValues] = useState({});
+  const {addToast} = useToasts();
   const handleChange = event=>{
     setValues({
       ...values,
@@ -90,6 +95,9 @@ export default ({
       localStorage.setItem('token',data.signIn);
       client.writeData({data:{isLoggedIn:true}});
       history.push('/')
+    },
+    onError:(error)=>{
+      addToast(error.message.substring(15),{appearance:"error"})
     }
   })
 
@@ -119,6 +127,9 @@ export default ({
                     <SubmitButtonIcon className="icon" />
                     <span className="text">{submitButtonText}</span>
                   </SubmitButton>
+                  {loading &&(
+                    <StyledProgress color={"link"}/>
+                  )}
                 </Form>
                 <p tw="mt-6 text-xs text-gray-600 text-center">
                   <a href={forgotPasswordUrl} tw="border-b border-gray-500 border-dotted">
@@ -139,5 +150,6 @@ export default ({
           </IllustrationContainer>
         </Content>
       </Container>
-      </Layout>)
+      </Layout>
+      )
 };
