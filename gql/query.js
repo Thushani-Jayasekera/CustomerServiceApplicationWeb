@@ -33,7 +33,17 @@ const GET_ME_AS_SERVICE_PROVIDER  = gql`
         }
     }
 `
+const GET_ME_AS_SERVICE_REQUESTER  = gql`
+    query Query {
+        me {
+            username
+            email
+            city
+            address
 
+        }
+    }
+`
 const GET_NOTE_FEED = gql`
     query Query($jobPostingFeedProvince: String!, $jobPostingFeedCity: String!, $jobPostingFeedTown: String!, $jobPostingFeedCategory: String!, $jobPostingFeedCursor: String) {
         jobPostingFeed(province: $jobPostingFeedProvince, city: $jobPostingFeedCity, town: $jobPostingFeedTown, category: $jobPostingFeedCategory, cursor: $jobPostingFeedCursor) {
@@ -57,4 +67,4 @@ const GET_NOTE_FEED = gql`
         }
     }
 `
-export {IS_LOGGED_IN,GET_ME,GET_ME_AS_SERVICE_PROVIDER ,GET_NOTE_FEED}
+export {IS_LOGGED_IN,GET_ME,GET_ME_AS_SERVICE_PROVIDER ,GET_NOTE_FEED,GET_ME_AS_SERVICE_REQUESTER}

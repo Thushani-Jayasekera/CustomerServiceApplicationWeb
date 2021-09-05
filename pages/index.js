@@ -13,12 +13,15 @@ import FindJobsPage from "./find_jobs";
 
 import AddDetailsPage from './service_requester_addDetails';
 
+import FindServicePage from './find_service';
+
 const Pages = () => {
     return (
         <Router>
               <Route exact path="/" component={Home} />
               <Route exact path="/login" component={Login}/>
               <Route exact path="/signup" component={SignUp}/>
+              <Route exact path="/service_requester/createRequest" component={FindServicePage}/>
               <LoggedInRoute exact path="/service_provider/register" component={ServiceProviderRegisterPage}/>
               <ServiceProviderRoute exact path={"/service_provider"} component={ServiceProviderProfilePage}/>
 
