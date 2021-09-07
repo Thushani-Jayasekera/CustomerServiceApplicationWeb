@@ -16,6 +16,7 @@ import AddDetailsPage from './service_requester_addDetails';
 import FindServicePage from './find_service';
 
 import SelectOptionPage from './service_option';
+import ServiceRequesterWelcomePage from './service_requester_welcome';
 
 const Pages = () => {
   return (
@@ -32,6 +33,11 @@ const Pages = () => {
         exact
         path="/service_requester/selectOption/:type"
         component={SelectOptionPage}
+      />
+            <Route
+        exact
+        path="/service_requester/selectOption"
+        component={ServiceRequesterWelcomePage}
       />
       <LoggedInRoute
         exact

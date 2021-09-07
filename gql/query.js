@@ -108,6 +108,21 @@ const GET_SERVICE_PROVIDER_BY_PROFESSION = gql`
     }
   }
 `;
+
+const GET_ALL_SERVICE_PROVIDERS = gql`
+  query ViewAllServiceProviders{
+  viewAllServiceProviders {
+    id
+    username
+    profession
+    email
+    contactNum
+    city
+    bio
+    service_providing_status
+  }
+}
+`;
 export {
   IS_LOGGED_IN,
   GET_ME,
@@ -115,5 +130,6 @@ export {
   GET_NOTE_FEED,
   GET_ME_AS_SERVICE_REQUESTER,
   GET_SERVICE_PROVIDERS_BY_NAME,
-  GET_SERVICE_PROVIDER_BY_PROFESSION
+  GET_SERVICE_PROVIDER_BY_PROFESSION,
+  GET_ALL_SERVICE_PROVIDERS
 };
