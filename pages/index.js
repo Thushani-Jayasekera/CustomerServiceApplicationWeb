@@ -34,7 +34,7 @@ const Pages = () => {
         path="/service_requester/selectOption/:type"
         component={SelectOptionPage}
       />
-            <Route
+      <Route
         exact
         path="/service_requester/selectOption"
         component={ServiceRequesterWelcomePage}

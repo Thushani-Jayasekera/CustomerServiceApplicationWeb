@@ -7,7 +7,7 @@ const _ = require('underscore');
 //import Header from "../components/Header"
 import {
   PrimaryButton,
-  PrimaryButton2,
+  DisabledPrimaryButton as DisabledButtonBase,
   PrimaryButton as PrimaryButtonBase
 } from '../components/misc/Buttons.js';
 import tw from 'twin.macro';
@@ -74,8 +74,10 @@ const CardHoverOverlay = styled(motion.div)`
 `;
 const CardButton = tw(
   PrimaryButtonBase
-)`text-sm rounded-full m-5 bg-primary-200`;
-
+)`text-sm rounded-full m-5 bg-primary-500`;
+const CardButtonUnAvailable = tw(
+  DisabledButtonBase
+)`text-sm rounded-full m-5 bg-primary-100`;
 const CardReview = tw.div`font-medium text-xs text-gray-600`;
 
 const CardText = tw.div`p-4 text-gray-900`;
@@ -108,8 +110,9 @@ const CardLinks = styled.div`
 `;
 
 const ServiceRequesterWelcomePage = ({ history }) => {
-  const { type } = useParams();
+  const { name } = useParams();
   const [values, setValues] = useState({ profession: '' });
+  const [searchTerm, setSearchTerm] = useState('');
   const { loading, error, data, fetchMore } = useQuery(
     GET_ME_AS_SERVICE_REQUESTER
   );
@@ -133,13 +136,18 @@ const ServiceRequesterWelcomePage = ({ history }) => {
 
   return (
     <Container>
-        
       <ContentWithPaddingXl>
         <HeaderRow>
-        <Actions>
-          <input type="text" placeholder="Enter Service Provider Name" />
-          <button>Search</button>
-        </Actions>
+          <Actions>
+            <input
+              type="text"
+              placeholder="Enter Service Provider Name"
+              onChange={event => {
+                setSearchTerm(event.target.value);
+              }}
+            />
+            <button>Search</button>
+          </Actions>
           <Container>
             <PrimaryButton>Create a Job for Service Providers</PrimaryButton>
           </Container>
@@ -147,68 +155,80 @@ const ServiceRequesterWelcomePage = ({ history }) => {
 
         <HeaderRow>
           <Header>Select What You Want to get Done!</Header>
-
         </HeaderRow>
         {tabKeys.forEach((keyname, index) => {
           console.log(`${keyname}`);
-         
-   
-            //TODO// //render cards to select service type
-        
+
+          //TODO// //render cards to select service type
         })}
-        
-        {items.map((card, index) => (
+
+        {items
+          .filter(val => {
+            if (searchTerm == '') {
+              return val;
+            } else if (
+              val.username.toLowerCase().includes(searchTerm.toLowerCase())
+            ) {
+              return val;
+            }
+          })
+          .map((card, index) => (
             //TODO View search results
-          <CardContainer key={index}>
-            <Card
-              className="group"
-              href={card.url}
-              initial="rest"
-              whileHover="hover"
-              animate="rest"
-            >
-              <TwoColumn>
-                <Column>
-                  <CardImageContainer
-                    imageSrc={
-                      'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80'
-                    }
-                  >
-                    <CardRatingContainer>
-                      <CardRating>{card.rating}</CardRating>
-                      <CardReview>({card.reviews})</CardReview>
-                    </CardRatingContainer>
-                  </CardImageContainer>
-                </Column>
-                <Column>
-                  <CardText>
-                    <CardTitle>{card.username}</CardTitle>
-                    <CardContent>{card.profession}</CardContent>
-                    <CardContent>{card.bio}</CardContent>
-                  </CardText>
-                </Column>
-                <Column>
-                  <CardText>
-                    <CardContent>{card.city}</CardContent>
-                  </CardText>
-                </Column>
-                <Column>
-                  <CardButton>View Profile</CardButton>
-                  <CardButton>
-                    <Link
-                      to={{
-                        pathname: `/service_requester/createRequest/${card.id}`
-                      }}
+            <CardContainer key={index}>
+              <Card
+                className="group"
+                href={card.url}
+                initial="rest"
+                whileHover="hover"
+                animate="rest"
+              >
+                <TwoColumn>
+                  <Column>
+                    <CardImageContainer
+                      imageSrc={
+                        'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80'
+                      }
                     >
-                      Hire Now
-                    </Link>
-                  </CardButton>
-                </Column>
-              </TwoColumn>
-            </Card>
-          </CardContainer>
-        ))}
-        ;
+                      <CardRatingContainer>
+                        <CardRating>{card.rating}</CardRating>
+                        <CardReview>({card.reviews})</CardReview>
+                      </CardRatingContainer>
+                    </CardImageContainer>
+                  </Column>
+                  <Column>
+                    <CardText>
+                      <CardTitle>{card.username}</CardTitle>
+                      <CardContent>{card.profession}</CardContent>
+                      <CardContent>{card.bio}</CardContent>
+                    </CardText>
+                  </Column>
+                  <Column>
+                    <CardText>
+                      <CardContent>{card.city}</CardContent>
+                    </CardText>
+                  </Column>
+                  <Column>
+                    <CardButton>View Profile</CardButton>
+                    {card.service_providing_status === true ? (
+                      <CardButton>
+                        <Link
+                          to={{
+                            pathname: `/service_requester/createRequest/${card.id}`
+                          }}
+                        >
+                          Hire Now
+                        </Link>
+                      </CardButton>
+                    ) : (
+                      <CardButtonUnAvailable>
+                        Not Available
+                      </CardButtonUnAvailable>
+                    )}
+                  </Column>
+                </TwoColumn>
+              </Card>
+            </CardContainer>
+          ))}
       </ContentWithPaddingXl>
     </Container>
   );
