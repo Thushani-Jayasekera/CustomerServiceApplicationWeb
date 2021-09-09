@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { motion } from 'framer-motion';
 const _ = require('underscore');
-//import Header from "../components/Header"
+import Header from "../components/Header"
 import {
   PrimaryButton,
   PrimaryButton2,
@@ -23,7 +23,7 @@ import { SectionHeading } from '../components/misc/Headings.js';
 const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`;
 const TwoColumn = tw.div`flex flex-col sm:flex-row justify-between`;
 const Column = tw.div`sm:w-5/12 flex flex-col`;
-const Header = tw(SectionHeading)``;
+const Heading = tw(SectionHeading)``;
 const TabsControl = tw.div`flex flex-wrap bg-gray-200 px-2 py-2 rounded leading-none mt-12 xl:mt-0`;
 
 const TabControl = styled.div`
@@ -37,7 +37,7 @@ const TabControl = styled.div`
 const Actions = styled.div`
   ${tw`relative max-w-lg text-center mx-auto lg:mx-0`}
   input {
-    ${tw`sm:pr-48 pl-8 py-4 sm:py-5 rounded-full border-2 w-full font-medium focus:outline-none transition duration-300  focus:border-primary-500 hover:border-gray-500`}
+    ${tw`sm:pr-48 pl-8 py-4 sm:py-5 rounded-full border-2 w-144 font-medium focus:outline-none transition duration-300  focus:border-primary-500 hover:border-gray-500`}
   }
   button {
     ${tw`w-72 sm:absolute right-0 top-0 bottom-0 bg-primary-500 text-gray-100 font-bold mr-2 my-4 sm:my-2 rounded-full py-4 flex items-center justify-center sm:w-40 sm:leading-none focus:outline-none hover:bg-primary-900 transition duration-300`}
@@ -72,10 +72,13 @@ const CardHoverOverlay = styled(motion.div)`
 `;
 const CardButton = tw(
   PrimaryButtonBase
-)`text-sm rounded-full m-5 bg-primary-500`;
+)`text-sm rounded-full m-5 bg-green-500`;
+const CardButton2 = tw(
+  PrimaryButtonBase
+)`text-sm rounded-full m-5 bg-yellow-600`;
 const CardButtonUnAvailable = tw(
   DisabledButtonBase
-)`text-sm rounded-full m-5 bg-primary-100`;
+)`text-sm rounded-full m-5 bg-red-500`;
 
 const CardReview = tw.div`font-medium text-xs text-gray-600`;
 
@@ -114,12 +117,10 @@ const SelectOptionPage = ({ history }) => {
 
   return (
     <Container>
+      <Header/>
       <ContentWithPaddingXl>
         <HeaderRow>
-          <Header>{heading}</Header>
-          <Container>
-            <PrimaryButton>Create a Job for Service Providers</PrimaryButton>
-          </Container>
+          <Heading>{heading}</Heading>
         </HeaderRow>
         <Actions>
           <input
@@ -132,10 +133,14 @@ const SelectOptionPage = ({ history }) => {
         </Actions>
         {items
           .filter(val => {
+            console.log(val);
             if (searchTerm == '') {
-              return val;
+              if(val.roles.includes("service_provider")){
+                return val;
+              }
+              
             } else if (
-              val.username.toLowerCase().includes(searchTerm.toLowerCase())
+              val.username.toLowerCase().includes(searchTerm.toLowerCase()) && val.roles.includes("service_provider")
             ) {
               return val;
             }
@@ -174,7 +179,7 @@ const SelectOptionPage = ({ history }) => {
                     </CardText>
                   </Column>
                   <Column>
-                    <CardButton>View Profile</CardButton>
+                    <CardButton2>View Profile</CardButton2>
                     {card.service_providing_status === true ? (
                       <CardButton>
                         <Link

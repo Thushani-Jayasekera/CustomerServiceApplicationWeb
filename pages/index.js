@@ -7,6 +7,7 @@ import SignUp from './signup';
 import ServiceProviderRegisterPage from './service_provider_registration';
 import Loader from '../components/utils/Loader';
 import ServiceProviderRoute from '../components/utils/ServiceProviderRoute';
+import ServiceRequesterRoute from '../components/utils/ServiceRequesterRoute';
 import ServiceProviderProfilePage from './service_provider_profile';
 
 import FindJobsPage from './find_jobs';
@@ -17,6 +18,7 @@ import FindServicePage from './find_service';
 
 import SelectOptionPage from './service_option';
 import ServiceRequesterWelcomePage from './service_requester_welcome';
+import BiddingJobPage from './create_bidding_job';
 
 const Pages = () => {
   return (
@@ -34,10 +36,15 @@ const Pages = () => {
         path="/service_requester/selectOption/:type"
         component={SelectOptionPage}
       />
-      <Route
+      <ServiceRequesterRoute
         exact
         path="/service_requester/selectOption"
         component={ServiceRequesterWelcomePage}
+      />
+      <Route
+        exact
+        path="/service_requester/createBiddingJob"
+        component={BiddingJobPage}
       />
       <LoggedInRoute
         exact

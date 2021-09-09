@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {BrowserRouter as Router , Route , Redirect} from "react-router-dom";
 import Layout from "../components/Layout";
 import Header from "../components/Header"
 import tw from "twin.macro";
@@ -41,7 +42,8 @@ const AddDetailsPage = ({history})=>{
   const {loading,error,data} = useQuery(GET_ME);
   const [registerServiceRequester,{loading_mutation,error_mutation}] = useMutation(ADD_DETAILS,{
     onCompleted:data =>{
-      history.push('/')
+      history.push('/');
+      
     }
   })
   if(loading){

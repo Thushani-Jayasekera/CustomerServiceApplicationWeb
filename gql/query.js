@@ -40,6 +40,7 @@ const GET_ME_AS_SERVICE_REQUESTER = gql`
       email
       city
       address
+      roles
     }
   }
 `;
@@ -88,6 +89,7 @@ const GET_SERVICE_PROVIDERS_BY_NAME = gql`
       city
       province
       service_providing_status
+      roles
     }
   }
 `;
@@ -105,6 +107,7 @@ const GET_SERVICE_PROVIDER_BY_PROFESSION = gql`
       city
       bio
       service_providing_status
+      roles
     }
   }
 `;
@@ -120,6 +123,7 @@ const GET_ALL_SERVICE_PROVIDERS = gql`
     city
     bio
     service_providing_status
+    roles
   }
 }
 `;

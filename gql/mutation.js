@@ -27,4 +27,19 @@ const CREATE_NEW_SR = gql`
   }
 }
 `
-export {MAKE_ME_SERVICE_PROVIDER, ADD_DETAILS,CREATE_NEW_SR}
+const CREATE_NEW_BIDDING_JOB = gql`
+mutation CreateBiddingJobMutation($createBiddingJobTask: String!, $createBiddingJobDate: String, $createBiddingJobTime: String, $createBiddingJobPayMethod: String, $createBiddingJobMinPrice: String, $createBiddingJobMaxPrice: String, $createBiddingJobImage1: String, $createBiddingJobImage2: String, $createBiddingJobImage3: String) {
+  createBiddingJob(task: $createBiddingJobTask, date: $createBiddingJobDate, time: $createBiddingJobTime, payMethod: $createBiddingJobPayMethod, min_price: $createBiddingJobMinPrice, max_price: $createBiddingJobMaxPrice, image1: $createBiddingJobImage1, image2: $createBiddingJobImage2, image3: $createBiddingJobImage3) {
+    requester_id
+    date
+    time
+    task
+    min_price
+    max_price
+    image1
+    image2
+    image3
+  }
+}
+`
+export {MAKE_ME_SERVICE_PROVIDER, ADD_DETAILS,CREATE_NEW_SR,CREATE_NEW_BIDDING_JOB}
