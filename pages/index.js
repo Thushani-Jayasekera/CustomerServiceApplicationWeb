@@ -19,6 +19,7 @@ import FindServicePage from './find_service';
 import SelectOptionPage from './service_option';
 import ServiceRequesterWelcomePage from './service_requester_welcome';
 import BiddingJobPage from './create_bidding_job';
+import ProfilePage from './profile';
 
 const Pages = () => {
   return (
@@ -26,6 +27,7 @@ const Pages = () => {
       <Route exact path="/" component={Home} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/signup" component={SignUp} />
+      <Route exact path="/profile" component={ProfilePage} />
       <Route
         exact
         path="/service_requester/createRequest/:provider_id"

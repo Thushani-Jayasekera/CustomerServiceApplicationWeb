@@ -127,6 +127,39 @@ const GET_ALL_SERVICE_PROVIDERS = gql`
   }
 }
 `;
+
+const GET_ACCEPTED_SERVICE_REQUESTS_OF_ME=gql`
+query AcceptedServiceRequestsbyMe{
+  acceptedServiceRequestsbyMe {
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    id
+    provider_id
+    requester_id
+  }
+}
+`;
+
+const GET_PENDING_SERVICE_REQUESTS_OF_ME=gql`
+query PendingServiceRequests{
+  
+  pendingServiceRequestsbyMe {
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+  }
+}
+
+`;
 export {
   IS_LOGGED_IN,
   GET_ME,
@@ -135,5 +168,7 @@ export {
   GET_ME_AS_SERVICE_REQUESTER,
   GET_SERVICE_PROVIDERS_BY_NAME,
   GET_SERVICE_PROVIDER_BY_PROFESSION,
-  GET_ALL_SERVICE_PROVIDERS
+  GET_ALL_SERVICE_PROVIDERS,
+  GET_ACCEPTED_SERVICE_REQUESTS_OF_ME,
+  GET_PENDING_SERVICE_REQUESTS_OF_ME
 };
