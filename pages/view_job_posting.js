@@ -26,7 +26,7 @@ const JobPostingPage = ({match})=>{
       history.push("/service_provider/find_jobs")
     },
     onError:(error)=>{
-      addToast("Failed ")
+      addToast("Failed ",{appearance:"error"})
     }
   })
     if(jobPostingQuery.loading){

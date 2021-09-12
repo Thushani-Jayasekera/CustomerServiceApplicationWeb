@@ -28,8 +28,8 @@ const FindJobsPage = ()=>{
       jobPostingFeedCategory:"Plumbing",
       jobPostingFeedCursor:"",
     },
-    fetchPolicy:"network-only",
-    nextFetchPolicy:"network-only",
+    fetchPolicy:"cache-and-network",
+    nextFetchPolicy:"cache-and-network",
   })
   if(loading || job_query.loading) return <Loader/>
   return(

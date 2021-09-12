@@ -18,7 +18,7 @@ import FindServicePage from './find_service';
 
 import SelectOptionPage from './service_option';
 import ServiceRequesterWelcomePage from './service_requester_welcome';
-import BiddingJobPage from './create_bidding_job';
+import CreateJobPostingPage from './create_job_posting';
 import ProfilePage from './profile';
 import JobPostingPage from "./view_job_posting";
 
@@ -47,7 +47,7 @@ const Pages = () => {
       <Route
         exact
         path="/service_requester/createBiddingJob"
-        component={BiddingJobPage}
+        component={CreateJobPostingPage}
       />
       <LoggedInRoute
         exact
