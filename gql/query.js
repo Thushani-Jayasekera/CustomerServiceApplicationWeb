@@ -80,6 +80,8 @@ const GET_JOB_POSTING_FEED = gql`
   }
 `;
 
+
+
 const GET_SERVICE_PROVIDERS_BY_NAME = gql`
   query SearchServiceProviderName($searchServiceProviderbyNameName: String!) {
     searchServiceProviderbyName(name: $searchServiceProviderbyNameName) {
