@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { GET_ME_AS_SERVICE_PROVIDER, GET_NOTE_FEED } from "../gql/query";
+import { GET_ME_AS_SERVICE_PROVIDER, GET_JOB_POSTING_FEED } from "../gql/query";
 import { useQuery } from "@apollo/client";
 import Loader from "../components/utils/Loader";
 import Header from "../components/Header"
@@ -21,7 +21,7 @@ const FindJobsPage = ()=>{
     jobPostingFeedCategory:""
   });
   const {data,loading,error,fetchMore} = useQuery(GET_ME_AS_SERVICE_PROVIDER)
-  const job_query = useQuery(GET_NOTE_FEED,{
+  const job_query = useQuery(GET_JOB_POSTING_FEED,{
     variables:{
       jobPostingFeedProvince:data.me.province,
       jobPostingFeedCity:data.me.city,
@@ -49,7 +49,8 @@ const FindJobsPage = ()=>{
           <Columns.Column>
             {
               (job_query.data.jobPostingFeed.jobPostings.map((obj,i)=>{
-              return(<JobPosting key={i} heading={obj.description} postedBy={obj.postedBy.username} location={obj.location.town+" , "+obj.location.city} lowerLimit={obj.budgetRange.lowerLimit} upperLimit={obj.budgetRange.upperLimit} />)
+                return(<JobPosting key={i} id={obj.id} heading={obj.description} postedBy={obj.postedBy.username} location={obj.location.town+" , "+obj.location.city}
+                                   lowerLimit={obj.budgetRange.lowerLimit} upperLimit={obj.budgetRange.upperLimit} />)
             }))
             }
             {

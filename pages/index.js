@@ -20,6 +20,7 @@ import SelectOptionPage from './service_option';
 import ServiceRequesterWelcomePage from './service_requester_welcome';
 import BiddingJobPage from './create_bidding_job';
 import ProfilePage from './profile';
+import JobPostingPage from "./view_job_posting";
 
 const Pages = () => {
   return (
@@ -64,6 +65,11 @@ const Pages = () => {
         path={'/service_provider/find_jobs'}
         component={FindJobsPage}
       />
+        <ServiceProviderRoute
+          exact
+          path={'/job_posting/:id'}
+          component={JobPostingPage}
+        />
 
       <LoggedInRoute
         exact

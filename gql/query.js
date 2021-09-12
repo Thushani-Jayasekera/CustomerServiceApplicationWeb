@@ -44,7 +44,7 @@ const GET_ME_AS_SERVICE_REQUESTER = gql`
     }
   }
 `;
-const GET_NOTE_FEED = gql`
+const GET_JOB_POSTING_FEED = gql`
   query Query(
     $jobPostingFeedProvince: String!
     $jobPostingFeedCity: String!
@@ -164,7 +164,7 @@ export {
   IS_LOGGED_IN,
   GET_ME,
   GET_ME_AS_SERVICE_PROVIDER,
-  GET_NOTE_FEED,
+  GET_JOB_POSTING_FEED,
   GET_ME_AS_SERVICE_REQUESTER,
   GET_SERVICE_PROVIDERS_BY_NAME,
   GET_SERVICE_PROVIDER_BY_PROFESSION,

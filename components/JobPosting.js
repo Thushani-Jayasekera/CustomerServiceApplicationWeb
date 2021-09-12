@@ -14,7 +14,7 @@ const CustomerInfoAndControlsContainer = tw.div`mt-8 flex items-center flex-col 
 const ControlsContainer = tw.div`sm:ml-auto flex`
 const JobPosting = ({id,heading,postedBy,location,lowerLimit,upperLimit})=>{
   return(
-    <Link to={"/login"}>
+    <Link to={`/job_posting/${id}`}>
       <Testimonial>
         <QuoteContainer>
           <Quote>
