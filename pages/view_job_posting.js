@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import {handleChangefn} from "../utils"
 import { ADD_JOB_BID } from "../gql/mutation";
 import {useToasts} from "react-toast-notifications";
-
+import {useHistory} from 'react-router-dom'
 const JobPostingPage = ({match})=>{
     const [values,setValues] = useState()
     const jobPostingQuery = useQuery(GET_JOB_POSTING,{
@@ -19,9 +19,11 @@ const JobPostingPage = ({match})=>{
       }
     })
   const {addToast} = useToasts()
+  const history = useHistory();
   const [jobBid,jobBidState] = useMutation(ADD_JOB_BID,{
     onCompleted:(data)=>{
       addToast("Successfully added job bid",{appearance:"success"})
+      history.push("/service_provider/find_jobs")
     },
     onError:(error)=>{
       addToast("Failed ")

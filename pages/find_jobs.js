@@ -3,7 +3,6 @@ import { GET_ME_AS_SERVICE_PROVIDER, GET_JOB_POSTING_FEED } from "../gql/query";
 import { useQuery } from "@apollo/client";
 import Loader from "../components/utils/Loader";
 import Header from "../components/Header"
-import { Redirect } from "react-router-dom";
 import Layout from "../components/Layout";
 import tw from "twin.macro";
 import styled from "styled-components";
@@ -30,7 +29,7 @@ const FindJobsPage = ()=>{
       jobPostingFeedCursor:"",
     },
     fetchPolicy:"network-only",
-    nextFetchPolicy:"network-only"
+    nextFetchPolicy:"network-only",
   })
   if(loading || job_query.loading) return <Loader/>
   return(
@@ -48,13 +47,13 @@ const FindJobsPage = ()=>{
           </Columns.Column>
           <Columns.Column>
             {
-              (job_query.data.jobPostingFeed.jobPostings.map((obj,i)=>{
+              (job_query.data && job_query.data.jobPostingFeed.jobPostings.map((obj,i)=>{
                 return(<JobPosting key={i} id={obj.id} heading={obj.description} postedBy={obj.postedBy.username} location={obj.location.town+" , "+obj.location.city}
                                    lowerLimit={obj.budgetRange.lowerLimit} upperLimit={obj.budgetRange.upperLimit} />)
             }))
             }
             {
-              (job_query.data.jobPostingFeed.jobPostings.length ===0) && (<Message color={"danger"}>
+              (job_query.data && job_query.data.jobPostingFeed.jobPostings.length ===0) && (<Message color={"danger"}>
                 <Message.Body>
                   No jobs found
                 </Message.Body>
