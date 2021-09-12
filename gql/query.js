@@ -80,8 +80,32 @@ const GET_JOB_POSTING_FEED = gql`
   }
 `;
 
-
-
+const GET_JOB_POSTING = gql`
+    query Query($jobPostingId: ID!) {
+        jobPosting(id: $jobPostingId) {
+            id
+            heading
+            location {
+                province
+                city
+                town
+            }
+            category
+            skills
+            postedBy {
+                id
+                username
+                email
+                nic
+            }
+            description
+            budgetRange {
+                lowerLimit
+                upperLimit
+            }
+        }
+    }
+`
 const GET_SERVICE_PROVIDERS_BY_NAME = gql`
   query SearchServiceProviderName($searchServiceProviderbyNameName: String!) {
     searchServiceProviderbyName(name: $searchServiceProviderbyNameName) {
@@ -204,5 +228,7 @@ export {
   GET_ACCEPTED_SERVICE_REQUESTS_OF_ME,
   GET_PENDING_SERVICE_REQUESTS_OF_ME,
   GET_PENDING_SERVICE_REQUESTS_FOR_ME,
-  GET_ACCEPTED_SERVICE_REQUESTS_FOR_ME
+  GET_ACCEPTED_SERVICE_REQUESTS_FOR_ME,
+  GET_JOB_POSTING
+
 };
