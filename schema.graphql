@@ -38,7 +38,7 @@ type Mutation {
     deleteServiceRequester(user_id: ID!): String!
     loginServiceRequester(password: String!, username: String!): ServiceRequesterUser!
     makeMeServiceProvider(bio: String, city: String!, nic: String!, profession: String!, province: String!, town: String!): User!
-    registerServiceRequester(address: String!, city: String!, confirmPassword: String!, contactNum: String!, email: String!, password: String!, postalCode: String!, town: String!, username: String!): String!
+    registerServiceRequester(contactNum: String!, address: String!, city: String!, postalCode: String!): User!
     signIn(email: String!, password: String!): String!
     signUp(email: String!, password: String!, username: String!): String!
 }
