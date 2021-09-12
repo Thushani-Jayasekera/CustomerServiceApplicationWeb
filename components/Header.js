@@ -87,10 +87,11 @@ export default ({ roundedHeaderButton = false, logoLink, links, className, colla
       <NavLink href="/service_requester/createBiddingJob">Create Bidding Job</NavLink>
       <NavLink href="/service_provider/find_jobs">Find Job</NavLink>
 
-      <NavLink href="/#">Contact Us</NavLink>
+
       {
         data.isLoggedIn ? (
          <React.Fragment>
+           <NavLink href={"/profile"}>Profile</NavLink>
            <NavLink tw="lg:ml-12!" href={"/"} onClick={
              ()=>{
                localStorage.removeItem('token');
@@ -99,6 +100,7 @@ export default ({ roundedHeaderButton = false, logoLink, links, className, colla
              } }>
              LogOut
            </NavLink>
+
          </React.Fragment>
         ):(
           <React.Fragment>

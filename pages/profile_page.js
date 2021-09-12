@@ -17,7 +17,7 @@ import {
 } from '../components/misc/Buttons.js';
 import { Container, ContentWithPaddingXl } from '../components/misc/Layouts.js';
 
-const ServiceProviderProfilePage = ()=>{
+const ProfilePage = ()=>{
    const {loading,error,data} = useQuery(GET_ME_AS_SERVICE_PROVIDER);
    const accepted = useQuery(GET_ACCEPTED_SERVICE_REQUESTS_FOR_ME);
    const pending= useQuery(GET_PENDING_SERVICE_REQUESTS_FOR_ME);
@@ -180,4 +180,4 @@ const PostTextContainer = tw.div``
    )
 }
 
-export default ServiceProviderProfilePage
+export default ProfilePage
