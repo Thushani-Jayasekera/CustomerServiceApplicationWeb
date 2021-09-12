@@ -10,10 +10,20 @@ type BudgetRange {
     upperLimit: Float!
 }
 
+type JobBid {
+    bidBy: User
+    detailedBreakdown: String
+    jobPosting: JobPosting
+    proposedAmount: Float!
+    proposedDate: DateTime!
+    state: String
+}
+
 type JobPosting {
     budgetRange: BudgetRange
     category: String!
     description: String
+    heading: String!
     id: ID!
     location: Location!
     postedBy: User!
@@ -33,35 +43,51 @@ type Location {
 }
 
 type Mutation {
-    addLocation(address: String!, city: String!, postalCode: String!, town: String!): ID!
-    createJobPosting(category: String!, city: String!, description: String!, lowerLimit: Float!, province: String!, skills: [String], town: String!, upperLimit: Float!): JobPosting!
-    deleteServiceRequester(user_id: ID!): String!
-    loginServiceRequester(password: String!, username: String!): ServiceRequesterUser!
+    createBiddingJob(date: String, image1: String, image2: String, image3: String, max_price: String, min_price: String, payMethod: String, task: String!, time: String): ServiceRequest!
+    createJobBid(detailedBreakdown: String, jobPosting: ID!, proposedAmount: Float!, proposedDate: String!): JobBid!
+    createJobPosting(category: String!, city: String!, description: String!, heading: String!, lowerLimit: Float!, province: String!, skills: [String], town: String!, upperLimit: Float!): JobPosting!
+    createServiceRequest(date: String, image1: String, image2: String, image3: String, max_price: String, min_price: String, payMethod: String, provider_id: ID, task: String!, time: String): ServiceRequest!
     makeMeServiceProvider(bio: String, city: String!, nic: String!, profession: String!, province: String!, town: String!): User!
-    registerServiceRequester(contactNum: String!, address: String!, city: String!, postalCode: String!): User!
+    registerServiceRequester(address: String!, city: String!, contactNum: String!, postalCode: String!): User!
     signIn(email: String!, password: String!): String!
     signUp(email: String!, password: String!, username: String!): String!
 }
 
 type Query {
+    acceptedServiceRequestsForMe: [ServiceRequest!]
+    acceptedServiceRequestsbyMe: [ServiceRequest!]
     jobPosting(id: ID!): JobPosting!
     jobPostingFeed(category: String!, city: String!, cursor: String, province: String!, town: String!): JobPostingFeed
-    jobs: [JobPosting!]
+    jobs: [JobPosting]
     me: User!
+    pendingServiceRequestsForMe: [ServiceRequest!]
+    pendingServiceRequestsbyMe: [ServiceRequest!]
+    searchServiceProviderbyName(name: String!): [User!]!
+    searchServiceProviderbyProfession(profession: String!): [User!]!
     users: [User!]!
+    viewAllServiceProviders: [User!]!
 }
 
-type ServiceRequesterUser {
-    createdAt: String!
-    email: String!
+type ServiceRequest {
+    date: String
     id: ID!
-    token: String!
-    username: String!
+    image1: String
+    image2: String
+    image3: String
+    max_price: String
+    min_price: String
+    payMethod: String
+    provider_id: ID
+    requester_id: ID
+    task: String!
+    time: String
 }
 
 type User {
+    address: String
     bio: String
     city: String
+    contactNum: String
     email: String!
     id: ID!
     nic: String
@@ -72,3 +98,7 @@ type User {
     town: String
     username: String!
 }
+
+
+"A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar."
+scalar DateTime

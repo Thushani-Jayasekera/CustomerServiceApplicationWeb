@@ -44,7 +44,7 @@ const GET_ME_AS_SERVICE_REQUESTER = gql`
     }
   }
 `;
-const GET_NOTE_FEED = gql`
+const GET_JOB_POSTING_FEED = gql`
   query Query(
     $jobPostingFeedProvince: String!
     $jobPostingFeedCity: String!
@@ -80,6 +80,32 @@ const GET_NOTE_FEED = gql`
   }
 `;
 
+const GET_JOB_POSTING = gql`
+    query Query($jobPostingId: ID!) {
+        jobPosting(id: $jobPostingId) {
+            id
+            heading
+            location {
+                province
+                city
+                town
+            }
+            category
+            skills
+            postedBy {
+                id
+                username
+                email
+                nic
+            }
+            description
+            budgetRange {
+                lowerLimit
+                upperLimit
+            }
+        }
+    }
+`
 const GET_SERVICE_PROVIDERS_BY_NAME = gql`
   query SearchServiceProviderName($searchServiceProviderbyNameName: String!) {
     searchServiceProviderbyName(name: $searchServiceProviderbyNameName) {
@@ -160,15 +186,49 @@ query PendingServiceRequests{
 }
 
 `;
+
+const GET_PENDING_SERVICE_REQUESTS_FOR_ME=gql`
+query MyPendingServiceRequests{
+  pendingServiceRequestsForMe {
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+  }
+}
+`;
+
+const GET_ACCEPTED_SERVICE_REQUESTS_FOR_ME=gql`
+query MyPendingServiceRequests{
+  acceptedServiceRequestsForMe {
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+  }
+}
+`;
 export {
   IS_LOGGED_IN,
   GET_ME,
   GET_ME_AS_SERVICE_PROVIDER,
-  GET_NOTE_FEED,
+  GET_JOB_POSTING_FEED,
   GET_ME_AS_SERVICE_REQUESTER,
   GET_SERVICE_PROVIDERS_BY_NAME,
   GET_SERVICE_PROVIDER_BY_PROFESSION,
   GET_ALL_SERVICE_PROVIDERS,
   GET_ACCEPTED_SERVICE_REQUESTS_OF_ME,
-  GET_PENDING_SERVICE_REQUESTS_OF_ME
+  GET_PENDING_SERVICE_REQUESTS_OF_ME,
+  GET_PENDING_SERVICE_REQUESTS_FOR_ME,
+  GET_ACCEPTED_SERVICE_REQUESTS_FOR_ME,
+  GET_JOB_POSTING
+
 };

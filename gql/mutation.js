@@ -42,4 +42,34 @@ mutation CreateBiddingJobMutation($createBiddingJobTask: String!, $createBidding
   }
 }
 `
-export {MAKE_ME_SERVICE_PROVIDER, ADD_DETAILS,CREATE_NEW_SR,CREATE_NEW_BIDDING_JOB}
+
+const ADD_JOB_BID = gql`
+    mutation CreateJobBidMutation(
+        $createJobBidProposedAmount: Float!
+        $createJobBidProposedDate: String!
+        $createJobBidJobPosting: ID!
+        $createJobBidDetailedBreakdown: String
+    ) {
+        createJobBid(
+            proposedAmount: $createJobBidProposedAmount
+            proposedDate: $createJobBidProposedDate
+            jobPosting: $createJobBidJobPosting
+            detailedBreakdown: $createJobBidDetailedBreakdown
+        ) {
+            proposedAmount
+        }
+    }
+
+`
+
+const ADD_JOB_POSTING  = gql`
+    mutation Mutation($createJobPostingHeading: String!, $createJobPostingProvince: String!, $createJobPostingCity: String!, $createJobPostingTown: String!, $createJobPostingCategory: String!, $createJobPostingDescription: String!, $createJobPostingLowerLimit: Float!, $createJobPostingUpperLimit: Float!) {
+        createJobPosting(heading: $createJobPostingHeading, province: $createJobPostingProvince, city: $createJobPostingCity, town: $createJobPostingTown, category: $createJobPostingCategory, description: $createJobPostingDescription, lowerLimit: $createJobPostingLowerLimit, upperLimit: $createJobPostingUpperLimit) {
+            id
+            heading
+            description
+        }
+    }
+
+`
+export {MAKE_ME_SERVICE_PROVIDER, ADD_DETAILS,CREATE_NEW_SR,CREATE_NEW_BIDDING_JOB,ADD_JOB_BID,ADD_JOB_POSTING}
