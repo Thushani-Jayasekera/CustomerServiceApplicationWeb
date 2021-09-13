@@ -45,7 +45,7 @@ type Location {
 type Mutation {
     createBiddingJob(date: String, image1: String, image2: String, image3: String, max_price: String, min_price: String, payMethod: String, task: String!, time: String): ServiceRequest!
     createJobBid(detailedBreakdown: String, jobPosting: ID!, proposedAmount: Float!, proposedDate: String!): JobBid!
-    createJobPosting(category: String!, city: String!, description: String!, heading: String!, lowerLimit: Float!, province: String!, skills: [String], town: String!, upperLimit: Float!): JobPosting!
+    createJobPosting(category: String!, city: String!, description: String!, heading: String!, lowerLimit: Float!, payMethod: String, province: String!, skills: [String], town: String!, upperLimit: Float!): JobPosting!
     createServiceRequest(date: String, image1: String, image2: String, image3: String, max_price: String, min_price: String, payMethod: String, provider_id: ID, task: String!, time: String): ServiceRequest!
     makeMeServiceProvider(bio: String, city: String!, nic: String!, profession: String!, province: String!, town: String!): User!
     registerServiceRequester(address: String!, city: String!, contactNum: String!, postalCode: String!): User!
