@@ -9,10 +9,19 @@ const IS_LOGGED_IN = gql`
 const GET_ME = gql`
   query Query {
     me {
-      id
-      username
-      email
-      roles
+        id
+        username
+        email
+        nic
+        profession
+        contactNum
+        address
+        province
+        city
+        town
+        bio
+        service_providing_status
+        roles
     }
   }
 `;
@@ -217,6 +226,7 @@ query MyPendingServiceRequests{
 }
 `;
 
+
 const GET_ALL_SERVICE_TYPES=gql`
 query Query {
   viewAllServiceTypes {
@@ -228,6 +238,21 @@ query Query {
   }
 }
 `;
+
+const GET_MY_BIDS = gql`
+    query Query {
+        getMyBids {
+            proposedAmount
+            proposedDate
+            detailedBreakdown
+            state
+            jobPosting {
+                id
+            }
+        }
+    }
+`;
+
 export {
   IS_LOGGED_IN,
   GET_ME,
@@ -242,6 +267,7 @@ export {
   GET_PENDING_SERVICE_REQUESTS_FOR_ME,
   GET_ACCEPTED_SERVICE_REQUESTS_FOR_ME,
   GET_JOB_POSTING,
-  GET_ALL_SERVICE_TYPES
+  GET_ALL_SERVICE_TYPES,
+  GET_MY_BIDS
 
 };
