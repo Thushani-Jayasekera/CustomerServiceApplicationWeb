@@ -216,6 +216,18 @@ query MyPendingServiceRequests{
   }
 }
 `;
+
+const GET_ALL_SERVICE_TYPES=gql`
+query Query {
+  viewAllServiceTypes {
+    id
+    service_name
+    description
+    user_type
+    image
+  }
+}
+`;
 export {
   IS_LOGGED_IN,
   GET_ME,
@@ -229,6 +241,7 @@ export {
   GET_PENDING_SERVICE_REQUESTS_OF_ME,
   GET_PENDING_SERVICE_REQUESTS_FOR_ME,
   GET_ACCEPTED_SERVICE_REQUESTS_FOR_ME,
-  GET_JOB_POSTING
+  GET_JOB_POSTING,
+  GET_ALL_SERVICE_TYPES
 
 };
