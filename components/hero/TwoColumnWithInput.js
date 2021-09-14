@@ -59,14 +59,14 @@ export default ({ roundedHeaderButton }) => {
             <Paragraph>
               {t("home_paragraph")}
             </Paragraph>
-            <Actions>
-              <input type="text" placeholder="Your E-mail Address" />
-              <button>Get Started</button>
-            </Actions>
-            <CustomersLogoStrip>
-              <p>Our TRUSTED Customers</p>
-              <img src={CustomersLogoStripImage} alt="Our Customers" />
-            </CustomersLogoStrip>
+            {/*<Actions>*/}
+            {/*  <input type="text" placeholder="Your E-mail Address" />*/}
+            {/*  <button>Get Started</button>*/}
+            {/*</Actions>*/}
+            {/*<CustomersLogoStrip>*/}
+            {/*  <p>Our TRUSTED Customers</p>*/}
+            {/*  <img src={CustomersLogoStripImage} alt="Our Customers" />*/}
+            {/*</CustomersLogoStrip>*/}
           </LeftColumn>
           <RightColumn>
             <IllustrationContainer>
