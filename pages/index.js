@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import LoggedInRoute from '../components/utils/LoggedInRoute';
 import Home from './home';
 import Login from './login';
-import AdminLogin from './admin_login';
+
 import SignUp from './signup';
 import ServiceProviderRegisterPage from './service_provider_registration';
 import Loader from '../components/utils/Loader';
@@ -81,7 +81,6 @@ const Pages = () => {
       <ServiceProviderRoute exact path={"/myBids"} component={MyBidsPage}/>
 
       <Route exact path={'/test'} component={Loader} />
-      <Route exact path={'/admin'} component={AdminLogin} />
     </Router>
   );
 };
