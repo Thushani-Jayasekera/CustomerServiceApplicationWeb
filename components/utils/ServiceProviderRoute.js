@@ -2,11 +2,12 @@ import React from "react";
 import {BrowserRouter as Router , Route , Redirect} from "react-router-dom";
 import { useQuery ,gql} from "@apollo/client";
 import {GET_ME_AS_SERVICE_PROVIDER} from "../../gql/query";
+import Loader from "./Loader";
 
 const ServiceProviderRoute = ({ component: Component, ...rest }) => {
   const { loading, error, data } = useQuery(GET_ME_AS_SERVICE_PROVIDER);
   // if the data is loading, display a loading message
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader/>;
   // if there is an error fetching the data, display an error message
   return (
     <Route
