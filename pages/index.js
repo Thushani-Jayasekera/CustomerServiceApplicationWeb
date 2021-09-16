@@ -22,6 +22,8 @@ import CreateJobPostingPage from './create_job_posting';
 import CommonProfilePage from "./profile";
 import JobPostingPage from "./view_job_posting";
 import MyBidsPage from "./my_bids";
+//import ViewServiceRequestPage from './view_service_request';
+import ProfilePage from './profile_page';
 
 
 const Pages = () => {
@@ -62,6 +64,12 @@ const Pages = () => {
         component={CommonProfilePage}
       />
 
+      <LoggedInRoute
+        exact
+        path={'/testprofile'}
+        component={ProfilePage}
+      />
+
       <ServiceProviderRoute
         exact
         path={'/service_provider/find_jobs'}
@@ -78,6 +86,8 @@ const Pages = () => {
         path="/service_requester/addDetails"
         component={AddDetailsPage}
       />
+
+      
       <ServiceProviderRoute exact path={"/myBids"} component={MyBidsPage}/>
 
       <Route exact path={'/test'} component={Loader} />

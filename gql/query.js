@@ -166,6 +166,7 @@ const GET_ALL_SERVICE_PROVIDERS = gql`
 const GET_ACCEPTED_SERVICE_REQUESTS_OF_ME=gql`
 query AcceptedServiceRequestsbyMe{
   acceptedServiceRequestsbyMe {
+    id
     date
     time
     payMethod
@@ -183,6 +184,7 @@ const GET_PENDING_SERVICE_REQUESTS_OF_ME=gql`
 query PendingServiceRequests{
   
   pendingServiceRequestsbyMe {
+    id
     date
     time
     payMethod
@@ -199,6 +201,7 @@ query PendingServiceRequests{
 const GET_PENDING_SERVICE_REQUESTS_FOR_ME=gql`
 query MyPendingServiceRequests{
   pendingServiceRequestsForMe {
+    id
     date
     time
     payMethod
@@ -214,6 +217,7 @@ query MyPendingServiceRequests{
 const GET_ACCEPTED_SERVICE_REQUESTS_FOR_ME=gql`
 query MyPendingServiceRequests{
   acceptedServiceRequestsForMe {
+    id
     date
     time
     payMethod
@@ -253,6 +257,38 @@ const GET_MY_BIDS = gql`
     }
 `;
 
+const GET_USER_BY_ID=gql`
+query Query($getUserbyIdId: String!) {
+  getUserbyId(id: $getUserbyIdId) {
+    id
+    username
+    roles
+    service_providing_status
+    city
+    postalCode
+  }
+}
+`;
+
+const GET_SR_BY_ID=gql`
+query Query($getServiceRequestByIdId: ID) {
+  getServiceRequestByID(id: $getServiceRequestByIdId) {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    image2
+    image1
+    image3
+  }
+}
+`;
+
 export {
   IS_LOGGED_IN,
   GET_ME,
@@ -268,6 +304,9 @@ export {
   GET_ACCEPTED_SERVICE_REQUESTS_FOR_ME,
   GET_JOB_POSTING,
   GET_ALL_SERVICE_TYPES,
-  GET_MY_BIDS
+  GET_MY_BIDS,
+  GET_USER_BY_ID,
+  GET_SR_BY_ID,
+
 
 };

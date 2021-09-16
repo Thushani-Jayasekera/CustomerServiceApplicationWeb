@@ -8,7 +8,7 @@ import styled from "styled-components";
 import tw from 'twin.macro'
 import Header from "../components/Header";
 import { motion } from 'framer-motion';
-
+import { Link } from "react-router-dom";
 import {
   PrimaryButton,
   PrimaryButton2,
@@ -163,7 +163,7 @@ const PostTextContainer = tw.div``
                     <Title>{request.task}</Title>
                     <AuthorName>Provider ID: {request.provider_id}</AuthorName>
                     <AuthorName>Scheduled for {request.date} at {request.time}h </AuthorName>
-                    <CardButton2>Edit</CardButton2>
+                    <Link to={`/service_request/${request.id}`}><CardButton2>Edit</CardButton2></Link>
                     <CardButton2>Reschedule</CardButton2>
                     <CardButton2>Cancel</CardButton2>
                   </PostTextContainer>
