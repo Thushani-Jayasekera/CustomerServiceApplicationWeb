@@ -9,13 +9,14 @@ import tw from 'twin.macro';
 import styled from 'styled-components';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import Loader from '../components/utils/Loader';
+
 //import {ReactComponent as SvgDotPatternIcon} from "../images/dot-pattern.svg"
 // Styling
 const Container = tw.div`relative`;
 const Content = tw.div`max-w-screen-xl mx-auto py-20 lg:py-24`;
 const Form = tw.form`mx-auto lg:max-w-lg max-w-sm`;
 const FormContainer = styled.div`
-  ${tw`p-10 sm:p-12 md:p-16 bg-primary-600 text-gray-100 rounded-lg relative`}
+  ${tw`p-10 sm:p-12 md:p-16 bg-primary-300 text-gray-100 rounded-lg relative`}
   form {
     ${tw`mt-4`}
   }
@@ -72,11 +73,12 @@ const FindServicePage = ({ history }) => {
 
   return (
     <Container>
+      <Header/>
       <Content>
         <FormContainer>
           <div tw="mx-auto max-w-4xl">
             <h2>New Service Request</h2>
-            <p>Creator {data.me.username}</p>
+            <p>Creator: {data.me.username}</p>
             <Form
               onSubmit={event => {
                 event.preventDefault();

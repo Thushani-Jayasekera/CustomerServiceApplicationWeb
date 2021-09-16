@@ -17,6 +17,7 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import Loader from '../components/utils/Loader';
 import {
   GET_ALL_SERVICE_PROVIDERS,
+  GET_ALL_SERVICE_TYPES,
   GET_ME_AS_SERVICE_REQUESTER
 } from '../gql/query';
 
@@ -28,16 +29,7 @@ const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`
 const TwoColumn = tw.div`flex flex-col sm:flex-row justify-between`;
 const Column = tw.div`sm:w-5/12 flex flex-col`;
 const Heading = tw(SectionHeading)``;
-const TabsControl = tw.div`flex flex-wrap bg-gray-200 px-2 py-2 rounded leading-none mt-12 xl:mt-0`;
 
-const TabControl = styled.div`
-  ${tw`cursor-pointer px-6 py-3 mt-2 sm:mt-0 sm:mr-2 last:mr-0 text-gray-600 font-medium rounded-sm transition duration-300 text-sm sm:text-base w-1/2 sm:w-auto text-center`}
-  &:hover {
-    ${tw`bg-gray-300 text-gray-700`}
-  }
-  ${props => props.active && tw`bg-primary-500! text-gray-100!`}
-  }
-`;
 const Actions = styled.div`
   ${tw`relative max-w-lg text-center mx-auto lg:mx-0`}
   input {
@@ -48,11 +40,9 @@ const Actions = styled.div`
   }
 `;
 
-const TabContent = tw(
-  motion.div
-)`mt-6 flex flex-wrap sm:-mr-10 md:-mr-6 lg:-mr-12`;
+
 const CardContainer = tw.div`mt-10 w-full sm:w-1/2 md:w-1/3 lg:w-full sm:pr-10 md:pr-6 lg:pr-12`;
-const CardContainer2 = tw.div`mt-10 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 sm:pr-10 md:pr-6 lg:pr-12`;
+const CardContainer2 = tw.div`mt-10 w-full sm:w-1/2 md:w-1/3 lg:w-1/3 sm:pr-10 md:pr-6 lg:pr-12`;//
 const Card = tw(
   motion.a
 )`bg-gray-200 rounded-b block max-w-xs mx-auto sm:max-w-none sm:mx-0`;
@@ -89,31 +79,9 @@ const CardReview = tw.div`font-medium text-xs text-gray-600`;
 const CardText = tw.div`p-4 text-gray-900`;
 const CardTitle = tw.h5`text-lg font-semibold group-hover:text-primary-500`;
 const CardContent = tw.p`mt-1 text-sm font-medium text-gray-600`;
-const Cards = tw.div`flex flex-wrap flex-row justify-center sm:max-w-2xl lg:max-w-5xl mx-auto`;
-const Card2 = tw.div`mt-24 w-full sm:w-1/2 lg:w-1/3 flex flex-col items-center`;
-const CardImage2 = styled.div`
-  ${props => css`background-image: url("${props.imageSrc}");`}
-  ${tw`w-64 h-64 bg-contain bg-center rounded`}
-`;
-const CardContent2 = styled.div`
-  ${tw`flex flex-col items-center mt-6`}
-  .position {
-    ${tw`uppercase font-bold tracking-widest text-xs text-primary-500`}
-  }
-  .name {
-    ${tw`mt-1 text-xl font-medium text-gray-900`}
-  9
-`;
 
-const CardLinks = styled.div`
-  ${tw`mt-6 flex`}
-  .link {
-    ${tw`mr-8 last:mr-0 text-gray-400 hocus:text-primary-500 transition duration-300`}
-    .icon {
-      ${tw`fill-current w-6 h-6`}
-    }
-  }
-`;
+
+
 const IconWithText = tw.div`flex items-center mr-6 my-2 sm:my-0`;
 const IconContainer = styled.div`
   ${tw`inline-block rounded-full p-2 bg-gray-700 text-gray-100`}
@@ -123,6 +91,9 @@ const IconContainer = styled.div`
 `;
 const Text = tw.div`ml-2 text-sm font-semibold text-gray-800`;
 
+
+
+
 const ServiceRequesterWelcomePage = ({ history }) => {
   const { name } = useParams();
   const [values, setValues] = useState({ profession: '' });
@@ -131,15 +102,18 @@ const ServiceRequesterWelcomePage = ({ history }) => {
     GET_ME_AS_SERVICE_REQUESTER
   );
   const service_providers = useQuery(GET_ALL_SERVICE_PROVIDERS);
-  if (loading || service_providers.loading) return <Loader />;
+  const service_types=useQuery(GET_ALL_SERVICE_TYPES);
+  if (loading || service_providers.loading||service_types.loading) return <Loader />;
 
   heading = 'Explore Service Providers';
   const items = service_providers.data.viewAllServiceProviders;
-  const tabs = _.countBy(items, function(items) {
-    return items.profession;
-  });
-  const tabKeys = Object.keys(tabs);
-  console.log(tabKeys);
+  //const tabs = _.countBy(items, function(items) {
+    //return items.profession;
+  //});
+  //const tabKeys = Object.keys(tabs);
+  //console.log(tabKeys);
+  const types=service_types.data.viewAllServiceTypes;
+  console.log(types);
 
   const handleChange = event => {
     setValues({
@@ -151,9 +125,10 @@ const ServiceRequesterWelcomePage = ({ history }) => {
 
 
   return (
-
+<>
+<Header/>
     <Container>
-      <Header/>
+      
       <ContentWithPaddingXl>
         <HeaderRow>
           <Actions>
@@ -173,19 +148,12 @@ const ServiceRequesterWelcomePage = ({ history }) => {
           <Heading>Select What You Want to get Done!</Heading>
         </HeaderRow>
       
-       <Container>
-          <CardContainer2>
-                <Card className="group"  initial="rest" whileHover="hover" animate="rest">
+        {types.map((type, index) => (
+              <CardContainer2 key={index}>
                
-                  <CardImage2 imageSrc="data:image/jpeg;base64,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">
-                    <CardRatingContainer>
-                      <CardRating>
-                       
-                        kjdksj
-                      </CardRating>
-                      <CardReview>(dd)</CardReview>
-                    </CardRatingContainer>
-                    
+                <Card className="group" href={`/service_requester/selectOption/${type.user_type}`}initial="rest" whileHover="hover" animate="rest">
+                  <CardImageContainer imageSrc={type.image}>
+ 
                     <CardHoverOverlay
                       variants={{
                         hover: {
@@ -199,97 +167,17 @@ const ServiceRequesterWelcomePage = ({ history }) => {
                       }}
                       transition={{ duration: 0.3 }}
                     >
-                      <CardButton>Buy Now</CardButton>
+                      <CardText><CardContent>{type.description}</CardContent></CardText>
                     </CardHoverOverlay>
-                    
-                  </CardImage2>
-                
+                  </CardImageContainer>
                   <CardText>
-                    <CardTitle>Plumbing</CardTitle>
-                    <CardContent2>sds</CardContent2>
+                    <CardTitle>{type.service_name}</CardTitle>
                     
                   </CardText>
-                
                 </Card>
-              </CardContainer2>
-              <CardContainer2>
-                <Card className="group"  initial="rest" whileHover="hover" animate="rest">
                
-                  <CardImage2 imageSrc="vbb">
-                    <CardRatingContainer>
-                      <CardRating>
-                       
-                        kjdksj
-                      </CardRating>
-                      <CardReview>(dd)</CardReview>
-                    </CardRatingContainer>
-                    
-                    <CardHoverOverlay
-                      variants={{
-                        hover: {
-                          opacity: 1,
-                          height: "auto"
-                        },
-                        rest: {
-                          opacity: 0,
-                          height: 0
-                        }
-                      }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <CardButton>Buy Now</CardButton>
-                    </CardHoverOverlay>
-                    
-                  </CardImage2>
-                
-                  <CardText>
-                    <CardTitle>Painting</CardTitle>
-                    <CardContent2>sds</CardContent2>
-                    
-                  </CardText>
-                
-                </Card>
               </CardContainer2>
-              <CardContainer2>
-                <Card className="group"  initial="rest" whileHover="hover" animate="rest">
-               
-                  <CardImage2 imageSrc="vbb">
-                    <CardRatingContainer>
-                      <CardRating>
-                       
-                        kjdksj
-                      </CardRating>
-                      <CardReview>(dd)</CardReview>
-                    </CardRatingContainer>
-                    
-                    <CardHoverOverlay
-                      variants={{
-                        hover: {
-                          opacity: 1,
-                          height: "auto"
-                        },
-                        rest: {
-                          opacity: 0,
-                          height: 0
-                        }
-                      }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <CardButton>Buy Now</CardButton>
-                    </CardHoverOverlay>
-                    
-                  </CardImage2>
-                
-                  <CardText>
-                    <CardTitle>Painting</CardTitle>
-                    <CardContent2>sds</CardContent2>
-                    
-                  </CardText>
-                
-                </Card>
-              </CardContainer2>
-              
-              </Container>
+            ))}
 
        
         
@@ -375,6 +263,7 @@ const ServiceRequesterWelcomePage = ({ history }) => {
           ))}
       </ContentWithPaddingXl>
     </Container>
+    </>
   );
 };
 
