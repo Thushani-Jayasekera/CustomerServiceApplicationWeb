@@ -5,7 +5,8 @@ import {
   Section,
   Content,
   Table,
-  Button
+  Button,
+  
 } from 'react-bulma-components';
 
 import Layout from '../components/Layout';
@@ -49,6 +50,16 @@ const FormContainer = styled.div`
     option {
       ${tw`text-gray-500`}
     }
+  }
+`;
+
+const Actions = styled.div`
+  ${tw`relative max-w-md text-center mx-auto lg:mx-0`}
+  input {
+    ${tw`sm:pr-48 pl-8 py-4 sm:py-5 rounded-full border-2 w-full font-medium focus:outline-none transition duration-300  focus:border-primary-500 hover:border-gray-500`}
+  }
+  button {
+    ${tw`w-full sm:absolute right-0 top-0 bottom-0 bg-primary-500 text-gray-100 font-bold mr-2 my-4 sm:my-2 rounded-full py-4 flex items-center justify-center sm:w-40 sm:leading-none focus:outline-none hover:bg-primary-900 transition duration-300`}
   }
 `;
 
@@ -178,7 +189,8 @@ const ViewServiceRequestPage = () => {
     setValues({ })
     acceptServiceRequest({
       variables: {
-        rejectServiceRequestId:id
+        acceptServiceRequestId:id,
+        acceptServiceRequestEstimate:values.acceptServiceRequestEstimate
       }
     });  
   }
@@ -248,27 +260,43 @@ const ViewServiceRequestPage = () => {
                     >
                       Cancel
                     </Button>
+
+                    <Button
+                    
+                    rounded
+                    className="button is-success is-centered is-medium mx-4 my-2 px-6"
+                   
+                  >
+                    Make Payment
+                  </Button>
                   </>
 
 
                 ) : (
                   <>
-                  <Button
+                  <Columns>
+                  <Actions>
+                    <input type="text" placeholder="Enter your estimate" name={'acceptServiceRequestEstimate'} onChange={handleChange}/>
+                    <Button
                   rounded
                   className="button is-success is-medium mx-4 my-2 px-6"
-                  onClick={rejectRequest}
-                  disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<new Date().toISOString().substr(0,16)}
+                  onClick={acceptRequest}
+                  disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<new Date().toISOString().substr(0,16)||serviceReqDetails.state!=='Pending'}
                 >
                   Accept
                 </Button>
+                  </Actions>
+
+                
                   <Button
                     rounded
                     className="button is-danger is-medium mx-4 my-2 px-6"
-                    onClick={acceptRequest}
+                    onClick={rejectRequest}
                     disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<now.toISOString().substr(0,16)}
                   >
                     Reject
                   </Button>
+                  </Columns>
                   </>
                 )}
 
@@ -297,10 +325,17 @@ const ViewServiceRequestPage = () => {
                         <td>{serviceReqDetails.time}</td>
                       </tr>
                       <tr>
+                        <td>Description of Task</td>
+                        <td>
+                          {serviceReqDetails.task}
+                         
+                        </td>
+                      </tr>
+                      <tr>
                         <td>Agreed Price Range</td>
                         <td>
                           {serviceReqDetails.min_price}-
-                          {serviceReqDetails.max_price}
+                          {serviceReqDetails.max_price} LKR
                         </td>
                       </tr>
 
@@ -308,10 +343,17 @@ const ViewServiceRequestPage = () => {
                         <td>Service Provider Estimate</td>
                         <td>
                           {serviceReqDetails.estimate
-                            ? serviceReqDetails.estimate
+                            ? `${serviceReqDetails.estimate} LKR`
                             : 'Not Available Yet'}
                         </td>
                       </tr>
+                      <tr>
+                        <td>Total Amount Paid to date</td>
+                        <td>
+                          {serviceReqDetails.task}
+                         
+                        </td>
+                        </tr>
                       <tr>
                         <td>Status of Request</td>
                         <td>
@@ -343,8 +385,10 @@ const ViewServiceRequestPage = () => {
                           
                         </td>
                       </tr>
+                      
                     </tbody>
                   </Table>
+          
                 </Content>
               </Section>
             </Container>
@@ -405,10 +449,11 @@ const ViewServiceRequestPage = () => {
 
               ) : (
                 <>
+         
                 <Button
                 rounded
                 className="button is-success is-medium mx-4 my-2 px-6"
-                onClick={rejectRequest}
+                onClick={acceptRequest}
                 disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<new Date().toISOString().substr(0,16)}
               >
                 Accept
@@ -416,7 +461,7 @@ const ViewServiceRequestPage = () => {
                 <Button
                   rounded
                   className="button is-danger is-medium mx-4 my-2 px-6"
-                  onClick={acceptRequest}
+                  onClick={rejectRequest}
                   disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<now.toISOString().substr(0,16)}
                 >
                   Reject
@@ -537,7 +582,7 @@ const ViewServiceRequestPage = () => {
                 <Button
                 rounded
                 className="button is-success is-medium mx-4 my-2 px-6"
-                onClick={rejectRequest}
+                onClick={acceptRequest}
                 disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<new Date().toISOString().substr(0,16)}
               >
                 Accept
@@ -545,7 +590,7 @@ const ViewServiceRequestPage = () => {
                 <Button
                   rounded
                   className="button is-danger is-medium mx-4 my-2 px-6"
-                  onClick={acceptRequest}
+                  onClick={rejectRequest}
                   disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<now.toISOString().substr(0,16)}
                 >
                   Reject

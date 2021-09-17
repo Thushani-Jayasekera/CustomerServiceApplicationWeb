@@ -283,6 +283,7 @@ query Query($getServiceRequestByIdId: ID!) {
     min_price
     max_price
     state
+    estimate
   }
 
 }
@@ -301,6 +302,7 @@ query GetServiceRequestDetails($getServiceRequestByIdId: ID!){
     min_price
     max_price
     state
+    estimate
   }
   me {
         id

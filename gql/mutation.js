@@ -97,11 +97,12 @@ mutation RejectServiceRequestMutation($rejectServiceRequestId: ID) {
 `;
 
 const ACCEPT_SR=gql`
-mutation AcceptServiceRequestMutation($acceptServiceRequestId: ID) {
-  acceptServiceRequest(id: $acceptServiceRequestId) {
+mutation AcceptServiceRequestMutation($acceptServiceRequestId: ID, $acceptServiceRequestEstimate: String) {
+  acceptServiceRequest(id: $acceptServiceRequestId, estimate: $acceptServiceRequestEstimate) {
     date
     time
     state
+    estimate
   }
 }
 `;
