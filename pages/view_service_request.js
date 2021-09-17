@@ -65,11 +65,12 @@ const ViewServiceRequestPage = () => {
   //const [user,setUser]=useState({});
   const { id } = useParams(0);
   console.log(id);
-  const { data: data_serviceRequest } = useQuery(GET_ME_USER_BY_ID_SR_DETAILS, {
+  const sr_request_query = useQuery(GET_ME_USER_BY_ID_SR_DETAILS, {
     variables: {
       getServiceRequestByIdId: `${id}`
     }
   });
+
 
  
   //console.log(data_provider);
@@ -77,12 +78,6 @@ const ViewServiceRequestPage = () => {
   const { addToast } = useToasts();
   const history = useHistory();
 
-  console.log(data_serviceRequest);
-  const serviceReqDetails = data_serviceRequest.getServiceRequestByID;
-
-  const provider_id = serviceReqDetails.provider_id;
-  const requester_id = serviceReqDetails.requester_id;
-  const myDetails = data_serviceRequest.me;
 
   const [cancelServiceRequest,{loading_cancel,error_cancel}] = useMutation(CANCEL_SR,{
     onCompleted:data =>{
@@ -120,7 +115,14 @@ const ViewServiceRequestPage = () => {
 
  
   //const providerDetails=data_provider.getUserbyId;
+  if(sr_request_query.loading) return (<Loader/>)
+  const data_serviceRequest = sr_request_query.data
+  console.log(data_serviceRequest);
+  const serviceReqDetails = data_serviceRequest.getServiceRequestByID;
 
+  const provider_id = serviceReqDetails.provider_id;
+  const requester_id = serviceReqDetails.requester_id;
+  const myDetails = data_serviceRequest.me;
   const handleChange = event => {
     setValues({
       ...values,
