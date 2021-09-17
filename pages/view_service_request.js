@@ -25,7 +25,7 @@ import { useParams } from 'react-router';
 const Content2 = tw.div`max-w-screen-xl mx-auto py-20 lg:py-24`;
 const Form = tw.form`mx-auto lg:max-w-lg max-w-sm`;
 const FormContainer = styled.div`
-  ${tw`p-10 sm:p-12 md:p-16 bg-primary-300 text-gray-100 rounded-lg relative`}
+  ${tw`p-10 sm:p-12 md:p-16 bg-primary-400 text-gray-100 rounded-lg relative`}
   form {
     ${tw`mt-4`}
   }
@@ -54,7 +54,7 @@ const SubmitButton = tw.button`w-full sm:w-32 mt-6 py-3 bg-gray-100 text-primary
 
 const ViewServiceRequestPage = ({ match }) => {
   const [values, setValues] = useState();
-  const [view, setView] = useState({ renderView: 1 });
+  const [view, setView] = useState({ renderView: 0 });
 
   const { id } = useParams(0);
   console.log(id);
@@ -106,56 +106,73 @@ const ViewServiceRequestPage = ({ match }) => {
                 <Button
                   onClick={clickDetails}
                   rounded
-                  className="button is-info is-medium mx-5 px-6"
+                  className="button is-info is-medium mx-4 my-2 px-6"
                 >
                   View Details
                 </Button>
                 <Button
                   onClick={clickReschedule}
                   rounded
-                  className="button is-info is-medium mx-5 px-6"
+                  className="button is-info is-medium mx-4 my-2 px-6"
                 >
                   Reschedule
                 </Button>
                 <Button
                   onClick={clickEdit}
                   rounded
-                  className="button is-info is-medium mx-5 px-6"
+                  className="button is-info is-medium mx-4 my-2 px-6"
                 >
-                  Edit
+                  Edit Task
                 </Button>
                 <Button
                   rounded
-                  className="button is-danger is-medium mx-5 px-6"
+                  className="button is-danger is-medium mx-4 my-2 px-6"
                 >
                   Cancel
                 </Button>
               </Section>
               <Section>
                 <Content>
-                  <Columns>
-                    <Columns.Column>
-                      Provider Name: Lasith Malinga
-                    </Columns.Column>
-                    <Columns.Column>Service Date: 05-09-2018</Columns.Column>
-                    <Columns.Column>Service Time: 13:05 a.m</Columns.Column>
-                  </Columns>
-                </Content>
-              </Section>
-
-              <Section>
-                <Content>
-                  <Columns>
-                    <Columns.Column>
-                      Agrred Price Range: 500 -700 LKR
-                    </Columns.Column>
-                    <Columns.Column>
-                      Service Provider Estimate: 650 LKR
-                    </Columns.Column>
-                    <Columns.Column>Approval Status: Accepted</Columns.Column>
-                  </Columns>
-                </Content>
-              </Section>
+                  <Table className="table is-responsive is-centerd">
+                    <thead>
+                      <tr>
+                        <th>Provider Name</th>
+                        <th>Lasith Malinga</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Service Date</td>
+                        <td>05-09-2018</td>
+                        </tr>
+                        <tr>
+                        <td>Service Time</td>
+                        <td>13:05 a.m</td>
+                        </tr>
+                        <tr>
+                        <td>Agreed Price Range</td>
+                        <td>05-09-2018</td>
+                        </tr>
+                        <tr>
+                        <td>Agreed Price Range</td>
+                        <td>500 -700 LKR</td>
+                        </tr>
+                        <tr>
+                        <td>Service Provider Estimate</td>
+                        <td>650 LKR</td>
+                        </tr>
+                        <tr>
+                        <td>Status of Request</td>
+                        <td>    <Button
+                  
+                  rounded
+                  className="button is-success is-small mx-5 px-6"
+                >Accepted</Button></td>
+                        </tr>
+                    </tbody>
+                    </Table>
+                  </Content>
+                  </Section>
             </Container>
           </Layout>
         );
@@ -172,27 +189,27 @@ const ViewServiceRequestPage = ({ match }) => {
                 <Button
                   onClick={clickDetails}
                   rounded
-                  className="button is-info is-medium mx-5 px-6"
+                  className="button is-info is-medium mx-4 my-2 px-6"
                 >
                   View Details
                 </Button>
                 <Button
                   onClick={clickReschedule}
                   rounded
-                  className="button is-info is-medium mx-5 px-6"
+                  className="button is-info is-medium mx-4 my-2 px-6"
                 >
                   Reschedule
                 </Button>
                 <Button
                   onClick={clickEdit}
                   rounded
-                  className="button is-info is-medium mx-5 px-6"
+                  className="button is-info is-medium mx-4 my-2 px-6"
                 >
-                  Edit
+                  Edit Task
                 </Button>
                 <Button
                   rounded
-                  className="button is-danger is-medium mx-5 px-6"
+                  className="button is-danger is-medium mx-4 my-2 px-6"
                 >
                   Cancel
                 </Button>
@@ -258,31 +275,30 @@ const ViewServiceRequestPage = ({ match }) => {
                 <Button
                   onClick={clickDetails}
                   rounded
-                  className="button is-info is-medium mx-5 px-6"
+                  className="button is-info is-medium mx-4 my-2 px-6"
                 >
                   View Details
                 </Button>
                 <Button
                   onClick={clickReschedule}
                   rounded
-                  className="button is-info is-medium mx-5 px-6"
+                  className="button is-info is-medium mx-4 my-2 px-6"
                 >
                   Reschedule
                 </Button>
                 <Button
                   onClick={clickEdit}
                   rounded
-                  className="button is-info is-medium mx-5 px-6"
+                  className="button is-info is-medium mx-4 my-2 px-6"
                 >
-                  Edit
+                  Edit Task
                 </Button>
                 <Button
                   rounded
-                  className="button is-danger is-medium mx-5 px-6"
+                  className="button is-danger is-medium mx-4 my-2 px-6"
                 >
                   Cancel
                 </Button>
-
                 <Content2>
                   <FormContainer>
                     <h3>Edit the Service Request</h3>
