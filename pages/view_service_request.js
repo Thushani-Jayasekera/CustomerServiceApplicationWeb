@@ -7,10 +7,16 @@ import {
   Table,
   Button
 } from 'react-bulma-components';
+
 import Layout from '../components/Layout';
 import Header from '../components/Header';
 import styled from 'styled-components';
-import { GET_SR_BY_ID } from '../gql/query';
+import {
+  GET_SR_BY_ID,
+  GET_USER_BY_ID,
+  GET_ME,
+  GET_ME_USER_BY_ID_SR_DETAILS
+} from '../gql/query';
 import { useMutation, useQuery } from '@apollo/client';
 import Loader from '../components/utils/Loader';
 import tw from 'twin.macro';
@@ -20,6 +26,7 @@ import { Link } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import { useHistory } from 'react-router-dom';
 import { useParams } from 'react-router';
+import { ACCEPT_SR, CANCEL_SR, EDIT_SR, REJECT_SR, RESCHEDULE_SR } from '../gql/mutation';
 
 //const Container = tw.div`relative`;
 const Content2 = tw.div`max-w-screen-xl mx-auto py-20 lg:py-24`;
@@ -52,23 +59,67 @@ const Input = tw.input``;
 const TextArea = tw.textarea`h-24 sm:h-full resize-none`;
 const SubmitButton = tw.button`w-full sm:w-32 mt-6 py-3 bg-gray-100 text-primary-500 rounded-full font-bold tracking-wide shadow-lg uppercase text-sm transition duration-300 transform focus:outline-none focus:shadow-outline hover:bg-gray-300 hover:text-primary-700 hocus:-translate-y-px hocus:shadow-xl`;
 
-const ViewServiceRequestPage = ({ match }) => {
+const ViewServiceRequestPage = () => {
   const [values, setValues] = useState();
   const [view, setView] = useState({ renderView: 0 });
-
+  //const [user,setUser]=useState({});
   const { id } = useParams(0);
   console.log(id);
-  const jobPostingQuery = useQuery(GET_SR_BY_ID, {
+  const { data: data_serviceRequest } = useQuery(GET_ME_USER_BY_ID_SR_DETAILS, {
     variables: {
       getServiceRequestByIdId: `${id}`
     }
   });
+
+ 
+  //console.log(data_provider);
+
   const { addToast } = useToasts();
   const history = useHistory();
 
-  if (jobPostingQuery.loading) {
-    return <Loader />;
-  }
+  console.log(data_serviceRequest);
+  const serviceReqDetails = data_serviceRequest.getServiceRequestByID;
+
+  const provider_id = serviceReqDetails.provider_id;
+  const requester_id = serviceReqDetails.requester_id;
+  const myDetails = data_serviceRequest.me;
+
+  const [cancelServiceRequest,{loading_cancel,error_cancel}] = useMutation(CANCEL_SR,{
+    onCompleted:data =>{
+      history.push('/');
+      
+    }
+  });
+
+  const [rejectServiceRequest,{loading_reject,error_reject}] = useMutation(REJECT_SR,{
+    onCompleted:data =>{
+      history.push('/');
+      
+    }
+  });
+
+  const [acceptServiceRequest,{loading_accept,error_accept}] = useMutation(ACCEPT_SR,{
+    onCompleted:data =>{
+      history.push('/');
+      
+    }
+  });
+  const [rescheduleServiceRequest,{loading_reschedule,error_reschedule}] = useMutation(RESCHEDULE_SR,{
+    onCompleted:data =>{
+      history.push('/');
+      
+    }
+  });
+
+  const [editServiceRequest,{loading_edit,error_edit}] = useMutation(EDIT_SR,{
+    onCompleted:data =>{
+      history.push('/');
+      
+    }
+  });
+
+ 
+  //const providerDetails=data_provider.getUserbyId;
 
   const handleChange = event => {
     setValues({
@@ -103,76 +154,108 @@ const ViewServiceRequestPage = ({ match }) => {
                   <h1>Service Request details</h1>
                 </Content>
 
-                <Button
-                  onClick={clickDetails}
+                {myDetails.id === requester_id ? (
+                  <>
+                    <Button
+                      onClick={clickDetails}
+                      rounded
+                      className="button is-info is-medium mx-4 my-2 px-6"
+                    >
+                      View Details
+                    </Button>
+                    <Button
+                      onClick={clickReschedule}
+                      rounded
+                      className="button is-info is-medium mx-4 my-2 px-6"
+                    >
+                      Reschedule
+                    </Button>
+                    <Button
+                      onClick={clickEdit}
+                      rounded
+                      className="button is-info is-medium mx-4 my-2 px-6"
+                    >
+                      Edit Task
+                    </Button>
+                    <Button
+                      rounded
+                      className="button is-danger is-medium mx-4 my-2 px-6"
+                      onClick={cancelServiceRequest}
+                    >
+                      Cancel
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                  <Button
                   rounded
-                  className="button is-info is-medium mx-4 my-2 px-6"
+                  className="button is-success is-medium mx-4 my-2 px-6"
+                  onClick={rejectServiceRequest}
                 >
-                  View Details
+                  Accept
                 </Button>
-                <Button
-                  onClick={clickReschedule}
-                  rounded
-                  className="button is-info is-medium mx-4 my-2 px-6"
-                >
-                  Reschedule
-                </Button>
-                <Button
-                  onClick={clickEdit}
-                  rounded
-                  className="button is-info is-medium mx-4 my-2 px-6"
-                >
-                  Edit Task
-                </Button>
-                <Button
-                  rounded
-                  className="button is-danger is-medium mx-4 my-2 px-6"
-                >
-                  Cancel
-                </Button>
+                  <Button
+                    rounded
+                    className="button is-danger is-medium mx-4 my-2 px-6"
+                    onClick={acceptServiceRequest}
+                  >
+                    Reject
+                  </Button>
+                  </>
+                )}
               </Section>
               <Section>
                 <Content>
                   <Table className="table is-responsive is-centerd">
                     <thead>
                       <tr>
-                        <th>Provider Name</th>
-                        <th>Lasith Malinga</th>
+                        <th>Selected Provider Profile</th>
+                        <th>
+                          <Link to={'/profile'}>{'View Profile'}</Link>
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td>Service Date</td>
-                        <td>05-09-2018</td>
-                        </tr>
-                        <tr>
+                        <td>{serviceReqDetails.date}</td>
+                      </tr>
+                      <tr>
                         <td>Service Time</td>
-                        <td>13:05 a.m</td>
-                        </tr>
-                        <tr>
+                        <td>{serviceReqDetails.time}</td>
+                      </tr>
+                      <tr>
                         <td>Agreed Price Range</td>
-                        <td>05-09-2018</td>
-                        </tr>
-                        <tr>
-                        <td>Agreed Price Range</td>
-                        <td>500 -700 LKR</td>
-                        </tr>
-                        <tr>
+                        <td>
+                          {serviceReqDetails.min_price}-
+                          {serviceReqDetails.max_price}
+                        </td>
+                      </tr>
+
+                      <tr>
                         <td>Service Provider Estimate</td>
-                        <td>650 LKR</td>
-                        </tr>
-                        <tr>
+                        <td>
+                          {serviceReqDetails.estimate
+                            ? serviceReqDetails.estimate
+                            : 'Not Available Yet'}
+                        </td>
+                      </tr>
+                      <tr>
                         <td>Status of Request</td>
-                        <td>    <Button
-                  
-                  rounded
-                  className="button is-success is-small mx-5 px-6"
-                >Accepted</Button></td>
-                        </tr>
+                        <td>
+                          
+                          <Button
+                            rounded
+                            className="button is-success is-small mx-5 px-6"
+                          >
+                            {serviceReqDetails.state}
+                          </Button>
+                        </td>
+                      </tr>
                     </tbody>
-                    </Table>
-                  </Content>
-                  </Section>
+                  </Table>
+                </Content>
+              </Section>
             </Container>
           </Layout>
         );
@@ -185,34 +268,55 @@ const ViewServiceRequestPage = ({ match }) => {
                 <Content>
                   <h1>Service Request details</h1>
                 </Content>
-
-                <Button
-                  onClick={clickDetails}
+                {myDetails.id === requester_id ? (
+                  <>
+                    <Button
+                      onClick={clickDetails}
+                      rounded
+                      className="button is-info is-medium mx-4 my-2 px-6"
+                    >
+                      View Details
+                    </Button>
+                    <Button
+                      onClick={clickReschedule}
+                      rounded
+                      className="button is-info is-medium mx-4 my-2 px-6"
+                    >
+                      Reschedule
+                    </Button>
+                    <Button
+                      onClick={clickEdit}
+                      rounded
+                      className="button is-info is-medium mx-4 my-2 px-6"
+                    >
+                      Edit Task
+                    </Button>
+                    <Button
+                      rounded
+                      className="button is-danger is-medium mx-4 my-2 px-6"
+                      onClick={cancelServiceRequest}
+                    >
+                      Cancel
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                  <Button
                   rounded
-                  className="button is-info is-medium mx-4 my-2 px-6"
+                  className="button is-success is-medium mx-4 my-2 px-6"
+                  onClick={rejectServiceRequest}
                 >
-                  View Details
+                  Accept
                 </Button>
-                <Button
-                  onClick={clickReschedule}
-                  rounded
-                  className="button is-info is-medium mx-4 my-2 px-6"
-                >
-                  Reschedule
-                </Button>
-                <Button
-                  onClick={clickEdit}
-                  rounded
-                  className="button is-info is-medium mx-4 my-2 px-6"
-                >
-                  Edit Task
-                </Button>
-                <Button
-                  rounded
-                  className="button is-danger is-medium mx-4 my-2 px-6"
-                >
-                  Cancel
-                </Button>
+                  <Button
+                    rounded
+                    className="button is-danger is-medium mx-4 my-2 px-6"
+                    onClick={acceptServiceRequest}
+                  >
+                    Reject
+                  </Button>
+                  </>
+                )}
 
                 <Content2>
                   <FormContainer>
@@ -271,34 +375,55 @@ const ViewServiceRequestPage = ({ match }) => {
                   <h1>Service Request details</h1>
                 </Content>
 
-                
-                <Button
-                  onClick={clickDetails}
+                {myDetails.id === requester_id ? (
+                  <>
+                    <Button
+                      onClick={clickDetails}
+                      rounded
+                      className="button is-info is-medium mx-4 my-2 px-6"
+                    >
+                      View Details
+                    </Button>
+                    <Button
+                      onClick={clickReschedule}
+                      rounded
+                      className="button is-info is-medium mx-4 my-2 px-6"
+                    >
+                      Reschedule
+                    </Button>
+                    <Button
+                      onClick={clickEdit}
+                      rounded
+                      className="button is-info is-medium mx-4 my-2 px-6"
+                    >
+                      Edit Task
+                    </Button>
+                    <Button
+                      rounded
+                      className="button is-danger is-medium mx-4 my-2 px-6"
+                      onClick={cancelServiceRequest}
+                    >
+                      Cancel
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                  <Button
                   rounded
-                  className="button is-info is-medium mx-4 my-2 px-6"
+                  className="button is-success is-medium mx-4 my-2 px-6"
+                  onClick={rejectServiceRequest}
                 >
-                  View Details
+                  Accept
                 </Button>
-                <Button
-                  onClick={clickReschedule}
-                  rounded
-                  className="button is-info is-medium mx-4 my-2 px-6"
-                >
-                  Reschedule
-                </Button>
-                <Button
-                  onClick={clickEdit}
-                  rounded
-                  className="button is-info is-medium mx-4 my-2 px-6"
-                >
-                  Edit Task
-                </Button>
-                <Button
-                  rounded
-                  className="button is-danger is-medium mx-4 my-2 px-6"
-                >
-                  Cancel
-                </Button>
+                  <Button
+                    rounded
+                    className="button is-danger is-medium mx-4 my-2 px-6"
+                    onClick={acceptServiceRequest}
+                  >
+                    Reject
+                  </Button>
+                  </>
+                )}
                 <Content2>
                   <FormContainer>
                     <h3>Edit the Service Request</h3>

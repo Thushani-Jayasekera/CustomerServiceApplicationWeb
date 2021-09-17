@@ -72,4 +72,56 @@ const ADD_JOB_POSTING  = gql`
     }
 
 `
-export {MAKE_ME_SERVICE_PROVIDER, ADD_DETAILS,CREATE_NEW_SR,CREATE_NEW_BIDDING_JOB,ADD_JOB_BID,ADD_JOB_POSTING}
+
+const CANCEL_SR=gql`
+mutation CancelServiceRequestMutation($cancelServiceRequestId: ID) {
+  cancelServiceRequest(id: $cancelServiceRequestId) {
+    date
+    time
+    task
+    state
+  }
+}
+
+`;
+
+const REJECT_SR=gql`
+mutation RejectServiceRequestMutation($rejectServiceRequestId: ID) {
+  rejectServiceRequest(id: $rejectServiceRequestId) {
+    date
+    time
+    task
+    state
+  }
+}
+`;
+
+const ACCEPT_SR=gql`
+mutation AcceptServiceRequestMutation($acceptServiceRequestId: ID) {
+  acceptServiceRequest(id: $acceptServiceRequestId) {
+    date
+    time
+    state
+  }
+}
+`;
+
+
+const RESCHEDULE_SR=gql`
+mutation RescheduleServiceRequestMutation($rescheduleServiceRequestDate: String!, $rescheduleServiceRequestTime: String!, $rescheduleServiceRequestId: ID) {
+  rescheduleServiceRequest(date: $rescheduleServiceRequestDate, time: $rescheduleServiceRequestTime, id: $rescheduleServiceRequestId) {
+    date
+    time
+  }
+}
+`;
+
+
+const EDIT_SR=gql`
+mutation EditServiceRequestMutation($editServiceRequestTask: String!, $editServiceRequestId: ID, $editServiceRequestImage1: String, $editServiceRequestImage2: String, $editServiceRequestImage3: String) {
+  editServiceRequest(task: $editServiceRequestTask, id: $editServiceRequestId, image1: $editServiceRequestImage1, image2: $editServiceRequestImage2, image3: $editServiceRequestImage3) {
+    task
+  }
+}
+`;
+export {MAKE_ME_SERVICE_PROVIDER, ADD_DETAILS,CREATE_NEW_SR,CREATE_NEW_BIDDING_JOB,ADD_JOB_BID,ADD_JOB_POSTING,CANCEL_SR,ACCEPT_SR,REJECT_SR,RESCHEDULE_SR,EDIT_SR}

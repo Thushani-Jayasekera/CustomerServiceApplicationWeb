@@ -258,8 +258,8 @@ const GET_MY_BIDS = gql`
 `;
 
 const GET_USER_BY_ID=gql`
-query Query($getUserbyIdId: String!) {
-  getUserbyId(id: $getUserbyIdId) {
+query Query ($getUserbyIdId: ID!){
+  getUserbyId (id: $getUserbyIdId){
     id
     username
     roles
@@ -271,9 +271,9 @@ query Query($getUserbyIdId: String!) {
 `;
 
 const GET_SR_BY_ID=gql`
-query Query($getServiceRequestByIdId: ID) {
+query Query($getServiceRequestByIdId: ID!) {
   getServiceRequestByID(id: $getServiceRequestByIdId) {
-    id
+    
     requester_id
     provider_id
     date
@@ -282,10 +282,33 @@ query Query($getServiceRequestByIdId: ID) {
     task
     min_price
     max_price
-    image2
-    image1
-    image3
+    state
   }
+
+}
+`;
+
+const GET_ME_USER_BY_ID_SR_DETAILS=gql`
+query GetServiceRequestDetails($getServiceRequestByIdId: ID!){
+  getServiceRequestByID(id: $getServiceRequestByIdId) {
+    
+    requester_id
+    provider_id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    state
+  }
+  me {
+        id
+        username
+        email
+        city
+    }
+   
 }
 `;
 
@@ -307,6 +330,7 @@ export {
   GET_MY_BIDS,
   GET_USER_BY_ID,
   GET_SR_BY_ID,
+  GET_ME_USER_BY_ID_SR_DETAILS,
 
 
 };
