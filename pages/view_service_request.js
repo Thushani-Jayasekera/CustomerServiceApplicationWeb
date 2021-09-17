@@ -27,6 +27,7 @@ import { useToasts } from 'react-toast-notifications';
 import { useHistory } from 'react-router-dom';
 import { useParams } from 'react-router';
 import { ACCEPT_SR, CANCEL_SR, EDIT_SR, REJECT_SR, RESCHEDULE_SR } from '../gql/mutation';
+import { ValuesOfCorrectType } from 'graphql/validation/rules/ValuesOfCorrectType';
 
 //const Container = tw.div`relative`;
 const Content2 = tw.div`max-w-screen-xl mx-auto py-20 lg:py-24`;
@@ -60,11 +61,14 @@ const TextArea = tw.textarea`h-24 sm:h-full resize-none`;
 const SubmitButton = tw.button`w-full sm:w-32 mt-6 py-3 bg-gray-100 text-primary-500 rounded-full font-bold tracking-wide shadow-lg uppercase text-sm transition duration-300 transform focus:outline-none focus:shadow-outline hover:bg-gray-300 hover:text-primary-700 hocus:-translate-y-px hocus:shadow-xl`;
 
 const ViewServiceRequestPage = () => {
-  const [values, setValues] = useState();
+  const { id } = useParams(0);
+  const[values,setValues]=useState();
   const [view, setView] = useState({ renderView: 0 });
   //const [user,setUser]=useState({});
-  const { id } = useParams(0);
-  console.log(id);
+  
+  const now=new Date()
+  now.setMinutes(now.getMinutes()+25)
+  console.log(now);
   const sr_request_query = useQuery(GET_ME_USER_BY_ID_SR_DETAILS, {
     variables: {
       getServiceRequestByIdId: `${id}`
@@ -80,42 +84,61 @@ const ViewServiceRequestPage = () => {
 
 
   const [cancelServiceRequest,{loading_cancel,error_cancel}] = useMutation(CANCEL_SR,{
-    onCompleted:data =>{
-      history.push('/');
-      
+    onCompleted:(data)=>{
+      addToast("Successfully canceled request",{appearance:"success"})
+      history.push(`/service_request/${id}`)
+    },
+    onError:(error)=>{
+      addToast("Failed ",{appearance:"error"})
     }
+    
+    
   });
 
   const [rejectServiceRequest,{loading_reject,error_reject}] = useMutation(REJECT_SR,{
-    onCompleted:data =>{
-      history.push('/');
-      
+    onCompleted:(data)=>{
+      addToast("Successfully rejected the request",{appearance:"success"})
+      history.push(`/service_request/${id}`)
+    },
+    onError:(error)=>{
+      addToast("Failed ",{appearance:"error"})
     }
   });
 
   const [acceptServiceRequest,{loading_accept,error_accept}] = useMutation(ACCEPT_SR,{
-    onCompleted:data =>{
-      history.push('/');
-      
+    onCompleted:(data)=>{
+      addToast("Successfully accepted the request",{appearance:"success"})
+      history.push(`/service_request/${id}`)
+    },
+    onError:(error)=>{
+      addToast("Failed ",{appearance:"error"})
     }
   });
   const [rescheduleServiceRequest,{loading_reschedule,error_reschedule}] = useMutation(RESCHEDULE_SR,{
-    onCompleted:data =>{
-      history.push('/');
-      
+    onCompleted:(data)=>{
+      addToast("Successfully rescheduled the request",{appearance:"success"})
+      history.push(`/service_request/${id}`)
+    },
+    onError:(error)=>{
+      addToast("Failed ",{appearance:"error"})
     }
   });
 
   const [editServiceRequest,{loading_edit,error_edit}] = useMutation(EDIT_SR,{
-    onCompleted:data =>{
-      history.push('/');
-      
+    onCompleted:(data)=>{
+      addToast("Successfully edited the request",{appearance:"success"})
+      history.push(`/service_request/${id}`)
+    },
+    onError:(error)=>{
+      addToast("Failed ",{appearance:"error"})
     }
   });
 
  
   //const providerDetails=data_provider.getUserbyId;
   if(sr_request_query.loading) return (<Loader/>)
+
+
   const data_serviceRequest = sr_request_query.data
   console.log(data_serviceRequest);
   const serviceReqDetails = data_serviceRequest.getServiceRequestByID;
@@ -123,12 +146,44 @@ const ViewServiceRequestPage = () => {
   const provider_id = serviceReqDetails.provider_id;
   const requester_id = serviceReqDetails.requester_id;
   const myDetails = data_serviceRequest.me;
+
+
   const handleChange = event => {
     setValues({
       ...values,
       [event.target.name]: event.target.value
     });
   };
+
+
+  const cancelRequest=event=>{
+    setValues({ })
+    cancelServiceRequest({
+      variables: {
+        cancelServiceRequestId:id
+      }
+    });  
+  }
+
+  const rejectRequest=event=>{
+    setValues({ })
+    rejectServiceRequest({
+      variables: {
+        rejectServiceRequestId:id
+      }
+    });  
+  }
+
+  const acceptRequest=event=>{
+    setValues({ })
+    acceptServiceRequest({
+      variables: {
+        rejectServiceRequestId:id
+      }
+    });  
+  }
+
+///////////////////////////////////////////////////////////////
   const clickDetails = event => {
     setView({
       renderView: 0
@@ -144,6 +199,8 @@ const ViewServiceRequestPage = () => {
       renderView: 2
     });
   };
+
+  ////////////////////////////////////////////////////////////////
   {
     switch (view.renderView) {
       case 0:
@@ -165,10 +222,13 @@ const ViewServiceRequestPage = () => {
                     >
                       View Details
                     </Button>
+                    
                     <Button
                       onClick={clickReschedule}
                       rounded
                       className="button is-info is-medium mx-4 my-2 px-6"
+                      disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<now.toISOString().substr(0,16)}
+                      
                     >
                       Reschedule
                     </Button>
@@ -176,35 +236,45 @@ const ViewServiceRequestPage = () => {
                       onClick={clickEdit}
                       rounded
                       className="button is-info is-medium mx-4 my-2 px-6"
+                      disabled={serviceReqDetails.state!=='Pending'||serviceReqDetails.date+"T"+serviceReqDetails.time<new Date().toISOString().substr(0,16)}
                     >
                       Edit Task
                     </Button>
                     <Button
                       rounded
                       className="button is-danger is-medium mx-4 my-2 px-6"
-                      onClick={cancelServiceRequest}
+                      onClick={cancelRequest}
+                      disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<now.toISOString().substr(0,16)}
                     >
                       Cancel
                     </Button>
                   </>
+
+
                 ) : (
                   <>
                   <Button
                   rounded
                   className="button is-success is-medium mx-4 my-2 px-6"
-                  onClick={rejectServiceRequest}
+                  onClick={rejectRequest}
+                  disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<new Date().toISOString().substr(0,16)}
                 >
                   Accept
                 </Button>
                   <Button
                     rounded
                     className="button is-danger is-medium mx-4 my-2 px-6"
-                    onClick={acceptServiceRequest}
+                    onClick={acceptRequest}
+                    disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<now.toISOString().substr(0,16)}
                   >
                     Reject
                   </Button>
                   </>
                 )}
+
+
+
+
               </Section>
               <Section>
                 <Content>
@@ -245,13 +315,32 @@ const ViewServiceRequestPage = () => {
                       <tr>
                         <td>Status of Request</td>
                         <td>
-                          
-                          <Button
+                          {
+                            (serviceReqDetails.state==='Accepted')?
+                              (<Button
                             rounded
                             className="button is-success is-small mx-5 px-6"
                           >
                             {serviceReqDetails.state}
                           </Button>
+                              ):(serviceReqDetails.state==='Pending')?(
+                                <Button
+                            rounded
+                            className="button is-warning is-small mx-5 px-6"
+                          >
+                            {serviceReqDetails.state}
+                          </Button>
+                              ):(
+                                <Button
+                            rounded
+                            className="button is-danger is-small mx-5 px-6"
+                          >
+                            {serviceReqDetails.state}
+                          </Button>
+                              )
+                          }
+                          
+                          
                         </td>
                       </tr>
                     </tbody>
@@ -261,6 +350,12 @@ const ViewServiceRequestPage = () => {
             </Container>
           </Layout>
         );
+
+
+
+
+
+        /////////////////////////////////////////////////
       case 1:
         return (
           <Layout>
@@ -272,53 +367,69 @@ const ViewServiceRequestPage = () => {
                 </Content>
                 {myDetails.id === requester_id ? (
                   <>
-                    <Button
-                      onClick={clickDetails}
-                      rounded
-                      className="button is-info is-medium mx-4 my-2 px-6"
-                    >
-                      View Details
-                    </Button>
-                    <Button
-                      onClick={clickReschedule}
-                      rounded
-                      className="button is-info is-medium mx-4 my-2 px-6"
-                    >
-                      Reschedule
-                    </Button>
-                    <Button
-                      onClick={clickEdit}
-                      rounded
-                      className="button is-info is-medium mx-4 my-2 px-6"
-                    >
-                      Edit Task
-                    </Button>
-                    <Button
-                      rounded
-                      className="button is-danger is-medium mx-4 my-2 px-6"
-                      onClick={cancelServiceRequest}
-                    >
-                      Cancel
-                    </Button>
-                  </>
-                ) : (
-                  <>
                   <Button
-                  rounded
-                  className="button is-success is-medium mx-4 my-2 px-6"
-                  onClick={rejectServiceRequest}
-                >
-                  Accept
-                </Button>
+                    onClick={clickDetails}
+                    rounded
+                    className="button is-info is-medium mx-4 my-2 px-6"
+                  >
+                    View Details
+                  </Button>
+                  
+                  <Button
+                    onClick={clickReschedule}
+                    rounded
+                    className="button is-info is-medium mx-4 my-2 px-6"
+                    disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<now.toISOString().substr(0,16)}
+                    
+                  >
+                    Reschedule
+                  </Button>
+                  <Button
+                    onClick={clickEdit}
+                    rounded
+                    className="button is-info is-medium mx-4 my-2 px-6"
+                    disabled={serviceReqDetails.state!=='Pending'||serviceReqDetails.date+"T"+serviceReqDetails.time<new Date().toISOString().substr(0,16)}
+                  >
+                    Edit Task
+                  </Button>
                   <Button
                     rounded
                     className="button is-danger is-medium mx-4 my-2 px-6"
-                    onClick={acceptServiceRequest}
+                    onClick={cancelRequest}
+                    disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<now.toISOString().substr(0,16)}
                   >
-                    Reject
+                    Cancel
                   </Button>
-                  </>
-                )}
+                </>
+
+
+              ) : (
+                <>
+                <Button
+                rounded
+                className="button is-success is-medium mx-4 my-2 px-6"
+                onClick={rejectRequest}
+                disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<new Date().toISOString().substr(0,16)}
+              >
+                Accept
+              </Button>
+                <Button
+                  rounded
+                  className="button is-danger is-medium mx-4 my-2 px-6"
+                  onClick={acceptRequest}
+                  disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<now.toISOString().substr(0,16)}
+                >
+                  Reject
+                </Button>
+                </>
+              )}
+
+              
+
+
+
+
+
 
                 <Content2>
                   <FormContainer>
@@ -329,7 +440,10 @@ const ViewServiceRequestPage = () => {
                         console.log(values);
                         rescheduleServiceRequest({
                           variables: {
-                            ...values
+                            rescheduleServiceRequestId:id,
+                            rescheduleServiceRequestDate:values.rescheduleServiceRequestDate,
+                            rescheduleServiceRequestTime:values.rescheduleServiceRequestTime
+                            
                           }
                         });
                       }}
@@ -339,7 +453,7 @@ const ViewServiceRequestPage = () => {
                         <Input
                           id="date-input"
                           type="date"
-                          name={'createServiceRequestDate'}
+                          name={'rescheduleServiceRequestDate'}
                           placeholder="E.g. john@mail.com"
                           onChange={handleChange}
                           required
@@ -351,8 +465,7 @@ const ViewServiceRequestPage = () => {
                         <Input
                           id="time-input"
                           type="time"
-                          name={'createServiceRequestTime'}
-                          placeholder="E.g. john@mail.com"
+                          name={'rescheduleServiceRequestTime'}
                           onChange={handleChange}
                           required
                         />
@@ -367,6 +480,10 @@ const ViewServiceRequestPage = () => {
             </Container>
           </Layout>
         );
+
+
+
+        //////////////////////////////////////////////////////////
       case 2:
         return (
           <Layout>
@@ -379,53 +496,67 @@ const ViewServiceRequestPage = () => {
 
                 {myDetails.id === requester_id ? (
                   <>
-                    <Button
-                      onClick={clickDetails}
-                      rounded
-                      className="button is-info is-medium mx-4 my-2 px-6"
-                    >
-                      View Details
-                    </Button>
-                    <Button
-                      onClick={clickReschedule}
-                      rounded
-                      className="button is-info is-medium mx-4 my-2 px-6"
-                    >
-                      Reschedule
-                    </Button>
-                    <Button
-                      onClick={clickEdit}
-                      rounded
-                      className="button is-info is-medium mx-4 my-2 px-6"
-                    >
-                      Edit Task
-                    </Button>
-                    <Button
-                      rounded
-                      className="button is-danger is-medium mx-4 my-2 px-6"
-                      onClick={cancelServiceRequest}
-                    >
-                      Cancel
-                    </Button>
-                  </>
-                ) : (
-                  <>
                   <Button
-                  rounded
-                  className="button is-success is-medium mx-4 my-2 px-6"
-                  onClick={rejectServiceRequest}
-                >
-                  Accept
-                </Button>
+                    onClick={clickDetails}
+                    rounded
+                    className="button is-info is-medium mx-4 my-2 px-6"
+                  >
+                    View Details
+                  </Button>
+                  
+                  <Button
+                    onClick={clickReschedule}
+                    rounded
+                    className="button is-info is-medium mx-4 my-2 px-6"
+                    disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<now.toISOString().substr(0,16)}
+                    
+                  >
+                    Reschedule
+                  </Button>
+                  <Button
+                    onClick={clickEdit}
+                    rounded
+                    className="button is-info is-medium mx-4 my-2 px-6"
+                    disabled={serviceReqDetails.state!=='Pending'||serviceReqDetails.date+"T"+serviceReqDetails.time<new Date().toISOString().substr(0,16)}
+                  >
+                    Edit Task
+                  </Button>
                   <Button
                     rounded
                     className="button is-danger is-medium mx-4 my-2 px-6"
-                    onClick={acceptServiceRequest}
+                    onClick={cancelRequest}
+                    disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<now.toISOString().substr(0,16)}
                   >
-                    Reject
+                    Cancel
                   </Button>
-                  </>
-                )}
+                </>
+
+
+              ) : (
+                <>
+                <Button
+                rounded
+                className="button is-success is-medium mx-4 my-2 px-6"
+                onClick={rejectRequest}
+                disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<new Date().toISOString().substr(0,16)}
+              >
+                Accept
+              </Button>
+                <Button
+                  rounded
+                  className="button is-danger is-medium mx-4 my-2 px-6"
+                  onClick={acceptRequest}
+                  disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<now.toISOString().substr(0,16)}
+                >
+                  Reject
+                </Button>
+                </>
+              )}
+
+
+
+
+
                 <Content2>
                   <FormContainer>
                     <h3>Edit the Service Request</h3>
@@ -435,7 +566,11 @@ const ViewServiceRequestPage = () => {
                         console.log(values);
                         editServiceRequest({
                           variables: {
-                            ...values
+                            editServiceRequestId:id,
+                            editServiceRequestTask:values.editServiceRequestTask,
+                            editServiceRequestImage1:values.editServiceRequestImage1,
+                            editServiceRequestImage2:values.editServiceRequestImage2,
+                            editServiceRequestImage3:values.editServiceRequestImage3
                           }
                         });
                       }}
@@ -444,7 +579,7 @@ const ViewServiceRequestPage = () => {
                         <Label htmlFor="job-input">Job Description</Label>
                         <TextArea
                           id="job-input"
-                          name={'createServiceRequestTask'}
+                          name={'editServiceRequestTask'}
                           placeholder="E.g. Details about the service request"
                           onChange={handleChange}
                           required
@@ -456,19 +591,19 @@ const ViewServiceRequestPage = () => {
                         </Label>
                         <input
                           type="file"
-                          name={'createServiceRequestImage1'}
+                          name={'editServiceRequestImage1'}
                           accept="image/*"
                           onChange={handleChange}
                         />
                         <input
                           type="file"
-                          name={'createServiceRequestImage2'}
+                          name={'editServiceRequestImage2'}
                           accept="image/*"
                           onChange={handleChange}
                         />
                         <input
                           type="file"
-                          name={'createServiceRequestImage3'}
+                          name={'editServiceRequestImage3'}
                           accept="image/*"
                           onChange={handleChange}
                         />

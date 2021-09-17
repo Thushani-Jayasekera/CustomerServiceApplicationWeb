@@ -119,7 +119,7 @@ mutation RescheduleServiceRequestMutation($rescheduleServiceRequestDate: String!
 
 const EDIT_SR=gql`
 mutation EditServiceRequestMutation($editServiceRequestTask: String!, $editServiceRequestId: ID, $editServiceRequestImage1: String, $editServiceRequestImage2: String, $editServiceRequestImage3: String) {
-  editServiceRequest(task: $editServiceRequestTask, id: $editServiceRequestId, image1: $editServiceRequestImage1, image2: $editServiceRequestImage2, image3: $editServiceRequestImage3) {
+  editServiceRequest(id: $editServiceRequestId,task: $editServiceRequestTask, image1: $editServiceRequestImage1, image2: $editServiceRequestImage2, image3: $editServiceRequestImage3) {
     task
   }
 }
