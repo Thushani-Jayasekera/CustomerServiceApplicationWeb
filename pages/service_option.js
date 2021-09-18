@@ -20,6 +20,7 @@ import { GET_SERVICE_PROVIDER_BY_PROFESSION } from '../gql/query';
 import { css } from 'styled-components/macro'; //eslint-disable-line
 import { Container, ContentWithPaddingXl } from '../components/misc/Layouts.js';
 import { SectionHeading } from '../components/misc/Headings.js';
+import profileImg from "../images/profile.png"
 const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`;
 const TwoColumn = tw.div`flex flex-col sm:flex-row justify-between`;
 const Column = tw.div`sm:w-5/12 flex flex-col`;
@@ -75,7 +76,7 @@ const CardButton = tw(
 )`text-sm rounded-full m-5 bg-green-500`;
 const CardButton2 = tw(
   PrimaryButtonBase
-)`text-sm rounded-full m-5 bg-yellow-600`;
+)`text-sm rounded-full m-5 bg-blue-600`;
 const CardButtonUnAvailable = tw(
   DisabledButtonBase
 )`text-sm rounded-full m-5 bg-red-500`;
@@ -158,7 +159,7 @@ const SelectOptionPage = ({ history }) => {
                   <Column>
                     <CardImageContainer
                       imageSrc={
-                        'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80'
+                        card.image?card.image:`${profileImg}`
                       }
                     >
                       <CardRatingContainer>
