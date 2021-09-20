@@ -23,8 +23,10 @@ import CommonProfilePage from "./profile";
 import JobPostingPage from "./view_job_posting";
 import MyBidsPage from "./my_bids";
 import ViewServiceRequestPage from './view_service_request';
+import ServiceRequesterStatusPage from './view_serviceRequest_status_requester';
 
 import ProfilePage from './profile_page';
+import ServiceProviderStatusPage from './view_serviceRequest_status_provider';
 
 const Pages = () => {
   return (
@@ -60,7 +62,8 @@ const Pages = () => {
       />
       <LoggedInRoute exact path={'/profile'} component={CommonProfilePage} />
 
-      <LoggedInRoute exact path={'/testprofile'} component={ProfilePage} />
+      <LoggedInRoute exact path={'/profile/serviceRequestsForMe'} component={ServiceProviderStatusPage} />
+      <LoggedInRoute exact path={'/profile/serviceRequestsSent'} component={ServiceRequesterStatusPage} />
 
       <ServiceProviderRoute
         exact

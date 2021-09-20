@@ -230,6 +230,74 @@ query MyPendingServiceRequests{
 }
 `;
 
+const GET_STARTED_SERVICE_REQUESTS_OF_ME=gql`
+query StartedServiceRequests{
+  
+  startedServiceRequestsbyMe {
+    id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+  }
+}
+
+`;
+
+const GET_STARTED_SERVICE_REQUESTS_FOR_ME=gql`
+query MyStartedServiceRequests{
+  startedServiceRequestsForMe {
+    id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+  }
+}
+`;
+
+const GET_COMPLETED_SERVICE_REQUESTS_OF_ME=gql`
+query CompletedServiceRequests{
+  
+  completedServiceRequestsbyMe {
+    id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+  }
+}
+
+`;
+
+const GET_COMPLETED_SERVICE_REQUESTS_FOR_ME=gql`
+query MyCompletedServiceRequests{
+  completedServiceRequestsForMe {
+    id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+  }
+}
+`;
+
 
 const GET_ALL_SERVICE_TYPES=gql`
 query Query {
@@ -314,6 +382,102 @@ query GetServiceRequestDetails($getServiceRequestByIdId: ID!){
 }
 `;
 
+const GET_SERVICE_REQUESTS_OF_ME=gql`
+query Query {
+  acceptedServiceRequestsbyMe {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    task
+    min_price
+    max_price
+  }
+  startedServiceRequestsbyMe {
+    id
+    requester_id
+    provider_id
+    time
+    date
+    min_price
+    max_price
+    payMethod
+    task
+  }
+  completedServiceRequestsbyMe {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    task
+    min_price
+    max_price
+  }
+  pendingServiceRequestsbyMe {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+  }
+}
+
+`;
+
+const GET_SERVICE_REQUESTS_FOR_ME=gql`
+query Query {
+  acceptedServiceRequestsForMe {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    task
+    min_price
+    max_price
+  }
+  startedServiceRequestsForMe {
+    id
+    requester_id
+    provider_id
+    time
+    date
+    min_price
+    max_price
+    payMethod
+    task
+  }
+  completedServiceRequestsForMe {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    task
+    min_price
+    max_price
+  }
+  pendingServiceRequestsForMe {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+  }
+}
+
+`;
+
 export {
   IS_LOGGED_IN,
   GET_ME,
@@ -333,6 +497,12 @@ export {
   GET_USER_BY_ID,
   GET_SR_BY_ID,
   GET_ME_USER_BY_ID_SR_DETAILS,
+  GET_STARTED_SERVICE_REQUESTS_FOR_ME,
+  GET_STARTED_SERVICE_REQUESTS_OF_ME,
+  GET_COMPLETED_SERVICE_REQUESTS_FOR_ME,
+  GET_COMPLETED_SERVICE_REQUESTS_OF_ME,
+  GET_SERVICE_REQUESTS_OF_ME,
+  GET_SERVICE_REQUESTS_FOR_ME
 
 
 };
