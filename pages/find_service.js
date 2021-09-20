@@ -9,6 +9,7 @@ import tw from 'twin.macro';
 import styled from 'styled-components';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import Loader from '../components/utils/Loader';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 //import {ReactComponent as SvgDotPatternIcon} from "../images/dot-pattern.svg"
 // Styling
@@ -99,6 +100,7 @@ const FindServicePage = ({ history }) => {
                   placeholder="E.g. john@mail.com"
                   onChange={handleChange}
                   required
+                  
                 />
               </InputContainer>
 
@@ -120,9 +122,15 @@ const FindServicePage = ({ history }) => {
                   id="loc-input"
                   type="email"
                   name="location"
-                  placeholder={data.me.address}
+                  value={data.me.address}
                   disabled={true}
+                  tw='text-black'
                 />
+                <Link to={{
+                          pathname: `/profile`
+                        }}>
+                <button tw='bg-white opacity-75 hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow'>Change Location</button>
+                </Link>
               </InputContainer>
 
               <TwoColumn>
