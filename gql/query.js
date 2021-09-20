@@ -308,6 +308,7 @@ query Query {
     user_type
     image
   }
+  
 }
 `;
 
