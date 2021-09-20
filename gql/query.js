@@ -120,6 +120,7 @@ const GET_SERVICE_PROVIDERS_BY_NAME = gql`
     searchServiceProviderbyName(name: $searchServiceProviderbyNameName) {
       id
       username
+      fullname
       profession
       city
       province
@@ -138,13 +139,34 @@ const GET_SERVICE_PROVIDER_BY_PROFESSION = gql`
     ) {
       id
       username
+      fullname
       profession
       city
       bio
       service_providing_status
       roles
+      postalCode
     }
+  
   }
+`;
+
+const GET_PROVIDERS_BY_PROFESSION_IN_PROVINCE=gql`
+query Query($searchServiceProviderbyProfessioninProvinceProfession: String!, $searchServiceProviderbyProfessioninProvinceProvince: String!) {
+  searchServiceProviderbyProfessioninProvince(profession: $searchServiceProviderbyProfessioninProvinceProfession, province: $searchServiceProviderbyProfessioninProvinceProvince) {
+    id
+    username
+    fullname
+    postalCode
+    city
+    province
+    bio
+    service_providing_status
+    roles
+    profession
+  
+  }
+}
 `;
 
 const GET_ALL_SERVICE_PROVIDERS = gql`
@@ -159,6 +181,7 @@ const GET_ALL_SERVICE_PROVIDERS = gql`
     bio
     service_providing_status
     roles
+    postalCode
   }
 }
 `;
@@ -548,7 +571,8 @@ export {
   GET_COMPLETED_SERVICE_REQUESTS_FOR_ME,
   GET_COMPLETED_SERVICE_REQUESTS_OF_ME,
   GET_SERVICE_REQUESTS_OF_ME,
-  GET_SERVICE_REQUESTS_FOR_ME
+  GET_SERVICE_REQUESTS_FOR_ME,
+  GET_PROVIDERS_BY_PROFESSION_IN_PROVINCE,
 
 
 };

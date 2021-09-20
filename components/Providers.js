@@ -15,13 +15,14 @@ import tw from 'twin.macro';
 import styled from 'styled-components';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import Loader from '../components/utils/Loader';
-import { GET_SERVICE_PROVIDER_BY_PROFESSION } from '../gql/query';
+import { GET_ME_AS_SERVICE_REQUESTER } from '../gql/query';
 
 import { css } from 'styled-components/macro'; //eslint-disable-line
 import { Container, ContentWithPaddingXl } from '../components/misc/Layouts.js';
 import { SectionHeading } from '../components/misc/Headings.js';
 import profileImg from "../images/profile.png"
-
+import FeatherIcon from 'feather-icons-react';
+import { Columns } from 'react-bulma-components';
 const levenshtein = require('fast-levenshtein');
 const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`;
 const TwoColumn = tw.div`flex flex-col sm:flex-row justify-between`;
@@ -88,9 +89,11 @@ const CardReview = tw.div`font-medium text-xs text-gray-600`;
 const CardText = tw.div`p-4 text-gray-900`;
 const CardTitle = tw.h5`text-lg font-semibold group-hover:text-primary-500`;
 const CardContent = tw.p`mt-1 text-sm font-medium text-gray-600`;
-const MIN_DISTANCE=7;
+const MIN_DISTANCE=4;
 
-const Providers=({items, loading,searchTerm})=>{
+
+
+const Providers=({items, loading,searchTerm,me_id})=>{
     if (loading){
         return <Loader/>
 
@@ -112,7 +115,7 @@ const Providers=({items, loading,searchTerm})=>{
               //use levenshtein-fast algorithm use to find names which are simillar according to a distance
              if (
 
-               levenshtein.get(val.username.substr(0,searchTerm.length).toLowerCase(), searchTerm.toLowerCase()) <=  MIN_DISTANCE && val.roles.includes("service_provider")
+               (levenshtein.get(val.username.substr(0,Math.min(searchTerm.length,val.username.length)).toLowerCase(), searchTerm.toLowerCase()) <=  MIN_DISTANCE || levenshtein.get(val.fullname.substr(0,Math.min(searchTerm.length,val.fullname.length)).toLowerCase(), searchTerm.toLowerCase()) <=  MIN_DISTANCE) && val.roles.includes("service_provider")
             ) {
               return val;
             }}
@@ -141,31 +144,50 @@ const Providers=({items, loading,searchTerm})=>{
                   </Column>
                   <Column>
                     <CardText>
-                      <CardTitle>{card.username}</CardTitle>
+                    <CardTitle>{card.fullname}</CardTitle>
+                      <CardContent>Username: - {card.username}</CardContent>
                       <CardContent>{card.bio}</CardContent>
                     </CardText>
                   </Column>
                   <Column>
                     <CardText>
-                      <CardContent>{card.city}</CardContent>
+                        <Columns>
+                    <FeatherIcon icon="map-pin" />
+                      <CardContent>{card.city} - {card.postalCode}</CardContent>
+                      </Columns>
                     </CardText>
                   </Column>
                   <Column>
-                    <CardButton2>View Profile</CardButton2>
-                    {card.service_providing_status === true ? (
-                      <CardButton>
-                        <Link
-                          to={{
-                            pathname: `/service_requester/createRequest/${card.id}`
-                          }}
-                        >
-                          Hire Now
-                        </Link>
+                  <Link
+                        to={{
+                          pathname: `/profile`
+                        }}
+                      >
+                      <CardButton className="button is-info px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5 ">
+                        
+                          View Profile
                       </CardButton>
+                      </Link>
+                    {card.service_providing_status === true ? (
+                        <Link
+                        to={{
+                          pathname: `/service_requester/createRequest/${card.id}`
+                        }}
+                      >
+                      <CardButton disabled={card.id===me_id} className="button  is-success  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5 ">
+                        
+                          Hire Now !
+                       
+                      </CardButton>
+                      </Link>
                     ) : (
-                      <CardButtonUnAvailable disabled>
+                        <Link>
+                     <CardButton disabled={true} className="button  is-danger  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5 ">
+                        
                         Not Available
-                      </CardButtonUnAvailable>
+                     
+                    </CardButton>
+                    </Link>
                     )}
                   </Column>
                 </TwoColumn>

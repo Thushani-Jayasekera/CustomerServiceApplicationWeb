@@ -15,7 +15,7 @@ import tw from 'twin.macro';
 import styled from 'styled-components';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import Loader from '../components/utils/Loader';
-import { GET_SERVICE_PROVIDER_BY_PROFESSION } from '../gql/query';
+import { GET_SERVICE_PROVIDER_BY_PROFESSION ,GET_ME} from '../gql/query';
 
 import { css } from 'styled-components/macro'; //eslint-disable-line
 import { Container, ContentWithPaddingXl } from '../components/misc/Layouts.js';
@@ -24,6 +24,7 @@ import profileImg from "../images/profile.png"
 import Providers from '../components/Providers';
 import Pagination from '../components/Pagination';
 import {  Message } from "react-bulma-components";
+
 const levenshtein = require('fast-levenshtein');
 const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`;
 const TwoColumn = tw.div`flex flex-col sm:flex-row justify-between`;
@@ -105,7 +106,11 @@ const SelectOptionPage = ({ history }) => {
       }
     }
   );
-  if (loading) return <Loader />;
+
+  const meQuery=useQuery(GET_ME);
+  if (loading||meQuery.loading) return <Loader />;
+
+  me_id=meQuery.data.me.id
 
   heading = 'Explore Service Providers';
   const items = data.searchServiceProviderbyProfession;
@@ -143,9 +148,9 @@ const SelectOptionPage = ({ history }) => {
             }}
           />
         </Actions>
-        <Providers items={items} loading={loading} searchTerm={searchTerm}/>
+        <Providers items={items} loading={loading} searchTerm={searchTerm} me_id={me_id}/>
 
-        <Pagination tilesPerPage={tilesPerPage} totalPosts={items.length} paginate={paginate}/>
+        
 
           {items.length === 0 && (
             <Message color={'danger'}>
