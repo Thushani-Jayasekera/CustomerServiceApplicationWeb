@@ -29,8 +29,7 @@ import { Container, ContentWithPaddingXl } from '../components/misc/Layouts.js';
 import { SectionHeading } from '../components/misc/Headings.js';
 import welcomeImage from '../images/welcomeImage.jpg';
 import HowitWorks from '../images/HowitWorksImage.jpg';
-import Pagination from '../components/Pagination';
-import Services from '../components/Services';
+import profileImg from '../images/profile.png';
 const HeaderRow = tw.div`flex justify-between items-center flex-col `;
 const TwoColumn = tw.div`flex flex-col sm:flex-row justify-between`;
 const Column = tw.div`sm:w-5/12 flex flex-col`;
@@ -84,129 +83,51 @@ const CardText = tw.div`p-4 text-gray-900`;
 const CardTitle = tw.h5`text-lg font-semibold group-hover:text-primary-500`;
 const CardContent = tw.p`mt-1 text-sm font-medium text-gray-600`;
 
+const Services=({types, loading})=>{
+    if (loading){
+        return <Loader/>
 
+    }
 
-const ServiceRequesterWelcomePage = ({ history }) => {
-  const { name } = useParams();
-  const [values, setValues] = useState({ profession: '' });
-  const [currentPage, setCurrentPage] = useState(1);
-  const [tilesPerPage, setTilesPerPage] = useState(6);
-  const { loading, error, data, fetchMore } = useQuery(
-    GET_ME_AS_SERVICE_REQUESTER
-  );
-  const service_providers = useQuery(GET_ALL_SERVICE_PROVIDERS);
-  const service_types = useQuery(GET_ALL_SERVICE_TYPES);
-  if (loading || service_providers.loading || service_types.loading)
-    return <Loader />;
-
-  heading = 'Explore Service Providers';
-  const items = service_providers.data.viewAllServiceProviders;
-  //const tabs = _.countBy(items, function(items) {
-  //return items.profession;
-  //});
-  //const tabKeys = Object.keys(tabs);
-  //console.log(tabKeys);
-  const types = service_types.data.viewAllServiceTypes;
-  console.log(types);
-
-
-
-  const scrollToSection = () => {
-    scroller.scrollTo('howitworks', {
-      duration: 800,
-      delay: 0,
-      smooth: 'easeInOutQuart'
-    });
-  };
-
-  const scrollToSection2 = () => {
-    scroller.scrollTo('selectType', {
-      duration: 800,
-      delay: 0,
-      smooth: 'easeInOutQuart'
-    });
-  };
-
-  const paginate=(pageNumber)=>setCurrentPage(pageNumber);
-
-  const indexOfLastPost=currentPage*tilesPerPage;
-  const indexOfFirstPost=indexOfLastPost-tilesPerPage;
-  const currentPosts=types.slice(indexOfFirstPost,indexOfLastPost)
-
-  return (
-    <>
-      <Header />
-      <div
-        style={{
-          backgroundImage: `url(${welcomeImage})`,
-
-          height: '500px',
-          width: '100%',
-          alignContent: 'center'
-        }}
-      >
-        <br />
-        <HeaderRow>
-          <Heading>Get it Done by Quality Pros!</Heading>
-        </HeaderRow>
-        <br />
-        <HeaderRow>
-          <Column>
-            <button tw="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" onClick={scrollToSection2}>
-              {' '}
-              Get Started!
-            </button>
-            <br />
-            <button
-              tw="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
-              onClick={scrollToSection}
-            >
-              {' '}
-              How it works
-            </button>
-          </Column>
-        </HeaderRow>
-      </div>
-
-      <Container>
-        <ContentWithPaddingXl>
+    return(
+<>
           
-          <HeaderRow>
-            <p tw="text-3xl font-sans">Select What You Want To Get Done!</p>
-          </HeaderRow>
-          <div className="selectType">
-            <Columns>
-          <Services types={currentPosts} loading={loading}/>
-          </Columns>
-          <Pagination tilesPerPage={tilesPerPage} totalPosts={types.length} paginate={paginate}/>
-
-          {types.length === 0 && (
-            <Message color={'danger'}>
-              <Message.Body>Sorry, No Services Found. Visit us Later!</Message.Body>
-            </Message>
-          )}
-          </div>
-          <br/>
-
-          <div className="howitworks">
-            <HeaderRow>
-              <Heading2>How it works!</Heading2>
-            </HeaderRow>
-            <div
-              style={{
-                backgroundImage: `url(${HowitWorks})`,
-
-                height: '517px',
-                width: '100%',
-                alignContent: 'center'
-                
-              }}
-            ></div>
-          </div>
-        </ContentWithPaddingXl>
-      </Container>
-    </>
-  );
+          {types.map((type, index) => (
+            <CardContainer2 key={index}>
+              <Card2
+                className="group"
+                href={`/service_requester/selectOption/${type.user_type}`}
+                initial="rest"
+                whileHover="hover"
+                animate="rest"
+              >
+                <CardImageContainer imageSrc={type.image}>
+                  <CardHoverOverlay
+                    variants={{
+                      hover: {
+                        opacity: 1,
+                        height: 'auto'
+                      },
+                      rest: {
+                        opacity: 0,
+                        height: 0
+                      }
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <CardText>
+                      <CardContent>{type.description}</CardContent>
+                    </CardText>
+                  </CardHoverOverlay>
+                </CardImageContainer>
+                <CardText>
+                  <CardTitle>{type.service_name}</CardTitle>
+                </CardText>
+              </Card2>
+            </CardContainer2>
+          ))}
+        </>
+    );
 };
 
-export default ServiceRequesterWelcomePage;
+export default Services;
