@@ -10,11 +10,11 @@ import {GET_ME} from "../gql/query";
 import {ADD_DETAILS} from "../gql/mutation";
 // Styling
 const Container = tw.div`relative flex justify-center`;
-const Content = tw.div`max-w-screen-xl m-0 sm:mx-20 sm:my-16 bg-white text-gray-900 shadow sm:rounded-lg flex justify-center flex-1 items-center`;
-const MainContainer = tw.div`lg:w-2/3  p-6 sm:p-12`;
+const Content = tw.div`max-w-screen-xl m-0 sm:mx-20 sm:my-16 bg-gradient-to-r from-blue-100 via-purple-500 to-blue-500 text-gray-900 shadow sm:rounded-lg flex justify-center flex-1 items-center`;
+const MainContainer = tw.div`lg:w-2/3  p-6 sm:p-12 `;
 const Heading = tw.h1`text-2xl xl:text-3xl  font-extrabold`;
-const FormContainer = tw.div`w-full flex-1 mt-8`;
-const Form = tw.form`mx-auto lg:max-w-lg max-w-sm`;
+const FormContainer = tw.div`w-full flex-1 mt-8 `;
+const Form = tw.form`mx-auto lg:max-w-lg max-w-sm `;
 const Input = tw.input`w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5 first:mt-0`;
 const Select = tw.select`w-full px-8 py-4 rounded-lg appearance-none font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-base focus:border-gray-400 focus:outline-none focus:bg-white mt-5 first:mt-0`
 const Label = tw.label`block mb-1 pt-3`
@@ -64,7 +64,7 @@ const AddDetailsPage = ({history})=>{
           <MainContainer>
             <Heading>Hello {data.me.username} !</Heading>
             <div>
-              <Span>Give us more details about you for a better service</Span>
+              <Span><p tw='font-sans text-base'>Give us more details about you for a better service</p></Span>
             </div>            
             <FormContainer>
               <Form onSubmit={
@@ -93,7 +93,15 @@ const AddDetailsPage = ({history})=>{
                   <Label>Postal Code</Label>
                   <Input  name={"registerServiceRequesterPostalCode"} placeholder={"Postal Code"} onChange={handleChange} required/>
                 </div>
-                
+                <div>
+                <p tw="mt-6 text-xs text-gray-600 text-center">
+                   
+                    Read Get it Done's{" "}
+                    <a href={''} tw="border-b border-gray-500 border-dotted">
+                      Privacy Policy
+                    </a>
+                  </p>
+                  </div>
               <SubmitButton>
                 Confirm
               </SubmitButton>
