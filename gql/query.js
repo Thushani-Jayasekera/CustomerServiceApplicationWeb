@@ -146,6 +146,8 @@ const GET_SERVICE_PROVIDER_BY_PROFESSION = gql`
       service_providing_status
       roles
       postalCode
+      provider_rating
+      provider_review_count
     }
   
   }
@@ -164,6 +166,8 @@ query Query($searchServiceProviderbyProfessioninProvinceProfession: String!, $se
     service_providing_status
     roles
     profession
+    provider_rating
+    provider_review_count
   
   }
 }
