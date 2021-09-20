@@ -426,8 +426,30 @@ query Query {
     min_price
     max_price
   }
+  canceledServiceRequestsbyMe {
+    id
+    requester_id
+    provider_id
+    time
+    date
+    payMethod
+    task
+    min_price
+    max_price
+  }
+  rejectedServiceRequestsbyMe {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+  
 }
-
+}
 `;
 
 const GET_SERVICE_REQUESTS_FOR_ME=gql`
@@ -474,6 +496,29 @@ query Query {
     min_price
     max_price
   }
+  canceledServiceRequestsForMe {
+    id
+    requester_id
+    provider_id
+    time
+    date
+    payMethod
+    task
+    min_price
+    max_price
+  }
+  rejectedServiceRequestsForMe {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+  }
+  
 }
 
 `;

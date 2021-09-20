@@ -16,7 +16,7 @@ import styled from 'styled-components';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import Loader from '../components/utils/Loader';
 
-
+import { useToasts } from 'react-toast-notifications';
 import { css } from 'styled-components/macro'; //eslint-disable-line
 import { Container, ContentWithPaddingXl } from '../components/misc/Layouts.js';
 import { SectionHeading } from '../components/misc/Headings.js';
@@ -24,6 +24,7 @@ import { SectionHeading } from '../components/misc/Headings.js';
 
 //import { Loader } from "react-feather";
 import { GET_ME_AS_SERVICE_PROVIDER,  GET_SERVICE_REQUESTS_FOR_ME } from "../gql/query";
+import { REJECT_SR } from '../gql/mutation';
 
 
 const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`;
@@ -97,6 +98,22 @@ const ServiceProviderStatusPage=({history})=>{
 
     const requestsForMe=useQuery(GET_SERVICE_REQUESTS_FOR_ME);
 
+    const { addToast } = useToasts();
+    //const[values,setValues]=useState();
+    
+
+    const [rejectServiceRequest,{loading_cancel,error_cancel}] = useMutation(REJECT_SR,{
+        onCompleted:(data)=>{
+          addToast("Successfully rejected request",{appearance:"success"})
+          history.push(`/profile/serviceRequestsForMe`)
+        },
+        onError:(error)=>{
+          addToast("Failed ",{appearance:"error"})
+        }
+        
+        
+      });
+
     if(loading|| requestsForMe.loading) return <Loader/>
 
 
@@ -104,7 +121,8 @@ const ServiceProviderStatusPage=({history})=>{
     const pendingRequests=requestsForMe.data.pendingServiceRequestsForMe;
     const startedRequests=requestsForMe.data.startedServiceRequestsForMe;
     const completedRequests=requestsForMe.data.completedServiceRequestsForMe;
-
+    const canceledRequests=requestsForMe.data.canceledServiceRequestsForMe;
+    const rejectedRequests=requestsForMe.data.rejectedServiceRequestsForMe;
     if(error) return <Redirect to={"/"}/>
     return (
         <Container>
@@ -115,6 +133,38 @@ const ServiceProviderStatusPage=({history})=>{
             </HeaderRow>
             
             {startedRequests
+              .map((request, index) => (
+                <CardContainer key={index}>
+                  <Card
+                    className="group"
+                    href={request.url}
+                    initial="rest"
+                    whileHover="hover"
+                    animate="rest"
+                  >
+                    <TwoColumn>
+                      
+                      <Column>
+                        <CardText>
+                          <CardTitle>{request.task}</CardTitle>
+                          <CardContent>{request.date} at {request.time}Hrs</CardContent>
+                        </CardText>
+                      </Column>
+                     
+                      <Column>
+                        
+                        <CardButton2 className="button is-danger">Mark Completed</CardButton2>
+                       
+                      </Column>
+                    </TwoColumn>
+                  </Card>
+                </CardContainer>
+              ))}
+              <HeaderRow>
+              <Heading>Canceled Requests</Heading>
+            </HeaderRow>
+            
+            {canceledRequests
               .map((request, index) => (
                 <CardContainer key={index}>
                   <Card
@@ -167,7 +217,12 @@ const ServiceProviderStatusPage=({history})=>{
                      
                       <Column>
                         <CardButton2 className="button is-info">View</CardButton2>
-                        <CardButton2 className="button is-danger">Reject</CardButton2>
+                        <CardButton2 className="button is-danger"  onClick={event=>{
+                            rejectServiceRequest({
+                                variables:{
+                                    rejectServiceRequestId:request.id
+                                }})
+                        }}>Reject</CardButton2>
                        
                       </Column>
                     </TwoColumn>
@@ -201,7 +256,12 @@ const ServiceProviderStatusPage=({history})=>{
                       <Column>
                         <CardButton2 className="button is-info">View</CardButton2>
                         <CardButton2 className="button is-info">Accept</CardButton2>
-                        <CardButton2 className="button is-danger">Reject</CardButton2>
+                        <CardButton2 className="button is-danger" onClick={event=>{
+                            rejectServiceRequest({
+                                variables:{
+                                    rejectServiceRequestId:request.id
+                                }})
+                        }}>Reject</CardButton2>
                       
                        
                       </Column>
@@ -235,6 +295,38 @@ const ServiceProviderStatusPage=({history})=>{
                       <Column>
                         <CardButton2 className="button is-info">View</CardButton2>
                         
+                       
+                      </Column>
+                    </TwoColumn>
+                  </Card>
+                </CardContainer>
+              ))}
+               <HeaderRow>
+              <Heading>Rejected Requests</Heading>
+            </HeaderRow>
+            
+            {rejectedRequests
+              .map((request, index) => (
+                <CardContainer key={index}>
+                  <Card
+                    className="group"
+                    href={request.url}
+                    initial="rest"
+                    whileHover="hover"
+                    animate="rest"
+                  >
+                    <TwoColumn>
+                      
+                      <Column>
+                        <CardText>
+                          <CardTitle>{request.task}</CardTitle>
+                          <CardContent>{request.date} at {request.time}Hrs</CardContent>
+                        </CardText>
+                      </Column>
+                     
+                      <Column>
+                        
+                        <CardButton2 className="button is-danger">Mark Completed</CardButton2>
                        
                       </Column>
                     </TwoColumn>

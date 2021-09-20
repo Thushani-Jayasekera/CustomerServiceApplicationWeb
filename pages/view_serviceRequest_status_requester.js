@@ -123,7 +123,8 @@ const ServiceRequesterStatusPage=({history})=>{
     const pendingRequests=requestsByMe.data.pendingServiceRequestsbyMe;
     const startedRequests=requestsByMe.data.startedServiceRequestsbyMe;
     const completedRequests=requestsByMe.data.completedServiceRequestsbyMe;
-
+    const canceledRequests=requestsByMe.data.canceledServiceRequestsbyMe;
+    const rejectedRequests=requestsByMe.data.rejectedServiceRequestsbyMe;
     
 
       const cancelRequest=(event)=>{
@@ -210,6 +211,45 @@ const ServiceRequesterStatusPage=({history})=>{
                   </Card>
                 </CardContainer>
               ))}
+             
+            <HeaderRow>
+              <Heading>Rejected Requests</Heading>
+            </HeaderRow>
+            
+            {rejectedRequests
+              .map((request, index) => (
+                <CardContainer key={index}>
+                  <Card
+                    className="group"
+                    href={request.url}
+                    initial="rest"
+                    whileHover="hover"
+                    animate="rest"
+                  >
+                    <TwoColumn>
+                      
+                      <Column>
+                        <CardText>
+                          <CardTitle>{request.task}</CardTitle>
+                          <CardContent>{request.date} at {request.time}Hrs</CardContent>
+                        </CardText>
+                      </Column>
+                     
+                      <Column>
+                        <CardButton2 className="button is-info">View and Edit</CardButton2>
+                        <CardButton2 name={'cancelServiceRequestId'} className="button is-danger" onClick={event=>{
+                            cancelServiceRequest({
+                                variables:{
+                                    cancelServiceRequestId:request.id
+                                }})
+                        }} >Cancel</CardButton2>
+                        
+                       
+                      </Column>
+                    </TwoColumn>
+                  </Card>
+                </CardContainer>
+              ))}
 
 <HeaderRow>
               <Heading>Pending Requests</Heading>
@@ -236,7 +276,12 @@ const ServiceRequesterStatusPage=({history})=>{
                      
                       <Column>
                         <CardButton2 className="button is-info">View and Edit</CardButton2>
-                        <CardButton2 className="button is-danger" onClick={cancelRequest}>Cancel</CardButton2>
+                        <CardButton2 className="button is-danger" onClick={event=>{
+                            cancelServiceRequest({
+                                variables:{
+                                    cancelServiceRequestId:request.id
+                                }})
+                        }}>Cancel</CardButton2>
                       
                        
                       </Column>
@@ -276,6 +321,39 @@ const ServiceRequesterStatusPage=({history})=>{
                   </Card>
                 </CardContainer>
               ))}
+              <HeaderRow>
+              <Heading>Canceled Requests</Heading>
+            </HeaderRow>
+            
+            {canceledRequests
+              .map((request, index) => (
+                <CardContainer key={index}>
+                  <Card
+                    className="group"
+                    href={request.url}
+                    initial="rest"
+                    whileHover="hover"
+                    animate="rest"
+                  >
+                    <TwoColumn>
+                      
+                      <Column>
+                        <CardText>
+                          <CardTitle>{request.task}</CardTitle>
+                          <CardContent>{request.date} at {request.time}Hrs</CardContent>
+                        </CardText>
+                      </Column>
+                     
+                      <Column>
+                        <CardButton2 className="button is-info">Pay Now</CardButton2>
+                        <CardButton2 className="button is-danger">Mark Completed</CardButton2>
+                       
+                      </Column>
+                    </TwoColumn>
+                  </Card>
+                </CardContainer>
+              ))}
+            
           </ContentWithPaddingXl>
         </Container>
       );
