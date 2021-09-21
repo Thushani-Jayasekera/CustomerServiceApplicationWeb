@@ -46,6 +46,7 @@
     "react-router-dom": "^5.1.2",
     "react-scroll": "^1.8.4",
     "react-slick": "^0.28.1",
+    "react-slideshow-with-pagination": "^1.0.2",
     "react-toast-notifications": "^2.5.1",
     "slick-carousel": "^1.8.1",
     "styled-components": "^4.4.1",
