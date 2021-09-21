@@ -156,6 +156,12 @@ const ViewServiceRequestPage = () => {
 
   const provider_id = serviceReqDetails.provider_id;
   const requester_id = serviceReqDetails.requester_id;
+  const date=new Date(serviceReqDetails.date+"T"+serviceReqDetails.time);
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  
+  const dayName = days[date.getDay()];
+  console.log(date.getDay())
+  showDay=`${serviceReqDetails.date}, ${dayName}`;
   const myDetails = data_serviceRequest.me;
 
 
@@ -322,8 +328,10 @@ const ViewServiceRequestPage = () => {
                       </tr>
                    
                       <tr>
+           
                         <td>Service Date</td>
-                        <td>{serviceReqDetails.date}</td>
+                        <td>{showDay}</td>
+                        
                       </tr>
                       <tr>
                         <td>Service Time</td>
