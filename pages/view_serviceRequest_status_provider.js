@@ -136,6 +136,7 @@ const ServiceProviderStatusPage = ({ history }) => {
           loading={loading}
           state="Started"
           user="Provider"
+          history={history}
         />
 
         <HeaderRow>
@@ -147,6 +148,7 @@ const ServiceProviderStatusPage = ({ history }) => {
           loading={loading}
           state="Canceled"
           user="Provider"
+          history={history}
         />
 
         <HeaderRow>
@@ -159,6 +161,7 @@ const ServiceProviderStatusPage = ({ history }) => {
           loading={loading}
           state="Accepted"
           user="Provider"
+          history={history}
         />
 
         <HeaderRow>
@@ -170,6 +173,7 @@ const ServiceProviderStatusPage = ({ history }) => {
           loading={loading}
           state="Pending"
           user="Provider"
+          history={history}
         />
 
         <HeaderRow>
@@ -182,6 +186,7 @@ const ServiceProviderStatusPage = ({ history }) => {
           loading={loading}
           state="Completed"
           user="Provider"
+          history={history}
         />
 
         <HeaderRow>
@@ -193,6 +198,7 @@ const ServiceProviderStatusPage = ({ history }) => {
           loading={loading}
           state="Rejected"
           user="Provider"
+          history={history}
         />
       </ContentWithPaddingXl>
     </Container>

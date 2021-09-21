@@ -81,6 +81,7 @@ const ServiceRequesterStatusPage=({history})=>{
           loading={loading}
           state="Started"
           user="Requester"
+          history={history}
         />
 
         <HeaderRow>
@@ -92,6 +93,7 @@ const ServiceRequesterStatusPage=({history})=>{
           loading={loading}
           state="Rejected"
           user="Requester"
+          history={history}
         />
 
         <HeaderRow>
@@ -104,6 +106,7 @@ const ServiceRequesterStatusPage=({history})=>{
           loading={loading}
           state="Accepted"
           user="Requester"
+          history={history}
         />
 
         <HeaderRow>
@@ -116,6 +119,7 @@ const ServiceRequesterStatusPage=({history})=>{
           loading={loading}
           state="Accepted"
           user="Requester"
+          history={history}
         />
 
         
@@ -130,6 +134,7 @@ const ServiceRequesterStatusPage=({history})=>{
           loading={loading}
           state="Completed"
           user="Requester"
+          history={history}
         />
 
         <HeaderRow>
@@ -141,6 +146,7 @@ const ServiceRequesterStatusPage=({history})=>{
           loading={loading}
           state="Canceled"
           user="Requester"
+          history={history}
         />
       </ContentWithPaddingXl>
         </Container>

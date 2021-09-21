@@ -50,18 +50,21 @@ const CardText = tw.div`p-4 text-gray-900`;
 const CardTitle = tw.h5`text-lg font-semibold group-hover:text-primary-500`;
 const CardContent = tw.p`mt-1 text-sm font-medium text-gray-600`;
 
-const Requests = ({ requests, loading, state, user }) => {
+const Requests = ({ requests, loading, state, user,history }) => {
   const { addToast } = useToasts();
   //const[values,setValues]=useState();
-
+  const [cancel,setCancel]=useState('Cancel');
+  const [reject,setReject]=useState('Reject');
   const [cancelServiceRequest, { loading_cancel, error_cancel }] = useMutation(
     CANCEL_SR,
     {
       onCompleted: data => {
         addToast('Successfully canceled request', { appearance: 'success' });
-        history.push(`/profile`);
+        setCancel('Canceled');
+        history.push(`/profile/serviceRequestsSent`);
       },
       onError: error => {
+          console.log(error)
         addToast('Failed ', { appearance: 'error' });
       }
     }
@@ -72,7 +75,8 @@ const Requests = ({ requests, loading, state, user }) => {
     {
       onCompleted: data => {
         addToast('Successfully rejected request', { appearance: 'success' });
-        history.push(`/profile`);
+        setCancel('Rejected');
+        history.push(`/profile/serviceRequestsForMe`);
       },
       onError: error => {
         addToast('Failed ', { appearance: 'error' });
@@ -165,7 +169,7 @@ const Requests = ({ requests, loading, state, user }) => {
                             });
                           }}
                         >
-                          Reject
+                          {reject}
                         </CardButton2>
 
                         <CardButton2
@@ -195,7 +199,7 @@ const Requests = ({ requests, loading, state, user }) => {
                             });
                           }}
                         >
-                          Cancel
+                         {cancel}
                         </CardButton2>
 
 
