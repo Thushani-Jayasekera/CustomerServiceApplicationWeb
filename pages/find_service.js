@@ -86,7 +86,8 @@ const FindServicePage = ({ history }) => {
                 console.log(values);
                 createServiceRequest({
                   variables: {
-                    ...values
+                    ...values,
+                    createServiceRequestLocation:data.me.address
                   }
                 });
               }}

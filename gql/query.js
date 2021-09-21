@@ -270,6 +270,7 @@ query StartedServiceRequests{
     max_price
     provider_id
     requester_id
+    location
   }
 }
 
@@ -287,6 +288,7 @@ query MyStartedServiceRequests{
     max_price
     provider_id
     requester_id
+    location
   }
 }
 `;
@@ -304,6 +306,7 @@ query CompletedServiceRequests{
     max_price
     provider_id
     requester_id
+    location
   }
 }
 
@@ -321,6 +324,7 @@ query MyCompletedServiceRequests{
     max_price
     provider_id
     requester_id
+    location
   }
 }
 `;
@@ -380,6 +384,7 @@ query Query($getServiceRequestByIdId: ID!) {
     max_price
     state
     estimate
+    location
   }
 
 }
@@ -399,6 +404,7 @@ query GetServiceRequestDetails($getServiceRequestByIdId: ID!){
     max_price
     state
     estimate
+    location
   }
   me {
         id
@@ -421,6 +427,7 @@ query Query {
     task
     min_price
     max_price
+    location
   }
   startedServiceRequestsbyMe {
     id
@@ -432,6 +439,7 @@ query Query {
     max_price
     payMethod
     task
+    location
   }
   completedServiceRequestsbyMe {
     id
@@ -442,6 +450,7 @@ query Query {
     task
     min_price
     max_price
+    location
   }
   pendingServiceRequestsbyMe {
     id
@@ -453,6 +462,7 @@ query Query {
     task
     min_price
     max_price
+    location
   }
   canceledServiceRequestsbyMe {
     id
@@ -464,6 +474,7 @@ query Query {
     task
     min_price
     max_price
+    location
   }
   rejectedServiceRequestsbyMe {
     id
@@ -475,6 +486,7 @@ query Query {
     task
     min_price
     max_price
+    location
   
 }
 }
@@ -491,6 +503,7 @@ query Query {
     task
     min_price
     max_price
+    location
   }
   startedServiceRequestsForMe {
     id
@@ -502,6 +515,7 @@ query Query {
     max_price
     payMethod
     task
+    location
   }
   completedServiceRequestsForMe {
     id
@@ -512,6 +526,7 @@ query Query {
     task
     min_price
     max_price
+    location
   }
   pendingServiceRequestsForMe {
     id
@@ -523,6 +538,7 @@ query Query {
     task
     min_price
     max_price
+    location
   }
   canceledServiceRequestsForMe {
     id
@@ -534,6 +550,7 @@ query Query {
     task
     min_price
     max_price
+    location
   }
   rejectedServiceRequestsForMe {
     id
@@ -545,6 +562,7 @@ query Query {
     task
     min_price
     max_price
+    location
   }
   
 }

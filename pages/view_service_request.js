@@ -307,15 +307,20 @@ const ViewServiceRequestPage = () => {
               <Section>
                 <Content>
                   <Table className="table is-responsive is-centerd">
-                    <thead>
+                  <tbody>
                       <tr>
-                        <th>Selected Provider Profile</th>
-                        <th>
-                          <Link to={'/profile'}>{'View Profile'}</Link>
-                        </th>
+                        <td>Selected Provider Profile</td>
+                        
+                        <td><Link to={'/profile'}><p tw="text-blue-600">{'View Profile'}</p></Link></td>
+                       
                       </tr>
-                    </thead>
-                    <tbody>
+                   
+                   
+                    <tr>
+                        <td>Service Requester</td>
+                        <td><Link to={'/profile'}><p tw="text-blue-600">{'View Profile'}</p></Link></td>
+                      </tr>
+                   
                       <tr>
                         <td>Service Date</td>
                         <td>{serviceReqDetails.date}</td>
@@ -323,6 +328,10 @@ const ViewServiceRequestPage = () => {
                       <tr>
                         <td>Service Time</td>
                         <td>{serviceReqDetails.time}</td>
+                      </tr>
+                      <tr>
+                        <td>Service Location</td>
+                        <td><b>{serviceReqDetails.location}</b></td>
                       </tr>
                       <tr>
                         <td>Description of Task</td>
