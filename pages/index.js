@@ -62,8 +62,8 @@ const Pages = () => {
       />
       <LoggedInRoute exact path={'/profile'} component={CommonProfilePage} />
 
-      <LoggedInRoute exact path={'/profile/serviceRequestsForMe'} component={ServiceProviderStatusPage} />
-      <LoggedInRoute exact path={'/profile/serviceRequestsSent'} component={ServiceRequesterStatusPage} />
+      <ServiceProviderRoute exact path={'/profile/serviceRequestsForMe'} component={ServiceProviderStatusPage} />
+      <ServiceRequesterRoute exact path={'/profile/serviceRequestsSent'} component={ServiceRequesterStatusPage} />
 
       <ServiceProviderRoute
         exact
@@ -76,7 +76,7 @@ const Pages = () => {
         component={JobPostingPage}
       />
 
-        <ServiceProviderRoute
+        <LoggedInRoute
           exact
           path={'/service_request/:id'}
           component={ViewServiceRequestPage}
