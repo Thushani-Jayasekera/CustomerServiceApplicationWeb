@@ -20,10 +20,11 @@ const ADD_DETAILS = gql`
 }
 `
 const CREATE_NEW_SR = gql`
-    mutation CreateSR($createServiceRequestTask: String!, $createServiceRequestDate: String!, $createServiceRequestTime: String!, $createServiceRequestProviderId: ID, $createServiceRequestPayMethod: String, $createServiceRequestMinPrice: String, $createServiceRequestMaxPrice: String, $createServiceRequestImage1: String, $createServiceRequestImage2: String, $createServiceRequestImage3: String){
-  createServiceRequest(task: $createServiceRequestTask, date: $createServiceRequestDate, time: $createServiceRequestTime,provider_id: $createServiceRequestProviderId, payMethod: $createServiceRequestPayMethod, min_price: $createServiceRequestMinPrice, max_price: $createServiceRequestMaxPrice, image1: $createServiceRequestImage1, image2: $createServiceRequestImage2, image3: $createServiceRequestImage3) {
+    mutation CreateSR($createServiceRequestTask: String!, $createServiceRequestDate: String!, $createServiceRequestTime: String!, $createServiceRequestProviderId: ID, $createServiceRequestPayMethod: String, $createServiceRequestMinPrice: String, $createServiceRequestMaxPrice: String,$createServiceRequestLocation: String, $createServiceRequestImage1: String, $createServiceRequestImage2: String, $createServiceRequestImage3: String){
+  createServiceRequest(task: $createServiceRequestTask, date: $createServiceRequestDate, time: $createServiceRequestTime,provider_id: $createServiceRequestProviderId, payMethod: $createServiceRequestPayMethod, min_price: $createServiceRequestMinPrice, max_price: $createServiceRequestMaxPrice,location: $createServiceRequestLocation, image1: $createServiceRequestImage1, image2: $createServiceRequestImage2, image3: $createServiceRequestImage3) {
     task
     max_price
+    location
   }
 }
 `
@@ -96,6 +97,17 @@ mutation RejectServiceRequestMutation($rejectServiceRequestId: ID) {
 }
 `;
 
+const START_SR=gql`
+mutation StartServiceRequestMutation($startServiceRequestId: ID) {
+  startServiceRequest(id: $startServiceRequestId) {
+    date
+    time
+    task
+    state
+  }
+}
+`;
+
 const ACCEPT_SR=gql`
 mutation AcceptServiceRequestMutation($acceptServiceRequestId: ID, $acceptServiceRequestEstimate: String) {
   acceptServiceRequest(id: $acceptServiceRequestId, estimate: $acceptServiceRequestEstimate) {
@@ -125,4 +137,22 @@ mutation EditServiceRequestMutation($editServiceRequestTask: String!, $editServi
   }
 }
 `;
-export {MAKE_ME_SERVICE_PROVIDER, ADD_DETAILS,CREATE_NEW_SR,CREATE_NEW_BIDDING_JOB,ADD_JOB_BID,ADD_JOB_POSTING,CANCEL_SR,ACCEPT_SR,REJECT_SR,RESCHEDULE_SR,EDIT_SR}
+
+const FEEDBACK_SR=gql`
+mutation FeedbackServiceRequestMutation($feedbackServiceRequestId: ID, $feedbackServiceRequestRequestRating: Int, $feedbackServiceRequestRequestReview: String) {
+  feedbackServiceRequest(id: $feedbackServiceRequestId, requestRating: $feedbackServiceRequestRequestRating, requestReview: $feedbackServiceRequestRequestReview) {
+    state
+    requestRating
+    requestReview
+  }
+}
+`;
+
+const CUSTOMER_FEEDBACK_SR=gql`
+mutation CustomerfeedbackServiceRequestMutation($customerfeedbackServiceRequestId: ID, $customerfeedbackServiceRequestCustomerRating: Int, $customerfeedbackServiceRequestCustomerReview: String) {
+  customerfeedbackServiceRequest(id: $customerfeedbackServiceRequestId, customerRating: $customerfeedbackServiceRequestCustomerRating, customerReview: $customerfeedbackServiceRequestCustomerReview) {
+    state
+  }
+}
+`;
+export {MAKE_ME_SERVICE_PROVIDER, ADD_DETAILS,CREATE_NEW_SR,CREATE_NEW_BIDDING_JOB,ADD_JOB_BID,ADD_JOB_POSTING,CANCEL_SR,ACCEPT_SR,REJECT_SR,RESCHEDULE_SR,EDIT_SR,FEEDBACK_SR,START_SR,CUSTOMER_FEEDBACK_SR}

@@ -120,6 +120,7 @@ const GET_SERVICE_PROVIDERS_BY_NAME = gql`
     searchServiceProviderbyName(name: $searchServiceProviderbyNameName) {
       id
       username
+      fullname
       profession
       city
       province
@@ -138,13 +139,38 @@ const GET_SERVICE_PROVIDER_BY_PROFESSION = gql`
     ) {
       id
       username
+      fullname
       profession
       city
       bio
       service_providing_status
       roles
+      postalCode
+      provider_rating
+      provider_review_count
     }
+  
   }
+`;
+
+const GET_PROVIDERS_BY_PROFESSION_IN_PROVINCE=gql`
+query Query($searchServiceProviderbyProfessioninProvinceProfession: String!, $searchServiceProviderbyProfessioninProvinceProvince: String!) {
+  searchServiceProviderbyProfessioninProvince(profession: $searchServiceProviderbyProfessioninProvinceProfession, province: $searchServiceProviderbyProfessioninProvinceProvince) {
+    id
+    username
+    fullname
+    postalCode
+    city
+    province
+    bio
+    service_providing_status
+    roles
+    profession
+    provider_rating
+    provider_review_count
+  
+  }
+}
 `;
 
 const GET_ALL_SERVICE_PROVIDERS = gql`
@@ -159,6 +185,7 @@ const GET_ALL_SERVICE_PROVIDERS = gql`
     bio
     service_providing_status
     roles
+    postalCode
   }
 }
 `;
@@ -230,6 +257,114 @@ query MyPendingServiceRequests{
 }
 `;
 
+const GET_STARTED_SERVICE_REQUESTS_OF_ME=gql`
+query StartedServiceRequests{
+  
+  startedServiceRequestsbyMe {
+    id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+    location
+  }
+}
+
+`;
+
+const GET_STARTED_SERVICE_REQUESTS_FOR_ME=gql`
+query MyStartedServiceRequests{
+  startedServiceRequestsForMe {
+    id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+    location
+  }
+}
+`;
+
+const GET_COMPLETED_SERVICE_REQUESTS_OF_ME=gql`
+query CompletedServiceRequests{
+  
+  completedServiceRequestsbyMe {
+    id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+    location
+  }
+}
+
+`;
+
+const GET_COMPLETED_SERVICE_REQUESTS_FOR_ME=gql`
+query MyCompletedServiceRequests{
+  completedServiceRequestsForMe {
+    id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+    location
+  }
+}
+`;
+
+const GET_REVIEWED_SERVICE_REQUESTS_OF_ME=gql`
+query ReviewedServiceRequests{
+  
+  reviewedServiceRequestsbyMe {
+    id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+    location
+  }
+}
+
+`;
+
+const GET_REVIEWED_SERVICE_REQUESTS_FOR_ME=gql`
+query MyReviewedServiceRequests{
+  reviewedServiceRequestsForMe {
+    id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+    location
+  }
+}
+`;
+
 
 const GET_ALL_SERVICE_TYPES=gql`
 query Query {
@@ -240,6 +375,7 @@ query Query {
     user_type
     image
   }
+  
 }
 `;
 
@@ -284,6 +420,9 @@ query Query($getServiceRequestByIdId: ID!) {
     max_price
     state
     estimate
+    location
+    requestReview
+    requestReview
   }
 
 }
@@ -303,6 +442,7 @@ query GetServiceRequestDetails($getServiceRequestByIdId: ID!){
     max_price
     state
     estimate
+    location
   }
   me {
         id
@@ -312,6 +452,187 @@ query GetServiceRequestDetails($getServiceRequestByIdId: ID!){
     }
    
 }
+`;
+
+const GET_SERVICE_REQUESTS_OF_ME=gql`
+query Query {
+  acceptedServiceRequestsbyMe {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    task
+    min_price
+    max_price
+    location
+  }
+  startedServiceRequestsbyMe {
+    id
+    requester_id
+    provider_id
+    time
+    date
+    min_price
+    max_price
+    payMethod
+    task
+    location
+  }
+  completedServiceRequestsbyMe {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    task
+    min_price
+    max_price
+    location
+  }
+  pendingServiceRequestsbyMe {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    location
+  }
+  canceledServiceRequestsbyMe {
+    id
+    requester_id
+    provider_id
+    time
+    date
+    payMethod
+    task
+    min_price
+    max_price
+    location
+  }
+  rejectedServiceRequestsbyMe {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    location
+  
+}
+reviewedServiceRequestsbyMe {
+    id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+    location
+    requestReview
+    requestRating
+  }
+}
+`;
+
+const GET_SERVICE_REQUESTS_FOR_ME=gql`
+query Query {
+  acceptedServiceRequestsForMe {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    task
+    min_price
+    max_price
+    location
+  }
+  startedServiceRequestsForMe {
+    id
+    requester_id
+    provider_id
+    time
+    date
+    min_price
+    max_price
+    payMethod
+    task
+    location
+  }
+  completedServiceRequestsForMe {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    task
+    min_price
+    max_price
+    location
+  }
+  pendingServiceRequestsForMe {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    location
+  }
+  canceledServiceRequestsForMe {
+    id
+    requester_id
+    provider_id
+    time
+    date
+    payMethod
+    task
+    min_price
+    max_price
+    location
+  }
+  rejectedServiceRequestsForMe {
+    id
+    requester_id
+    provider_id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    location
+  }
+  reviewedServiceRequestsForMe {
+    id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+    location
+    requestReview
+    requestRating
+  }
+  
+}
+
 `;
 
 export {
@@ -333,6 +654,13 @@ export {
   GET_USER_BY_ID,
   GET_SR_BY_ID,
   GET_ME_USER_BY_ID_SR_DETAILS,
+  GET_STARTED_SERVICE_REQUESTS_FOR_ME,
+  GET_STARTED_SERVICE_REQUESTS_OF_ME,
+  GET_COMPLETED_SERVICE_REQUESTS_FOR_ME,
+  GET_COMPLETED_SERVICE_REQUESTS_OF_ME,
+  GET_SERVICE_REQUESTS_OF_ME,
+  GET_SERVICE_REQUESTS_FOR_ME,
+  GET_PROVIDERS_BY_PROFESSION_IN_PROVINCE,
 
 
 };
