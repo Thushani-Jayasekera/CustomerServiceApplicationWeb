@@ -443,6 +443,16 @@ const ViewServiceRequestPage = () => {
                       >
                         Reject
                       </Button>
+                      <Button
+                      rounded
+                      className="button is-success is-medium mx-4 my-2 px-6"
+                      
+                      disabled={
+                        serviceReqDetails.state!=='Started'
+                      }
+                    >
+                      Mark Completed
+                    </Button>
                     </Columns>
                   </>
                 )}
@@ -689,6 +699,16 @@ const ViewServiceRequestPage = () => {
                       }
                     >
                       Reject
+                    </Button>
+                    <Button
+                      rounded
+                      className="button is-success is-medium mx-4 my-2 px-6"
+                      
+                      disabled={
+                        serviceReqDetails.state!=='Started'
+                      }
+                    >
+                      Mark Completed
                     </Button>
                   </>
                 )}
