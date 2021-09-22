@@ -19,7 +19,7 @@ import { SectionHeading } from '../components/misc/Headings.js';
 import FeatherIcon from 'feather-icons-react';
 import { Columns, Message } from 'react-bulma-components';
 
-import { REJECT_SR } from '../gql/mutation';
+import { REJECT_SR, START_SR } from '../gql/mutation';
 
 import { CANCEL_SR } from '../gql/mutation';
 import {
@@ -89,7 +89,25 @@ const Requests = ({ requests, loading, state, user,history }) => {
     }
   );
 
-  if (loading || loading_reject || loading_cancel) {
+  const [startServiceRequest, { loading_start, error_start }] = useMutation(
+    START_SR,
+    {
+      onCompleted: data => {
+        addToast('Successfully started the request', {
+          appearance: 'success'
+        });
+        setView({
+          renderView: 0
+        });
+        history.push(`/service_request/${id}`);
+      },
+      onError: error => {
+        addToast('Failed ', { appearance: 'error' });
+      }
+    }
+  );
+
+  if (loading || loading_reject || loading_cancel||loading_start) {
     return <Loader />;
   }
 
@@ -190,6 +208,22 @@ const Requests = ({ requests, loading, state, user,history }) => {
                           }}
                         >
                           {reject}
+                        </CardButton2>
+                        <CardButton2
+                          disabled={state !== 'Accepted' || user != 'Provider'}
+                          hidden={user != 'Provider'}
+                          className="button is-success  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
+                          onClick={event=>{
+                            startServiceRequest({
+                              variables:{
+                                startServiceRequestId: request.id
+                              }
+                            })
+                          }
+
+                          }
+                        >
+                          Start
                         </CardButton2>
 
                         <CardButton2

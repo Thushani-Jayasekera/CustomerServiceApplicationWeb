@@ -33,7 +33,8 @@ import {
   EDIT_SR,
   FEEDBACK_SR,
   REJECT_SR,
-  RESCHEDULE_SR
+  RESCHEDULE_SR,
+  START_SR
 } from '../gql/mutation';
 import { ValuesOfCorrectType } from 'graphql/validation/rules/ValuesOfCorrectType';
 import ReactStars from 'react-rating-stars-component';
@@ -52,7 +53,7 @@ const FormContainer = styled.div`
   input,
   textarea,
   select {
-    ${tw`w-full bg-transparent text-black text-base font-medium tracking-wide border-b-2 py-2 text-black hocus:border-pink-400 focus:outline-none transition duration-200`};
+    ${tw`w-full bg-transparent  text-base font-medium tracking-wide border-b-2 py-2 text-black hocus:border-pink-400 focus:outline-none transition duration-200`};
 
     ::placeholder,
     option {
@@ -122,6 +123,24 @@ const ViewServiceRequestPage = () => {
     {
       onCompleted: data => {
         addToast('Successfully rejected the request', {
+          appearance: 'success'
+        });
+        setView({
+          renderView: 0
+        });
+        history.push(`/service_request/${id}`);
+      },
+      onError: error => {
+        addToast('Failed ', { appearance: 'error' });
+      }
+    }
+  );
+
+  const [startServiceRequest, { loading_start, error_start }] = useMutation(
+    START_SR,
+    {
+      onCompleted: data => {
+        addToast('Successfully started the request', {
           appearance: 'success'
         });
         setView({
@@ -252,6 +271,15 @@ const ViewServiceRequestPage = () => {
     rejectServiceRequest({
       variables: {
         rejectServiceRequestId: id
+      }
+    });
+  };
+
+  const startRequest = event => {
+    setValues({});
+    startServiceRequest({
+      variables: {
+        startServiceRequestId: id
       }
     });
   };
@@ -393,13 +421,24 @@ const ViewServiceRequestPage = () => {
 
                       <Button
                         rounded
+                        className="button is-info is-medium mx-4 my-2 px-6"
+                        onClick={startRequest}
+                        disabled={
+                          serviceReqDetails.state!=='Accepted'
+                        }
+                      >
+                        Start
+                      </Button>
+
+                      <Button
+                        rounded
                         className="button is-danger is-medium mx-4 my-2 px-6"
                         onClick={rejectRequest}
                         disabled={
                           serviceReqDetails.date +
                             'T' +
                             serviceReqDetails.time <
-                          now.toISOString().substr(0, 16)
+                          now.toISOString().substr(0, 16) || serviceReqDetails.state==='Completed'||serviceReqDetails.state==='Started'
                         }
                       >
                         Reject
