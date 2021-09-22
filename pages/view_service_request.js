@@ -97,6 +97,9 @@ const ViewServiceRequestPage = () => {
   const [cancelServiceRequest,{loading_cancel,error_cancel}] = useMutation(CANCEL_SR,{
     onCompleted:(data)=>{
       addToast("Successfully canceled request",{appearance:"success"})
+      setView({
+        renderView: 0
+      });
       history.push(`/service_request/${id}`)
     },
     onError:(error)=>{
@@ -109,6 +112,9 @@ const ViewServiceRequestPage = () => {
   const [rejectServiceRequest,{loading_reject,error_reject}] = useMutation(REJECT_SR,{
     onCompleted:(data)=>{
       addToast("Successfully rejected the request",{appearance:"success"})
+      setView({
+        renderView: 0
+      });
       history.push(`/service_request/${id}`)
     },
     onError:(error)=>{
@@ -119,6 +125,9 @@ const ViewServiceRequestPage = () => {
   const [acceptServiceRequest,{loading_accept,error_accept}] = useMutation(ACCEPT_SR,{
     onCompleted:(data)=>{
       addToast("Successfully accepted the request",{appearance:"success"})
+      setView({
+        renderView: 0
+      });
       history.push(`/service_request/${id}`)
     },
     onError:(error)=>{
@@ -128,6 +137,9 @@ const ViewServiceRequestPage = () => {
   const [rescheduleServiceRequest,{loading_reschedule,error_reschedule}] = useMutation(RESCHEDULE_SR,{
     onCompleted:(data)=>{
       addToast("Successfully rescheduled the request",{appearance:"success"})
+      setView({
+        renderView: 0
+      });
       history.push(`/service_request/${id}`)
     },
     onError:(error)=>{
@@ -138,6 +150,9 @@ const ViewServiceRequestPage = () => {
   const [editServiceRequest,{loading_edit,error_edit}] = useMutation(EDIT_SR,{
     onCompleted:(data)=>{
       addToast("Successfully edited the request",{appearance:"success"})
+      setView({
+        renderView: 0
+      });
       history.push(`/service_request/${id}`)
     },
     onError:(error)=>{
@@ -245,7 +260,7 @@ const ViewServiceRequestPage = () => {
                       onClick={clickReschedule}
                       rounded
                       className="button is-info is-medium mx-4 my-2 px-6"
-                      disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<now.toISOString().substr(0,16)}
+                      disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<now.toISOString().substr(0,16)||serviceReqDetails.state==='Canceled'||serviceReqDetails.state==='Rejected'}
                       
                     >
                       Reschedule
@@ -262,7 +277,7 @@ const ViewServiceRequestPage = () => {
                       rounded
                       className="button is-danger is-medium mx-4 my-2 px-6"
                       onClick={cancelRequest}
-                      disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<now.toISOString().substr(0,16)}
+                      disabled={serviceReqDetails.date+"T"+serviceReqDetails.time<now.toISOString().substr(0,16)||serviceReqDetails.state!=='Pending'}
                     >
                       Cancel
                     </Button>
@@ -271,6 +286,7 @@ const ViewServiceRequestPage = () => {
                     
                     rounded
                     className="button is-success is-centered is-medium mx-4 my-2 px-6"
+                    disabled={serviceReqDetails.state==='Pending'||serviceReqDetails.state==='Canceled'||serviceReqDetails.state==='Rejected'}
                    
                   >
                     Make Payment
