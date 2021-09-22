@@ -321,7 +321,9 @@ const ViewServiceRequestPage = () => {
                         serviceReqDetails.date + 'T' + serviceReqDetails.time <
                           now.toISOString().substr(0, 16) ||
                         serviceReqDetails.state === 'Canceled' ||
-                        serviceReqDetails.state === 'Rejected'
+                        serviceReqDetails.state === 'Rejected' ||
+                        serviceReqDetails.state === 'Completed' ||
+                        serviceReqDetails.state === 'Reviewed' 
                       }
                     >
                       Reschedule
@@ -345,7 +347,7 @@ const ViewServiceRequestPage = () => {
                       disabled={
                         serviceReqDetails.date + 'T' + serviceReqDetails.time <
                           now.toISOString().substr(0, 16) ||
-                        serviceReqDetails.state !== 'Pending'
+                        serviceReqDetails.state !== 'Pending'||serviceReqDetails.state !== 'Accepted'
                       }
                     >
                       Cancel

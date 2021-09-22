@@ -27,6 +27,7 @@ import {
   Link,
 } from 'react-router-dom';
 import SlideshowWithPagination from 'react-slideshow-with-pagination';
+import reactStars from 'react-rating-stars-component';
 
 const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`;
 const TwoColumn = tw.div`flex flex-col sm:flex-row justify-between`;
@@ -49,6 +50,10 @@ const CardReview = tw.div`font-medium text-xs text-gray-600`;
 const CardText = tw.div`p-4 text-gray-900`;
 const CardTitle = tw.h5`text-lg font-semibold group-hover:text-primary-500`;
 const CardContent = tw.p`mt-1 text-sm font-medium text-gray-600`;
+const ratingChanged = newRating => {
+  setRating(newRating);
+  console.log(newRating);
+};
 
 const Requests = ({ requests, loading, state, user,history }) => {
   const { addToast } = useToasts();
@@ -121,6 +126,21 @@ const Requests = ({ requests, loading, state, user,history }) => {
                         <FeatherIcon icon="clock" />
                         <CardTitle>Time - {request.time} H</CardTitle>
                       </Columns>
+                      {(state==='Reviewed')?<>
+                      <reactStars
+                        count={5}
+                        onChange={ratingChanged}
+                        size={24}
+                        value={request.requestRating}
+                        activeColor="blue"
+                        id="star"
+                      />
+                      <FeatherIcon icon="user-check" />
+                      <CardTitle>Customer Review- {request.requestReview}</CardTitle>
+                      <FeatherIcon icon="star" />
+                      <CardTitle>Service Rating - {request.requestRating} / 5.0</CardTitle>
+
+                      </>:<></>}
                     </CardText>
                   </Column>
 

@@ -131,7 +131,7 @@ const ServiceProviderStatusPage = ({ history }) => {
       <Header />
       <ContentWithPaddingXl>
         <HeaderRow>
-          <Heading>Started Requests</Heading>
+        <p tw="text-3xl font-sans">Started Requests</p>
         </HeaderRow>
         <br/>
         <Requests
@@ -143,7 +143,7 @@ const ServiceProviderStatusPage = ({ history }) => {
         />
 
         <HeaderRow>
-          <Heading>Canceled Requests</Heading>
+        <p tw="text-3xl font-sans">Canceled Requests</p>
         </HeaderRow>
         <br/>
         <Requests
@@ -155,7 +155,7 @@ const ServiceProviderStatusPage = ({ history }) => {
         />
 
         <HeaderRow>
-          <Heading>Accepted Requests</Heading>
+        <p tw="text-3xl font-sans">Accepted Requests</p>
         </HeaderRow>
         <br/>
 
@@ -168,7 +168,7 @@ const ServiceProviderStatusPage = ({ history }) => {
         />
 
         <HeaderRow>
-          <Heading>Pending Requests</Heading>
+        <p tw="text-3xl font-sans">Pending Requests</p>
         </HeaderRow>
         <br/>
         <Requests
@@ -180,7 +180,7 @@ const ServiceProviderStatusPage = ({ history }) => {
         />
 
         <HeaderRow>
-          <Heading>Completed Requests</Heading>
+        <p tw="text-3xl font-sans">Completed Requests</p>
         </HeaderRow>
         <br/>
 
@@ -192,7 +192,7 @@ const ServiceProviderStatusPage = ({ history }) => {
           history={history}
         />
          <HeaderRow>
-          <Heading>Reviewed Requests</Heading>
+         <p tw="text-3xl font-sans">Reviewed Requests</p>
         </HeaderRow>
         <br/>
         <Requests

@@ -538,6 +538,8 @@ reviewedServiceRequestsbyMe {
     provider_id
     requester_id
     location
+    requestReview
+    requestRating
   }
 }
 `;
@@ -625,6 +627,8 @@ query Query {
     provider_id
     requester_id
     location
+    requestReview
+    requestRating
   }
   
 }
