@@ -30,6 +30,7 @@ import { useParams } from 'react-router';
 import {
   ACCEPT_SR,
   CANCEL_SR,
+  CUSTOMER_FEEDBACK_SR,
   EDIT_SR,
   FEEDBACK_SR,
   REJECT_SR,
@@ -223,6 +224,24 @@ const ViewServiceRequestPage = () => {
     }
   );
 
+  const [customerfeedbackServiceRequest, { loading_Cfeedback, error_Cfeedback }] = useMutation(
+    CUSTOMER_FEEDBACK_SR,
+    {
+      onCompleted: data => {
+        addToast('Successfully reviewed the customer', { appearance: 'success' });
+        setView({
+          renderView: 0
+        });
+        setStatus('Reviewed')
+        history.push(`/service_request/${id}`);
+      },
+      onError: error => {
+        console.log(error);
+        addToast('Failed ', { appearance: 'error' });
+      }
+    }
+  );
+
   //const providerDetails=data_provider.getUserbyId;
   if (sr_request_query.loading) return <Loader />;
 
@@ -351,7 +370,8 @@ const ViewServiceRequestPage = () => {
                         serviceReqDetails.state === 'Canceled' ||
                         serviceReqDetails.state === 'Rejected' ||
                         serviceReqDetails.state === 'Completed' ||
-                        serviceReqDetails.state === 'Reviewed' 
+                        serviceReqDetails.state === 'Reviewed' ||
+                        serviceReqDetails.state === 'Started' 
                       }
                     >
                       Reschedule
@@ -438,7 +458,7 @@ const ViewServiceRequestPage = () => {
                           serviceReqDetails.date +
                             'T' +
                             serviceReqDetails.time <
-                          now.toISOString().substr(0, 16) || serviceReqDetails.state==='Completed'||serviceReqDetails.state==='Started'
+                          now.toISOString().substr(0, 16) || serviceReqDetails.state==='Completed'||serviceReqDetails.state==='Started'||serviceReqDetails.state==='Reviewed'
                         }
                       >
                         Reject
@@ -547,7 +567,7 @@ const ViewServiceRequestPage = () => {
                       </tr>
                     </tbody>
                   </Table>
-                  {serviceReqDetails.state === 'Canceled' && myDetails.id === requester_id && status!=='Reviewed'? (
+                  {serviceReqDetails.state === 'Completed' && myDetails.id === requester_id && status!=='Reviewed'? (
                     <>
                       <FormContainer>
                     <div tw="mx-auto max-w-4xl">
@@ -612,7 +632,78 @@ const ViewServiceRequestPage = () => {
                           minuites before the scheduled time
                         </Message.Body>
                       </Message>
-    }
+                    }
+                    </>
+                  )}
+
+
+
+              {serviceReqDetails.state === 'Completed' && myDetails.id === provider_id && status!=='Reviewed'? (
+                    <>
+                      <FormContainer>
+                    <div tw="mx-auto max-w-4xl">
+                      <h2>Add Review about your customer</h2>
+                     <Form
+                      onSubmit={event => {
+                        event.preventDefault();
+                        console.log(values);
+                        customerfeedbackServiceRequest({
+                          variables: {
+                            customerfeedbackServiceRequestId: id,
+                            customerfeedbackServiceRequestCustomerRating:
+                              rating,
+                              customerfeedbackServiceRequestCustomerReview:
+                              values.customerfeedbackServiceRequestRequestReview
+                          }
+                        });
+                      }}
+                    >
+                    <Columns>
+                    <h5>How much do you rate your customer?  - {rating}/5</h5>
+                    </Columns>
+                      <ReactStars
+                        count={5}
+                        onChange={ratingChanged}
+                        size={24}
+                        activeColor="#ffd700"
+                        id="star"
+                      />
+                      
+                      
+                     
+                      <InputContainer tw="flex-1">
+                      <Label htmlFor="review-input">Share your experience </Label>
+                      <TextArea
+                        id="review-input"
+                        name={'customerfeedbackServiceRequestRequestReview'}
+                        placeholder="Add your Review Here!"
+                        onChange={handleChange}
+                        required
+                      />
+                    </InputContainer>
+                    <SubmitButton type="submit" value="Submit">
+                        Submit Review
+                      </SubmitButton>
+                      </Form>
+                      </div>
+                      </FormContainer>
+                    </>
+                  ) : (
+                    <>
+                    {status==='Reviewed'?(
+                      <Message color={'success'}>
+                      <Message.Body>
+                        Thank you for your feedback!
+                      </Message.Body>
+                    </Message>
+                    ) :
+                      <Message color={'warning'}>
+                        <Message.Body>
+                          You can cancel/ reschedule / reject a request only 20
+                          minuites before the scheduled time
+                        </Message.Body>
+                      </Message>
+                    }
                     </>
                   )}
                 </Content>
