@@ -9,6 +9,8 @@ import Loader from '../components/utils/Loader';
 import ServiceProviderRoute from '../components/utils/ServiceProviderRoute';
 import ServiceRequesterRoute from '../components/utils/ServiceRequesterRoute';
 import AdminLogin from './admin_login';
+import AdminSignUp from './adminPages/admin_signup';
+import AdminHome from './adminPages/admin_home';
 import FindJobsPage from './find_jobs';
 
 import AddDetailsPage from './service_requester_addDetails';
@@ -19,9 +21,9 @@ import SelectOptionPage from './service_option';
 import ServiceRequesterWelcomePage from './service_requester_welcome';
 import CreateJobPostingPage from './create_job_posting';
 
-import CommonProfilePage from "./profile";
-import JobPostingPage from "./view_job_posting";
-import MyBidsPage from "./my_bids";
+import CommonProfilePage from './profile';
+import JobPostingPage from './view_job_posting';
+import MyBidsPage from './my_bids';
 import ViewServiceRequestPage from './view_service_request';
 
 import ProfilePage from './profile_page';
@@ -32,6 +34,8 @@ const Pages = () => {
       <Route exact path="/" component={Home} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/signup" component={SignUp} />
+      <Route exact path="/adminHome" component={AdminHome} />
+      <Route exact path="/adminSignup" component={AdminSignUp} />
       <ServiceRequesterRoute
         exact
         path="/service_requester/createRequest/:provider_id"
@@ -73,21 +77,21 @@ const Pages = () => {
         component={JobPostingPage}
       />
 
-        <ServiceProviderRoute
-          exact
-          path={'/service_request/:id'}
-          component={ViewServiceRequestPage}
-        />
+      <ServiceProviderRoute
+        exact
+        path={'/service_request/:id'}
+        component={ViewServiceRequestPage}
+      />
 
       <LoggedInRoute
         exact
         path="/service_requester/addDetails"
         component={AddDetailsPage}
       />
-
       <ServiceProviderRoute exact path={'/myBids'} component={MyBidsPage} />
 
       <Route exact path={'/test'} component={Loader} />
+
       <Route exact path={'/admin'} component={AdminLogin} />
     </Router>
   );
