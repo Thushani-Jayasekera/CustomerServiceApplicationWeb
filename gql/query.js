@@ -329,6 +329,42 @@ query MyCompletedServiceRequests{
 }
 `;
 
+const GET_REVIEWED_SERVICE_REQUESTS_OF_ME=gql`
+query ReviewedServiceRequests{
+  
+  reviewedServiceRequestsbyMe {
+    id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+    location
+  }
+}
+
+`;
+
+const GET_REVIEWED_SERVICE_REQUESTS_FOR_ME=gql`
+query MyReviewedServiceRequests{
+  reviewedServiceRequestsForMe {
+    id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+    location
+  }
+}
+`;
+
 
 const GET_ALL_SERVICE_TYPES=gql`
 query Query {
@@ -385,6 +421,8 @@ query Query($getServiceRequestByIdId: ID!) {
     state
     estimate
     location
+    requestReview
+    requestReview
   }
 
 }
@@ -489,6 +527,18 @@ query Query {
     location
   
 }
+reviewedServiceRequestsbyMe {
+    id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
+    location
+  }
 }
 `;
 
@@ -562,6 +612,18 @@ query Query {
     task
     min_price
     max_price
+    location
+  }
+  reviewedServiceRequestsForMe {
+    id
+    date
+    time
+    payMethod
+    task
+    min_price
+    max_price
+    provider_id
+    requester_id
     location
   }
   

@@ -60,7 +60,7 @@ const ServiceRequesterStatusPage=({history})=>{
     const completedRequests=requestsByMe.data.completedServiceRequestsbyMe;
     const canceledRequests=requestsByMe.data.canceledServiceRequestsbyMe;
     const rejectedRequests=requestsByMe.data.rejectedServiceRequestsbyMe;
-    
+    const reviewedRequests=requestsByMe.data.reviewedServiceRequestsbyMe;
 
   
 
@@ -133,6 +133,19 @@ const ServiceRequesterStatusPage=({history})=>{
           requests={completedRequests}
           loading={loading}
           state="Completed"
+          user="Requester"
+          history={history}
+        />
+
+        <HeaderRow>
+          <Heading>Reviewed Requests</Heading>
+        </HeaderRow>
+        <br/>
+
+        <Requests
+          requests={reviewedRequests}
+          loading={loading}
+          state="Reviewed"
           user="Requester"
           history={history}
         />

@@ -126,4 +126,14 @@ mutation EditServiceRequestMutation($editServiceRequestTask: String!, $editServi
   }
 }
 `;
-export {MAKE_ME_SERVICE_PROVIDER, ADD_DETAILS,CREATE_NEW_SR,CREATE_NEW_BIDDING_JOB,ADD_JOB_BID,ADD_JOB_POSTING,CANCEL_SR,ACCEPT_SR,REJECT_SR,RESCHEDULE_SR,EDIT_SR}
+
+const FEEDBACK_SR=gql`
+mutation FeedbackServiceRequestMutation($feedbackServiceRequestId: ID, $feedbackServiceRequestRequestRating: Int, $feedbackServiceRequestRequestReview: String) {
+  feedbackServiceRequest(id: $feedbackServiceRequestId, requestRating: $feedbackServiceRequestRequestRating, requestReview: $feedbackServiceRequestRequestReview) {
+    state
+    requestRating
+    requestReview
+  }
+}
+`;
+export {MAKE_ME_SERVICE_PROVIDER, ADD_DETAILS,CREATE_NEW_SR,CREATE_NEW_BIDDING_JOB,ADD_JOB_BID,ADD_JOB_POSTING,CANCEL_SR,ACCEPT_SR,REJECT_SR,RESCHEDULE_SR,EDIT_SR,FEEDBACK_SR}

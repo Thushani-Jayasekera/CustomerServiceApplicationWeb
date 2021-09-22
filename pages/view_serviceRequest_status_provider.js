@@ -122,7 +122,10 @@ const ServiceProviderStatusPage = ({ history }) => {
   const completedRequests = requestsForMe.data.completedServiceRequestsForMe;
   const canceledRequests = requestsForMe.data.canceledServiceRequestsForMe;
   const rejectedRequests = requestsForMe.data.rejectedServiceRequestsForMe;
-  if (error) return <Redirect to={'/'} />;
+  const reviewedRequests = requestsForMe.data.reviewedServiceRequestsForMe;
+  if (error) {
+    console.log(error);
+    return <Redirect to={'/'} />};
   return (
     <Container>
       <Header />
@@ -185,6 +188,17 @@ const ServiceProviderStatusPage = ({ history }) => {
           requests={completedRequests}
           loading={loading}
           state="Completed"
+          user="Provider"
+          history={history}
+        />
+         <HeaderRow>
+          <Heading>Reviewed Requests</Heading>
+        </HeaderRow>
+        <br/>
+        <Requests
+          requests={reviewedRequests}
+          loading={loading}
+          state="Reviewed"
           user="Provider"
           history={history}
         />

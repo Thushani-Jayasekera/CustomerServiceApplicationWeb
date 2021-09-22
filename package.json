@@ -43,6 +43,7 @@
     "react-loading": "^2.0.3",
     "react-markdown": "^6.0.3",
     "react-modal": "^3.14.3",
+    "react-rating-stars-component": "^2.2.0",
     "react-router-dom": "^5.1.2",
     "react-scroll": "^1.8.4",
     "react-slick": "^0.28.1",
