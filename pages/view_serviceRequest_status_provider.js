@@ -204,7 +204,7 @@ const ServiceProviderStatusPage = ({ history }) => {
         />
 
         <HeaderRow>
-          <Heading>Rejected Requests</Heading>
+        <p tw="text-3xl font-sans">Rejected Requests</p>
         </HeaderRow>
         <br/>
         <Requests

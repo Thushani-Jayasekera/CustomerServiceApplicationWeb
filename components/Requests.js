@@ -17,7 +17,7 @@ import { css } from 'styled-components/macro'; //eslint-disable-line
 
 import { SectionHeading } from '../components/misc/Headings.js';
 import FeatherIcon from 'feather-icons-react';
-import { Columns, Message } from 'react-bulma-components';
+import { Columns, Container, Message } from 'react-bulma-components';
 
 import { REJECT_SR, START_SR } from '../gql/mutation';
 
@@ -33,6 +33,13 @@ const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`
 const TwoColumn = tw.div`flex flex-col sm:flex-row justify-between`;
 const Column = tw.div`sm:w-5/12 flex flex-col`;
 const Heading = tw(SectionHeading)``;
+const CardImageContainer = styled.div`
+  ${props =>
+    css`
+      background-image: url(${props.imageSrc});
+    `}
+  ${tw`h-40 w-40  xl:h-40 w-40 bg-center bg-cover relative rounded-t`}
+`;
 
 const CardContainer = tw.div`mt-10 w-full sm:w-1/2 md:w-1/3 lg:w-full sm:pr-10 md:pr-6 lg:pr-12`;
 const Card = tw(
@@ -132,8 +139,12 @@ const Requests = ({ requests, loading, state, user,history }) => {
               >
                 <TwoColumn>
                   <Column>
+             <Container>
                     <CardText>
-                      <CardTitle>{request.task}</CardTitle>
+                    <Columns>
+                        <FeatherIcon icon="tool" />
+                        <CardTitle> {request.task}</CardTitle>
+                      </Columns>
                       <br />
                       <Columns>
                         <FeatherIcon icon="calendar" />
@@ -144,6 +155,7 @@ const Requests = ({ requests, loading, state, user,history }) => {
                         <FeatherIcon icon="clock" />
                         <CardTitle>Time - {request.time} H</CardTitle>
                       </Columns>
+                      
                       {(state==='Reviewed')?<>
                       <reactStars
                         count={5}
@@ -154,30 +166,30 @@ const Requests = ({ requests, loading, state, user,history }) => {
                         id="star"
                       />
                       <FeatherIcon icon="user-check" />
-                      <CardTitle>Customer Review- {request.requestReview}</CardTitle>
+                      <CardTitle tw="font-style: italic">Customer Review- {request.requestReview}</CardTitle>
                       <FeatherIcon icon="star" />
-                      <CardTitle>Service Rating - {request.requestRating} / 5.0</CardTitle>
+                      <CardTitle tw="font-style: italic">Service Rating - {request.requestRating} / 5.0</CardTitle>
 
                       </>:<></>}
+                      
                     </CardText>
+                    </Container>
                   </Column>
 
                   <Column>
-                    <Columns>
-                      <Link
-                        to={{
-                          pathname: `/service_request/${request.id}`
-                        }}
-                      >
-                        <CardButton2 className="button is-info  w-max px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5">
-                          View
-                        </CardButton2>
-                      </Link>
-                     
-                    </Columns>
+                    
 
-                    {user === 'Provider' ? (
-                      <>
+                 
+                     
+
+
+                      {state==='Pending' && user==='Provider'?
+                      
+                      (
+
+                        <>
+                        
+                        <Columns>
                         <Link
                         to={{
                           pathname: `/service_request/${request.id}`
@@ -198,7 +210,7 @@ const Requests = ({ requests, loading, state, user,history }) => {
                             user != 'Provider'
                           }
                           hidden={user != 'Provider'}
-                          className="button is-danger"
+                          className="button is-danger  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
                           onClick={event => {
                             rejectServiceRequest({
                               variables: {
@@ -209,6 +221,83 @@ const Requests = ({ requests, loading, state, user,history }) => {
                         >
                           {reject}
                         </CardButton2>
+                        </Columns>
+                        </>
+                      ):(<></>)}
+
+{(state==='Pending'|| state==='Accepted') && user==='Requester'?
+                      
+                      (
+
+                        <>
+                        
+                        <Columns>
+                        <Link
+                        to={{
+                          pathname: `/service_request/${request.id}`
+                        }}
+                      >
+                        <CardButton2
+                          disabled={state !== 'Pending' }
+                          hidden={user != 'Provider'}
+                          className="button is-success  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
+                        >
+                          View
+                        </CardButton2>
+                        </Link>
+
+                        <CardButton2
+                          disabled={
+                            (state !== 'Pending' && state !== 'Accepted') ||
+                            user != 'Requester'
+                          }
+                          hidden={user != 'Provider'}
+                          className="button is-danger  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
+                          onClick={event => {
+                            cancelServiceRequest({
+                              variables: {
+                                cancelServiceRequestId: request.id
+                              }
+                            });
+                          }}
+                        >
+                         {cancel}
+                        </CardButton2>
+                        </Columns>
+                        </>
+                      ):(<></>)}
+
+                      {state==='Accepted'  && user==='Provider'?(
+
+                        <Columns>
+                        <Link
+                        to={{
+                          pathname: `/service_request/${request.id}`
+                        }}
+                      >
+                        <CardButton2 className="button is-info  w-max px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5">
+                          View
+                        </CardButton2>
+                      </Link>
+
+                      <CardButton2
+                          disabled={
+                            (state !== 'Pending' && state !== 'Accepted') ||
+                            user != 'Provider'
+                          }
+                          hidden={user != 'Provider'}
+                          className="button is-danger  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
+                          onClick={event => {
+                            rejectServiceRequest({
+                              variables: {
+                                rejectServiceRequestId: request.id
+                              }
+                            });
+                          }}
+                        >
+                          {reject}
+                        </CardButton2>
+
                         <CardButton2
                           disabled={state !== 'Accepted' || user != 'Provider'}
                           hidden={user != 'Provider'}
@@ -225,8 +314,24 @@ const Requests = ({ requests, loading, state, user,history }) => {
                         >
                           Start
                         </CardButton2>
+                     
+                        </Columns>
+                      ):(<></>)}
 
-                        <CardButton2
+                      {state==='Started' && (user==='Provider'||user==='Requester')?(
+
+                        <Columns>
+                           <Link
+                        to={{
+                          pathname: `/service_request/${request.id}`
+                        }}
+                      >
+                        <CardButton2 className="button is-info  w-max px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5">
+                          View
+                        </CardButton2>
+                      </Link>
+
+                      <CardButton2
                           disabled={state !== 'Started' || user != 'Provider'}
                           hidden={user != 'Provider'}
                           className="button is-success  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
@@ -234,38 +339,30 @@ const Requests = ({ requests, loading, state, user,history }) => {
                           Mark Completed
                         </CardButton2>
 
+                        </Columns>
 
-                      </>
-                    ) : (
-                      <>
-                        <CardButton2
-                          disabled={
-                            (state !== 'Pending' && state !== 'Accepted') ||
-                            user != 'Requester'
-                          }
-                          hidden={user != 'Provider'}
-                          className="button is-danger"
-                          onClick={event => {
-                            cancelServiceRequest({
-                              variables: {
-                                cancelServiceRequestId: request.id
-                              }
-                            });
-                          }}
-                        >
-                         {cancel}
+                        
+                      ):(<></>)}
+                      {(state==='Completed'|| state==='Reviewed'|| state==='Canceled'|| state==='Rejected')?<>
+                      
+                      <Columns>
+                           <Link
+                        to={{
+                          pathname: `/service_request/${request.id}`
+                        }}
+                      >
+                        <CardButton2 className="button is-info  w-max px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5">
+                          View
                         </CardButton2>
+                      </Link>
+                      </Columns>
+                      </>:<></>}
+                    
 
 
-                        <CardButton2
-                          disabled={state !== 'Started' || user != 'Provider'}
-                          hidden={user != 'Provider'}
-                          className="button is-success  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
-                        >
-                          Mark Completed
-                        </CardButton2>
-                      </>
-                    )}
+
+
+                   
                   </Column>
                 </TwoColumn>
               </Card>
