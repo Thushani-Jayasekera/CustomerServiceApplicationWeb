@@ -140,6 +140,7 @@ const Requests = ({ requests, loading, state, user,history }) => {
                 <TwoColumn>
                   <Column>
              <Container>
+               <br/>
                     <CardText>
                     <Columns>
                         <FeatherIcon icon="tool" />
@@ -155,6 +156,7 @@ const Requests = ({ requests, loading, state, user,history }) => {
                         <FeatherIcon icon="clock" />
                         <CardTitle>Time - {request.time} H</CardTitle>
                       </Columns>
+
                       
                       {(state==='Reviewed')?<>
                       <reactStars
@@ -171,7 +173,7 @@ const Requests = ({ requests, loading, state, user,history }) => {
                       <CardTitle tw="font-style: italic">Service Rating - {request.requestRating} / 5.0</CardTitle>
 
                       </>:<></>}
-                      
+                      <br/>
                     </CardText>
                     </Container>
                   </Column>
