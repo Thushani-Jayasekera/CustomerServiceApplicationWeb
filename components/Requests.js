@@ -240,9 +240,9 @@ const Requests = ({ requests, loading, state, user,history }) => {
                         }}
                       >
                         <CardButton2
-                          disabled={state !== 'Pending' }
-                          hidden={user != 'Provider'}
-                          className="button is-success  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
+                         
+                         
+                          className="button is-info  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
                         >
                           View
                         </CardButton2>
