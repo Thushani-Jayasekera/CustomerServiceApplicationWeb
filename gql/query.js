@@ -443,6 +443,8 @@ query GetServiceRequestDetails($getServiceRequestByIdId: ID!){
     state
     estimate
     location
+    requestReview
+    requestRating
   }
   me {
         id

@@ -77,6 +77,7 @@ const ADD_JOB_POSTING  = gql`
 const CANCEL_SR=gql`
 mutation CancelServiceRequestMutation($cancelServiceRequestId: ID) {
   cancelServiceRequest(id: $cancelServiceRequestId) {
+  
     date
     time
     task
@@ -102,6 +103,18 @@ mutation StartServiceRequestMutation($startServiceRequestId: ID) {
   startServiceRequest(id: $startServiceRequestId) {
     date
     time
+    task
+    state
+  }
+}
+`;
+
+const COMPLETE_SR=gql`
+mutation CompleteServiceRequestMutation($completeServiceRequestId: ID, $completeServiceRequestFinalAmount: Int) {
+  completeServiceRequest(id: $completeServiceRequestId, finalAmount: $completeServiceRequestFinalAmount) {
+    requester_id
+    provider_id
+    id
     task
     state
   }
@@ -167,4 +180,4 @@ mutation MakeComplaintMutation($makeComplaintComplainer: ID, $makeComplaintVicti
 }
 
 `;
-export {MAKE_ME_SERVICE_PROVIDER, ADD_DETAILS,CREATE_NEW_SR,CREATE_NEW_BIDDING_JOB,ADD_JOB_BID,ADD_JOB_POSTING,CANCEL_SR,ACCEPT_SR,REJECT_SR,RESCHEDULE_SR,EDIT_SR,FEEDBACK_SR,START_SR,CUSTOMER_FEEDBACK_SR,MAKE_COMPLAINT}
+export {MAKE_ME_SERVICE_PROVIDER, ADD_DETAILS,CREATE_NEW_SR,CREATE_NEW_BIDDING_JOB,ADD_JOB_BID,ADD_JOB_POSTING,CANCEL_SR,ACCEPT_SR,REJECT_SR,RESCHEDULE_SR,EDIT_SR,FEEDBACK_SR,START_SR,CUSTOMER_FEEDBACK_SR,MAKE_COMPLAINT,COMPLETE_SR}
