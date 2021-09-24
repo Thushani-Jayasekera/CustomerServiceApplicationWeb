@@ -5,7 +5,7 @@ import tw from "twin.macro";
 import { css } from "styled-components/macro";
 
 import Header from "../Header";
-
+import {useTranslation} from "react-i18next";
 // import { ReactComponent as SvgDecoratorBlob1 } from "../../images/svg-decorator-blob-1.svg";
 import DesignIllustration from "/images/design-illustration-2.svg";
 import CustomersLogoStripImage from "../../images/customers-logo-strip.png";
@@ -46,6 +46,7 @@ const CustomersLogoStrip = styled.div`
 `;
 
 export default ({ roundedHeaderButton }) => {
+  const {t,i18n}  = useTranslation();
   return (
     <>
       <Header roundedHeaderButton={roundedHeaderButton} />
@@ -53,19 +54,19 @@ export default ({ roundedHeaderButton }) => {
         <TwoColumn>
           <LeftColumn>
             <Heading>
-              We deliver best service  <span tw="text-primary-500">for you.</span>
+              {t("home_heading")}
             </Heading>
             <Paragraph>
-              Our platform is the best platform available for you to fix your problems
+              {t("home_paragraph")}
             </Paragraph>
-            <Actions>
-              <input type="text" placeholder="Your E-mail Address" />
-              <button>Get Started</button>
-            </Actions>
-            <CustomersLogoStrip>
-              <p>Our TRUSTED Customers</p>
-              <img src={CustomersLogoStripImage} alt="Our Customers" />
-            </CustomersLogoStrip>
+            {/*<Actions>*/}
+            {/*  <input type="text" placeholder="Your E-mail Address" />*/}
+            {/*  <button>Get Started</button>*/}
+            {/*</Actions>*/}
+            {/*<CustomersLogoStrip>*/}
+            {/*  <p>Our TRUSTED Customers</p>*/}
+            {/*  <img src={CustomersLogoStripImage} alt="Our Customers" />*/}
+            {/*</CustomersLogoStrip>*/}
           </LeftColumn>
           <RightColumn>
             <IllustrationContainer>

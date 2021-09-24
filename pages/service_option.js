@@ -15,11 +15,17 @@ import tw from 'twin.macro';
 import styled from 'styled-components';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import Loader from '../components/utils/Loader';
-import { GET_SERVICE_PROVIDER_BY_PROFESSION } from '../gql/query';
+import { GET_SERVICE_PROVIDER_BY_PROFESSION ,GET_ME} from '../gql/query';
 
 import { css } from 'styled-components/macro'; //eslint-disable-line
 import { Container, ContentWithPaddingXl } from '../components/misc/Layouts.js';
 import { SectionHeading } from '../components/misc/Headings.js';
+import profileImg from "../images/profile.png"
+import Providers from '../components/Providers';
+import Pagination from '../components/Pagination';
+import {  Message } from "react-bulma-components";
+
+const levenshtein = require('fast-levenshtein');
 const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`;
 const TwoColumn = tw.div`flex flex-col sm:flex-row justify-between`;
 const Column = tw.div`sm:w-5/12 flex flex-col`;
@@ -75,7 +81,7 @@ const CardButton = tw(
 )`text-sm rounded-full m-5 bg-green-500`;
 const CardButton2 = tw(
   PrimaryButtonBase
-)`text-sm rounded-full m-5 bg-yellow-600`;
+)`text-sm rounded-full m-5 bg-blue-600`;
 const CardButtonUnAvailable = tw(
   DisabledButtonBase
 )`text-sm rounded-full m-5 bg-red-500`;
@@ -89,6 +95,8 @@ const CardContent = tw.p`mt-1 text-sm font-medium text-gray-600`;
 const SelectOptionPage = ({ history }) => {
   const { type } = useParams();
   const [values, setValues] = useState({ profession: '' });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [tilesPerPage, setTilesPerPage] = useState(2);
   const [searchTerm, setSearchTerm] = useState('');
   const { loading, error, data, fetchMore } = useQuery(
     GET_SERVICE_PROVIDER_BY_PROFESSION,
@@ -98,14 +106,17 @@ const SelectOptionPage = ({ history }) => {
       }
     }
   );
-  if (loading) return <Loader />;
+
+  const meQuery=useQuery(GET_ME);
+  if (loading||meQuery.loading) return <Loader />;
+
+  me_id=meQuery.data.me.id
 
   heading = 'Explore Service Providers';
   const items = data.searchServiceProviderbyProfession;
-  //var tabs = _.countBy(items, function(items) {
-  // return items.profession;
-  // });
 
+  const MIN_DISTANCE=7;
+  
   console.log(items);
 
   const handleChange = event => {
@@ -114,6 +125,12 @@ const SelectOptionPage = ({ history }) => {
       [event.target.name]: event.target.value
     });
   };
+
+  const paginate=(pageNumber)=>setCurrentPage(pageNumber);
+
+  const indexOfLastPost=currentPage*tilesPerPage;
+  const indexOfFirstPost=indexOfLastPost-tilesPerPage;
+  const currentPosts=items.slice(indexOfFirstPost,indexOfLastPost)
 
   return (
     <Container>
@@ -131,75 +148,15 @@ const SelectOptionPage = ({ history }) => {
             }}
           />
         </Actions>
-        {items
-          .filter(val => {
-            console.log(val);
-            if (searchTerm == '') {
-              if(val.roles.includes("service_provider")){
-                return val;
-              }
-              
-            } else if (
-              val.username.toLowerCase().includes(searchTerm.toLowerCase()) && val.roles.includes("service_provider")
-            ) {
-              return val;
-            }
-          })
-          .map((card, index) => (
-            <CardContainer key={index}>
-              <Card
-                className="group"
-                href={card.url}
-                initial="rest"
-                whileHover="hover"
-                animate="rest"
-              >
-                <TwoColumn>
-                  <Column>
-                    <CardImageContainer
-                      imageSrc={
-                        'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80'
-                      }
-                    >
-                      <CardRatingContainer>
-                        <CardRating>{card.rating}</CardRating>
-                        <CardReview>({card.reviews})</CardReview>
-                      </CardRatingContainer>
-                    </CardImageContainer>
-                  </Column>
-                  <Column>
-                    <CardText>
-                      <CardTitle>{card.username}</CardTitle>
-                      <CardContent>{card.bio}</CardContent>
-                    </CardText>
-                  </Column>
-                  <Column>
-                    <CardText>
-                      <CardContent>{card.city}</CardContent>
-                    </CardText>
-                  </Column>
-                  <Column>
-                    <CardButton2>View Profile</CardButton2>
-                    {card.service_providing_status === true ? (
-                      <CardButton>
-                        <Link
-                          to={{
-                            pathname: `/service_requester/createRequest/${card.id}`
-                          }}
-                        >
-                          Hire Now
-                        </Link>
-                      </CardButton>
-                    ) : (
-                      <CardButtonUnAvailable disabled>
-                        Not Available
-                      </CardButtonUnAvailable>
-                    )}
-                  </Column>
-                </TwoColumn>
-              </Card>
-            </CardContainer>
-          ))}
+        <Providers items={items} loading={loading} searchTerm={searchTerm} me_id={me_id}/>
+
+        
+
+          {items.length === 0 && (
+            <Message color={'danger'}>
+              <Message.Body>Sorry, No Providers Found as {type}s. Visit us Later!</Message.Body>
+            </Message>
+          )}
       </ContentWithPaddingXl>
     </Container>
   );
