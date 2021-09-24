@@ -155,4 +155,16 @@ mutation CustomerfeedbackServiceRequestMutation($customerfeedbackServiceRequestI
   }
 }
 `;
-export {MAKE_ME_SERVICE_PROVIDER, ADD_DETAILS,CREATE_NEW_SR,CREATE_NEW_BIDDING_JOB,ADD_JOB_BID,ADD_JOB_POSTING,CANCEL_SR,ACCEPT_SR,REJECT_SR,RESCHEDULE_SR,EDIT_SR,FEEDBACK_SR,START_SR,CUSTOMER_FEEDBACK_SR}
+
+const MAKE_COMPLAINT=gql`
+mutation MakeComplaintMutation($makeComplaintComplainer: ID, $makeComplaintVictim: String, $makeComplaintTitle: String, $makeComplaintComplaint: String) {
+  makeComplaint(complainer: $makeComplaintComplainer, victim: $makeComplaintVictim, title: $makeComplaintTitle, complaint: $makeComplaintComplaint) {
+    complainer
+    victim
+    title
+    complaint
+  }
+}
+
+`;
+export {MAKE_ME_SERVICE_PROVIDER, ADD_DETAILS,CREATE_NEW_SR,CREATE_NEW_BIDDING_JOB,ADD_JOB_BID,ADD_JOB_POSTING,CANCEL_SR,ACCEPT_SR,REJECT_SR,RESCHEDULE_SR,EDIT_SR,FEEDBACK_SR,START_SR,CUSTOMER_FEEDBACK_SR,MAKE_COMPLAINT}

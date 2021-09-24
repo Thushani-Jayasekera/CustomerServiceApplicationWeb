@@ -1,8 +1,11 @@
-import React from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import React, { useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import Header from "../components/Header"
-
+import { MAKE_COMPLAINT } from "../gql/mutation";
+import { GET_ME } from "../gql/query";
+import  Loader from "../components/utils/Loader";
 
 const Container = tw.div`relative`;
 const Content = tw.div`max-w-screen-xl mx-auto py-20 lg:py-24`;
@@ -37,6 +40,24 @@ const SubmitButton = tw.button`w-full sm:w-32 mt-6 py-3 bg-gray-100 text-primary
 
 
 const addComplaintPage = ({ history }) => {
+
+  const [values,setValues] = useState({});
+  const {loading,error,data} = useQuery(GET_ME);
+  const [makeComplaint,{loading_mutation,error_mutation}] = useMutation(MAKE_COMPLAINT,{
+    onCompleted:data =>{
+      history.push('/');
+      
+    }
+  })
+  if(loading){
+    return <Loader/>
+  }
+  const handleChange = event=>{
+    setValues({
+      ...values,
+      [event.target.name]:event.target.value
+    })
+  };
 return(
 <Container>
 <Header/>
@@ -44,26 +65,33 @@ return(
         <FormContainer>
           <div tw="mx-auto max-w-4xl">
             <h2>Submit a complaint</h2>
-            <form action="#">
+            <form onSubmit={
+                event=>{
+                  event.preventDefault();
+                  console.log(values);
+                  makeComplaint({
+                    variables:{
+                      ...values,
+                      makeComplaintComplainer:data.me.id
+                    }
+                  })
+                } }>
               <TwoColumn>
                 <Column>
                   <InputContainer>
                     <Label htmlFor="name-input">What it is about?</Label>
-                    <Input id="name-input" type="text" name="name" placeholder="E.g. Payment Fraud"  required/>
+                    <Input id="name-input" type="text" name="makeComplaintTitle" placeholder="E.g. Payment Fraud" onChange={handleChange} required/>
                   </InputContainer>
                   <InputContainer>
-                    <Label htmlFor="email-input">Provider username related to the complaint (Optional)</Label>
-                    <Input id="email-input" type="email" name="email" placeholder="E.g. JayUser124" />
+                    <Label htmlFor="email-input">username related to the complaint (Optional)</Label>
+                    <Input id="victim-input" type="text" name="makeComplaintVictim" onChange={handleChange} placeholder="E.g. JayUser124" />
                   </InputContainer>
-                  <InputContainer>
-                    <Label htmlFor="email-input">Requester username related to the complaint(Optional)</Label>
-                    <Input id="email-input" type="email" name="email" placeholder="E.g. JayUser124" />
-                  </InputContainer>
+                 
                 </Column>
                 <Column>
                   <InputContainer tw="flex-1">
                     <Label htmlFor="name-input">Your Message</Label>
-                    <TextArea id="message-input" name="message" placeholder="E.g. Details about your complaint" required/>
+                    <TextArea id="message-input" name="makeComplaintComplaint" placeholder="E.g. Details about your complaint"onChange={handleChange} required/>
                   </InputContainer>
                 </Column>
               </TwoColumn>
