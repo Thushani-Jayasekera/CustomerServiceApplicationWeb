@@ -395,7 +395,7 @@ const ViewServiceRequestPage = () => {
                       disabled={
                         serviceReqDetails.date + 'T' + serviceReqDetails.time <
                           now.toISOString().substr(0, 16) ||
-                        serviceReqDetails.state !== 'Pending'||serviceReqDetails.state !== 'Accepted'
+                        (serviceReqDetails.state !== 'Pending'&& serviceReqDetails.state !== 'Accepted')
                       }
                     >
                       Cancel

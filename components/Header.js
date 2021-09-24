@@ -86,6 +86,7 @@ export default ({ roundedHeaderButton = false, logoLink, links, className, colla
       <NavLink href="/service_requester/selectOption">Find Service</NavLink>
       <NavLink href="/service_requester/createBiddingJob">Create Bidding Job</NavLink>
       <NavLink href="/service_provider/find_jobs">Find Job</NavLink>
+      <NavLink href="/add_complaint">Complain</NavLink>
 
 
       {

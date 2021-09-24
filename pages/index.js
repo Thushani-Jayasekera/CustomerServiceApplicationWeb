@@ -31,6 +31,7 @@ import ServiceRequesterStatusPage from './view_serviceRequest_status_requester';
 
 import ProfilePage from './profile_page';
 import ServiceProviderStatusPage from './view_serviceRequest_status_provider';
+import addComplaintPage from './add_complaint';
 
 const Pages = () => {
   return (
@@ -103,6 +104,7 @@ const Pages = () => {
         path="/service_requester/addDetails"
         component={AddDetailsPage}
       />
+      <Route exact path={'/add_complaint'} component={addComplaintPage}/>
       <ServiceProviderRoute exact path={'/myBids'} component={MyBidsPage} />
 
       <Route exact path={'/test'} component={Loader} />
