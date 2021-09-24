@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import AdminNavbar from '../../components/AdminNavbar';
 
 const AdminHome = props => {
   return (
     <div>
-      <h1>Hello Admin!</h1>
+      <AdminNavbar />
     </div>
   );
 };
