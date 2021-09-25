@@ -90,7 +90,7 @@ export default ({
     <NavLinks key={1}>
       <NavLink href="/admin/userManage">User Management</NavLink>
       <NavLink href="/admin/addService">Add Service</NavLink>
-      <NavLink href="/adminHome">Complaints</NavLink>
+      <NavLink href="/admin/complaints">Complaints</NavLink>
 
       {data.isLoggedIn ? (
         <React.Fragment>
