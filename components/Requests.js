@@ -19,7 +19,7 @@ import { SectionHeading } from '../components/misc/Headings.js';
 import FeatherIcon from 'feather-icons-react';
 import { Columns, Container, Message } from 'react-bulma-components';
 
-import { REJECT_SR, START_SR } from '../gql/mutation';
+import { REJECT_SR, START_SR, COMPLETE_SR } from '../gql/mutation';
 
 import { CANCEL_SR } from '../gql/mutation';
 import {
@@ -103,18 +103,34 @@ const Requests = ({ requests, loading, state, user,history }) => {
         addToast('Successfully started the request', {
           appearance: 'success'
         });
-        setView({
-          renderView: 0
-        });
-        history.push(`/service_request/${id}`);
+
+        history.push(`/profile/serviceRequestsForMe`);
       },
       onError: error => {
+        console.log(error);
         addToast('Failed ', { appearance: 'error' });
       }
     }
   );
 
-  if (loading || loading_reject || loading_cancel||loading_start) {
+  const [completeServiceRequest, { loading_complete, error_complete }] = useMutation(
+    COMPLETE_SR,
+    {
+      onCompleted: data => {
+        addToast('Successfully completed the request', {
+          appearance: 'success'
+        });
+
+        history.push(`/profile/serviceRequestsForMe`);
+      },
+      onError: error => {
+        console.log(error);
+        addToast('Failed ', { appearance: 'error' });
+      }
+    }
+  );
+
+  if (loading || loading_reject || loading_cancel||loading_start||loading_complete) {
     return <Loader />;
   }
 
@@ -159,14 +175,14 @@ const Requests = ({ requests, loading, state, user,history }) => {
 
                       
                       {(state==='Reviewed')?<>
-                      <reactStars
-                        count={5}
-                        onChange={ratingChanged}
-                        size={24}
-                        value={request.requestRating}
-                        activeColor="blue"
-                        id="star"
-                      />
+                      <reactStars 
+                            count={5}
+                            onChange={ratingChanged}
+                            size={24}
+                            activeColor="#ffd700"
+                            id="star"
+                            value={request.requestRating}
+                            edit={false}/>
                       <FeatherIcon icon="user-check" />
                       <CardTitle tw="font-style: italic">Customer Review- {request.requestReview}</CardTitle>
                       <FeatherIcon icon="star" />
@@ -337,6 +353,13 @@ const Requests = ({ requests, loading, state, user,history }) => {
                           disabled={state !== 'Started' || user != 'Provider'}
                           hidden={user != 'Provider'}
                           className="button is-success  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
+                          onClick={event => {
+                            completeServiceRequest({
+                              variables: {
+                                completeServiceRequestId: request.id
+                              }
+                            });
+                          }}
                         >
                           Mark Completed
                         </CardButton2>

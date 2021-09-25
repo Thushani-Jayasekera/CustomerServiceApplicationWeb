@@ -434,6 +434,8 @@ const GET_ME_USER_BY_ID_SR_DETAILS = gql`
       state
       estimate
       location
+      requestReview
+      requestRating
     }
     me {
       id

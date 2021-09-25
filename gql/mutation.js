@@ -154,7 +154,9 @@ const ADD_JOB_POSTING = gql`
       heading
       description
     }
+
   }
+
 `;
 
 const CANCEL_SR = gql`
@@ -179,6 +181,21 @@ const REJECT_SR = gql`
   }
 `;
 
+
+const COMPLETE_SR=gql`
+mutation CompleteServiceRequestMutation($completeServiceRequestId: ID, $completeServiceRequestFinalAmount: Int) {
+  completeServiceRequest(id: $completeServiceRequestId, finalAmount: $completeServiceRequestFinalAmount) {
+    requester_id
+    provider_id
+    id
+    task
+    state
+  }
+}
+`;
+
+
+
 const START_SR = gql`
   mutation StartServiceRequestMutation($startServiceRequestId: ID) {
     startServiceRequest(id: $startServiceRequestId) {
@@ -187,6 +204,7 @@ const START_SR = gql`
       task
       state
     }
+
   }
 `;
 
@@ -317,21 +335,6 @@ const MAKE_COMPLAINT = gql`
     }
   }
 `;
-export {
-  MAKE_ME_SERVICE_PROVIDER,
-  ADD_DETAILS,
-  CREATE_NEW_SR,
-  CREATE_NEW_BIDDING_JOB,
-  ADD_JOB_BID,
-  ADD_JOB_POSTING,
-  CANCEL_SR,
-  ACCEPT_SR,
-  REJECT_SR,
-  RESCHEDULE_SR,
-  EDIT_SR,
-  FEEDBACK_SR,
-  START_SR,
-  CUSTOMER_FEEDBACK_SR,
-  MAKE_COMPLAINT,
-  CREATE_SERVICE
-};
+
+export {MAKE_ME_SERVICE_PROVIDER, ADD_DETAILS,CREATE_NEW_SR,CREATE_NEW_BIDDING_JOB,ADD_JOB_BID,ADD_JOB_POSTING,CANCEL_SR,ACCEPT_SR,REJECT_SR,RESCHEDULE_SR,EDIT_SR,FEEDBACK_SR,START_SR,CUSTOMER_FEEDBACK_SR,MAKE_COMPLAINT,COMPLETE_SR}
+
