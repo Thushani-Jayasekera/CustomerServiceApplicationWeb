@@ -66,7 +66,7 @@ const ServiceRequesterStatusPage=({history})=>{
 
     if(error){
       console.log(error)
-      return <Redirect to={"/"}/>
+      return <Redirect to={"/profile/serviceRequestsSent"}/>
     } 
     return (
         <Container>

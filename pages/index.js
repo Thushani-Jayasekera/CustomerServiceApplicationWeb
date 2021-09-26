@@ -11,6 +11,9 @@ import ServiceRequesterRoute from '../components/utils/ServiceRequesterRoute';
 import AdminLogin from './admin_login';
 import AdminSignUp from './adminPages/admin_signup';
 import AdminHome from './adminPages/admin_home';
+import AddService from './adminPages/add_service';
+import UserManage from './adminPages/user_management';
+import Complaints from './adminPages/complaints';
 import FindJobsPage from './find_jobs';
 
 import AddDetailsPage from './service_requester_addDetails';
@@ -41,6 +44,9 @@ const Pages = () => {
       <Route exact path="/signup" component={SignUp} />
       <Route exact path="/adminHome" component={AdminHome} />
       <Route exact path="/adminSignup" component={AdminSignUp} />
+      <Route exact path="/admin/addService" component={AddService} />
+      <Route exact path="/admin/userManage" component={UserManage} />
+      <Route exact path="/admin/complaints" component={Complaints} />
       <ServiceRequesterRoute
         exact
         path="/service_requester/createRequest/:provider_id"
@@ -111,7 +117,7 @@ const Pages = () => {
         path="/service_requester/addDetails"
         component={AddDetailsPage}
       />
-      <Route exact path={'/add_complaint'} component={addComplaintPage}/>
+      <Route exact path={'/add_complaint'} component={addComplaintPage} />
       <ServiceProviderRoute exact path={'/myBids'} component={MyBidsPage} />
 
       <Route exact path={'/test'} component={Loader} />

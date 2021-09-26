@@ -45,7 +45,7 @@ const CommonProfilePage = ()=>{
                   </Link>
                 </Level.Item>
                 <Level.Item>
-                  <Link to={'./profile/serviceRequestsForMe'}>
+                  <Link to={'/profile/serviceRequestsForMe'}>
                   <Button color={"link"}>Service requests for me </Button>
                   </Link>
                 </Level.Item>
@@ -65,7 +65,7 @@ const CommonProfilePage = ()=>{
                   </Link>
                 </Level.Item>
                 <Level.Item>
-                  <Link to={'./profile/serviceRequestsSent'}>
+                  <Link to={'/profile/serviceRequestsSent'}>
                   <Button color={"link"}>Service requests for me </Button>
                   </Link>
                 </Level.Item>

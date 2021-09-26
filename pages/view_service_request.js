@@ -30,6 +30,7 @@ import { useParams } from 'react-router';
 import {
   ACCEPT_SR,
   CANCEL_SR,
+  COMPLETE_SR,
   CUSTOMER_FEEDBACK_SR,
   EDIT_SR,
   FEEDBACK_SR,
@@ -80,6 +81,13 @@ const Label = tw.label`absolute top-0 left-0 tracking-wide font-semibold text-sm
 const Input = tw.input``;
 const TextArea = tw.textarea`h-24 sm:h-full resize-none`;
 const SubmitButton = tw.button`w-full sm:w-32 mt-6 py-3 bg-gray-100 text-primary-500 rounded-full font-bold tracking-wide shadow-lg uppercase text-sm transition duration-300 transform focus:outline-none focus:shadow-outline hover:bg-gray-300 hover:text-primary-700 hocus:-translate-y-px hocus:shadow-xl`;
+
+const Testimonials = tw.div`flex flex-col lg:flex-row items-center lg:items-stretch`;
+const TestimonialContainer = tw.div`mt-16 bg-gray-100 lg:w-full`;
+const Testimonial = tw.div`px-4 text-center max-w-lg mx-auto flex flex-col items-center`;
+const Image = tw.img`w-20 h-20 rounded-full`;
+const Quote = tw.blockquote`mt-5 text-gray-600 font-medium leading-loose`;
+const CustomerName = tw.p`mt-5 text-gray-900 font-semibold uppercase text-sm tracking-wide`;
 
 const ViewServiceRequestPage = () => {
   const { id } = useParams(0);
@@ -150,6 +158,25 @@ const ViewServiceRequestPage = () => {
         history.push(`/service_request/${id}`);
       },
       onError: error => {
+        addToast('Failed ', { appearance: 'error' });
+      }
+    }
+  );
+  const [completeServiceRequest, { loading_complete, error_complete }] = useMutation(
+    COMPLETE_SR,
+    {
+      onCompleted: data => {
+        addToast('Successfully completed the request', {
+          appearance: 'success'
+        });
+        setView({
+          renderView: 0
+        });
+
+        history.push(`/service_request/${id}`);
+      },
+      onError: error => {
+        console.log(error);
         addToast('Failed ', { appearance: 'error' });
       }
     }
@@ -303,6 +330,15 @@ const ViewServiceRequestPage = () => {
     });
   };
 
+  const completeRequest = event => {
+    setValues({});
+    completeServiceRequest({
+      variables: {
+        completeServiceRequestId: id
+      }
+    });
+  };
+
   const acceptRequest = event => {
     setValues({});
     acceptServiceRequest({
@@ -395,7 +431,7 @@ const ViewServiceRequestPage = () => {
                       disabled={
                         serviceReqDetails.date + 'T' + serviceReqDetails.time <
                           now.toISOString().substr(0, 16) ||
-                        serviceReqDetails.state !== 'Pending'||serviceReqDetails.state !== 'Accepted'
+                        (serviceReqDetails.state !== 'Pending'&& serviceReqDetails.state !== 'Accepted')
                       }
                     >
                       Cancel
@@ -466,7 +502,7 @@ const ViewServiceRequestPage = () => {
                       <Button
                       rounded
                       className="button is-success is-medium mx-4 my-2 px-6"
-                      
+                      onClick={completeRequest}
                       disabled={
                         serviceReqDetails.state!=='Started'
                       }
@@ -555,6 +591,20 @@ const ViewServiceRequestPage = () => {
                             >
                               {serviceReqDetails.state}
                             </Button>
+                          ) : serviceReqDetails.state === 'Started' ? (
+                            <Button
+                              rounded
+                              className="button is-success is-small mx-5 px-6"
+                            >
+                              {serviceReqDetails.state}
+                            </Button>
+                          ) : serviceReqDetails.state === 'Completed'|| serviceReqDetails.state === 'Reviewed' ? (
+                            <Button
+                              rounded
+                              className="button is-success is-small mx-5 px-6"
+                            >
+                              {serviceReqDetails.state}
+                            </Button>
                           ) : (
                             <Button
                               rounded
@@ -625,20 +675,45 @@ const ViewServiceRequestPage = () => {
                         Thank you for your feedback!
                       </Message.Body>
                     </Message>
-                    ) :
+                    ) :(
+                      <>
+                    {status!=='Completed' &&  status!=='Started' && status!=='Reviewed' && serviceReqDetails.state!=='Reviewed'  && myDetails.id === requester_id?(
                       <Message color={'warning'}>
                         <Message.Body>
                           You can cancel/ reschedule / reject a request only 20
                           minuites before the scheduled time
                         </Message.Body>
                       </Message>
+                    ):(<>{
+                      serviceReqDetails.state==='Reviewed' && myDetails.id === requester_id?(<>
+                          <TestimonialContainer >
+                          <Testimonial>
+                            <Image src={''} />
+                            <Quote>"{serviceReqDetails.requestReview}"</Quote>
+                            <ReactStars 
+                            count={5}
+                            onChange={ratingChanged}
+                            size={24}
+                            activeColor="#ffd700"
+                            id="star"
+                            value={serviceReqDetails.requestRating}
+                            edit={false}/>
+                            <CustomerName>- CUSTOMER FEEDBACK</CustomerName>
+                          </Testimonial>
+                        </TestimonialContainer>
+                        </>):(<></>)}
+                    </>)
                     }
+                    </>
+                    )
+                  }
+                  
                     </>
                   )}
 
 
 
-              {serviceReqDetails.state === 'Completed' && myDetails.id === provider_id && status!=='Reviewed'? (
+              {serviceReqDetails.state === 'Completed' && myDetails.id === provider_id && status!=='Reviewed' && serviceReqDetails.state!=='Reviewed'? (
                     <>
                       <FormContainer>
                     <div tw="mx-auto max-w-4xl">
@@ -696,16 +771,44 @@ const ViewServiceRequestPage = () => {
                         Thank you for your feedback!
                       </Message.Body>
                     </Message>
-                    ) :
+                    
+                    ) :(
+                      <>
+                    {status!=='Completed' &&  status!=='Started' && status!=='Reviewed' && serviceReqDetails.state!=='Reviewed' && myDetails.id === provider_id?(
                       <Message color={'warning'}>
                         <Message.Body>
                           You can cancel/ reschedule / reject a request only 20
                           minuites before the scheduled time
                         </Message.Body>
                       </Message>
+                    ):(<>{
+                      serviceReqDetails.state==='Reviewed'&& myDetails.id === provider_id?(<>
+                        <TestimonialContainer >
+                          <Testimonial>
+                            <Image src={''} />
+                            <Quote>"{serviceReqDetails.requestReview}"</Quote>
+                            <ReactStars 
+                            count={5}
+                            onChange={ratingChanged}
+                            size={24}
+                            activeColor="#ffd700"
+                            id="star"
+                            value={serviceReqDetails.requestRating}
+                            edit={false}/>
+                            <CustomerName>- CUSTOMER FEEDBACK</CustomerName>
+                          </Testimonial>
+                        </TestimonialContainer>
+                        </>):(<></>)}
+                    </>)
+                    }
+                    </>)
                     }
                     </>
                   )}
+                
+                  
+                  
+                  
                 </Content>
               </Section>
             </Container>
@@ -794,7 +897,7 @@ const ViewServiceRequestPage = () => {
                     <Button
                       rounded
                       className="button is-success is-medium mx-4 my-2 px-6"
-                      
+                      onClick={completeRequest}
                       disabled={
                         serviceReqDetails.state!=='Started'
                       }
