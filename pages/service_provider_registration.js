@@ -81,6 +81,11 @@ const ServiceProviderRegisterPage = ({history})=>{
                   })
                 }
               }>
+
+                <div>
+                  <Label>Full Name</Label>
+                  <Input type={"text"} name={"makeMeServiceProviderFullname"} placeholder={"Fullname"} onChange={handleChange}/>
+                </div>
                 <div>
                   <Label>NIC</Label>
                   <Input type={"text"} name={"makeMeServiceProviderNic"} placeholder={"NIC"} onChange={handleChange}/>
@@ -92,6 +97,9 @@ const ServiceProviderRegisterPage = ({history})=>{
                  </Select>
                 </div>
                 <div>
+                  <Label>Address</Label>
+                  <Input  name={"makeMeServiceProviderAddress"} placeholder={"Address"} onChange={handleChange} />
+                </div>                  <div>
                   <Label>Province</Label>
                   <Input  name={"makeMeServiceProviderProvince"} placeholder={"Province"} onChange={handleChange} />
                 </div>                <div>
@@ -102,6 +110,10 @@ const ServiceProviderRegisterPage = ({history})=>{
                   <Label>Town/SubUrb</Label>
                   <Input  name={"makeMeServiceProviderTown"} placeholder={"Town"} onChange={handleChange} />
                 </div>
+                <div>
+                <Label>Contact Number</Label>
+                <Input  name={"makeMeServiceProviderContactNumber"} placeholder={"Contact Number"} onChange={handleChange} />
+              </div>
                 <div>
                   <Label>Short Bio</Label>
                   <TextArea name={"makeMeServiceProviderBio"} onChange={handleChange} />
