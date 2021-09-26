@@ -2,16 +2,22 @@ import { gql } from '@apollo/client';
 
 const MAKE_ME_SERVICE_PROVIDER = gql`
   mutation Mutation(
+    $makeMeServiceProviderFullname: String!
     $makeMeServiceProviderNic: String!
     $makeMeServiceProviderProfession: String!
+    $makeMeServiceProviderAddress: String!
+    $makeMeServiceProviderContactNumber: String!
     $makeMeServiceProviderProvince: String!
     $makeMeServiceProviderCity: String!
     $makeMeServiceProviderTown: String!
     $makeMeServiceProviderBio: String
   ) {
     makeMeServiceProvider(
+      fullname: $makeMeServiceProviderFullname
       nic: $makeMeServiceProviderNic
       profession: $makeMeServiceProviderProfession
+      address: $makeMeServiceProviderAddress
+      contactNumber: $makeMeServiceProviderContactNumber
       province: $makeMeServiceProviderProvince
       city: $makeMeServiceProviderCity
       town: $makeMeServiceProviderTown
@@ -336,6 +342,20 @@ const MAKE_COMPLAINT = gql`
   }
 `;
 
+const ACCEPT_JOB_BID = gql`
+  mutation Mutation(
+    $acceptJobBidJobPostingId: ID!
+    $acceptJobBidJobBidId: ID!
+  ) {
+    acceptJobBid(
+      jobPostingId: $acceptJobBidJobPostingId
+      jobBidId: $acceptJobBidJobBidId
+    ) {
+      id
+    }
+  }
+`;
+
 export {
   MAKE_ME_SERVICE_PROVIDER,
   ADD_DETAILS,
@@ -353,5 +373,6 @@ export {
   CUSTOMER_FEEDBACK_SR,
   MAKE_COMPLAINT,
   COMPLETE_SR,
+  ACCEPT_JOB_BID,
   CREATE_SERVICE
 };

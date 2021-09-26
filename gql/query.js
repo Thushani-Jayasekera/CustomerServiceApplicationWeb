@@ -637,6 +637,47 @@ const GET_ALL_COMPLAINTS = gql`
   }
 `;
 
+const GET_MY_JOB_POSTINGS = gql`
+  query Query($getMyJobPostingsState: String!) {
+    getMyJobPostings(state: $getMyJobPostingsState) {
+      id
+      heading
+      category
+      budgetRange {
+        lowerLimit
+        upperLimit
+      }
+      updatedAt
+    }
+  }
+`;
+const GET_MY_JOB_POSTING_BIDS = gql`
+  query Query($getMyJobPostingBidsId: ID!) {
+    getMyJobPostingBids(id: $getMyJobPostingBidsId) {
+      id
+      state
+      proposedAmount
+      bidBy {
+        fullname
+        profession
+        provider_rating
+      }
+      detailedBreakdown
+      proposedDate
+      updatedAt
+    }
+  }
+`;
+
+const GET_JOB_POSTING_STATE = gql`
+  query Query($jobPostingId: ID!) {
+    jobPosting(id: $jobPostingId) {
+      id
+      state
+    }
+  }
+`;
+
 const GET_USERS_BY_AC_STATE = gql`
   query Query($takeUsersAccountState: String!) {
     takeUsers(accountState: $takeUsersAccountState) {
@@ -680,5 +721,8 @@ export {
   GET_SERVICE_REQUESTS_FOR_ME,
   GET_PROVIDERS_BY_PROFESSION_IN_PROVINCE,
   GET_ALL_COMPLAINTS,
+  GET_MY_JOB_POSTINGS,
+  GET_MY_JOB_POSTING_BIDS,
+  GET_JOB_POSTING_STATE,
   GET_USERS_BY_AC_STATE
 };

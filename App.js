@@ -10,7 +10,9 @@ import GlobalStyles from "./styles/GlobalStyles";
 import english from "./translations/english";
 import sinhala from "./translations/sinhala";
 import tamil from "./translations/tamil";
+
 //Setting up apollo client
+
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
 import {setContext} from "apollo-link-context";
 import { ToastProvider } from "react-toast-notifications";

@@ -33,6 +33,8 @@ import ServiceRequesterStatusPage from './view_serviceRequest_status_requester';
 import ProfilePage from './profile_page';
 import ServiceProviderStatusPage from './view_serviceRequest_status_provider';
 import addComplaintPage from './add_complaint';
+import MyJobPostingsPage from "./my_job_postings";
+import MyJobPostingBidsPage from "./my_job_posting_bids";
 
 const Pages = () => {
   return (
@@ -83,7 +85,16 @@ const Pages = () => {
         path={'/profile/serviceRequestsSent'}
         component={ServiceRequesterStatusPage}
       />
-
+      <ServiceRequesterRoute
+        exact
+        path={"/myJobPostings"}
+        component={MyJobPostingsPage}
+      />
+      <ServiceRequesterRoute
+          exact
+          path={"/myJobPostings/:id"}
+          component={MyJobPostingBidsPage}
+        />
       <ServiceProviderRoute
         exact
         path={'/service_provider/find_jobs'}

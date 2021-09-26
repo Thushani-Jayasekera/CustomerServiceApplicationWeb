@@ -60,8 +60,8 @@ const CommonProfilePage = ()=>{
               </Level>
               <Level>
                 <Level.Item>
-                  <Link to={"/myBids"}>
-                    <Button color={"link"}>My Bids</Button>
+                  <Link to={"/myJobPostings"}>
+                    <Button color={"link"}>My Job Postings</Button>
                   </Link>
                 </Level.Item>
                 <Level.Item>

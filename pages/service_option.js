@@ -110,9 +110,9 @@ const SelectOptionPage = ({ history }) => {
   const meQuery=useQuery(GET_ME);
   if (loading||meQuery.loading) return <Loader />;
 
-  me_id=meQuery.data.me.id
+  const me_id=meQuery.data.me.id
 
-  heading = 'Explore Service Providers';
+  const  heading = 'Explore Service Providers';
   const items = data.searchServiceProviderbyProfession;
 
   const MIN_DISTANCE=7;

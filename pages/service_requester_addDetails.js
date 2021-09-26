@@ -39,13 +39,19 @@ const SubmitButton = styled.button`
 
 const AddDetailsPage = ({history})=>{
   const [values,setValues] = useState({});
-  const {loading,error,data} = useQuery(GET_ME);
+  const {loading,error,data} = useQuery(GET_ME,{
+    onCompleted:data1 => {
+      setValues({
+        registerServiceRequesterContactNum:data1.me.contactNum
+      })
+    }
+  });
   const [registerServiceRequester,{loading_mutation,error_mutation}] = useMutation(ADD_DETAILS,{
     onCompleted:data =>{
       history.push('/');
-      
     }
   })
+
   if(loading){
     return <Loader/>
   }
@@ -55,7 +61,6 @@ const AddDetailsPage = ({history})=>{
       [event.target.name]:event.target.value
     })
   };
-
   return(
     <Layout>
       <Header/>
@@ -80,7 +85,8 @@ const AddDetailsPage = ({history})=>{
               }>
                 <div>
                   <Label>Contact Number</Label>
-                  <Input type={"text"} name={"registerServiceRequesterContactNum"} placeholder={"Contact Number"} onChange={handleChange} required/>
+                  <Input type={"text"} name={"registerServiceRequesterContactNum"} placeholder={"Contact Number"} onChange={handleChange}
+                      value={values.registerServiceRequesterContactNum || ""}     required/>
                 </div>
                 <div>
                   <Label>Address</Label>

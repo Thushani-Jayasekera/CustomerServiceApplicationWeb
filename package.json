@@ -61,7 +61,8 @@
     "styled-components": "^4.4.1",
     "tailwindcss": "^2.2.7",
     "twin.macro": "^2.6.2",
-    "underscore": "^1.13.1"
+    "underscore": "^1.13.1",
+    "javascript-time-ago": "2.3.8"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
