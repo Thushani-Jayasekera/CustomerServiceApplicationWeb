@@ -637,6 +637,22 @@ const GET_ALL_COMPLAINTS = gql`
   }
 `;
 
+const GET_USERS_BY_AC_STATE = gql`
+  query Query($takeUsersAccountState: String!) {
+    takeUsers(accountState: $takeUsersAccountState) {
+      email
+      nic
+      fullname
+      username
+      contactNum
+      address
+      city
+      provider_rating
+      provider_review_count
+    }
+  }
+`;
+
 export {
   IS_LOGGED_IN,
   GET_ME,
@@ -663,5 +679,6 @@ export {
   GET_SERVICE_REQUESTS_OF_ME,
   GET_SERVICE_REQUESTS_FOR_ME,
   GET_PROVIDERS_BY_PROFESSION_IN_PROVINCE,
-  GET_ALL_COMPLAINTS
+  GET_ALL_COMPLAINTS,
+  GET_USERS_BY_AC_STATE
 };
