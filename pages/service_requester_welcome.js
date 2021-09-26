@@ -99,7 +99,7 @@ const ServiceRequesterWelcomePage = ({ history }) => {
   if (loading || service_providers.loading || service_types.loading)
     return <Loader />;
 
-  heading = 'Explore Service Providers';
+  const heading = 'Explore Service Providers';
   const items = service_providers.data.viewAllServiceProviders;
   //const tabs = _.countBy(items, function(items) {
   //return items.profession;
