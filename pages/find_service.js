@@ -9,6 +9,7 @@ import tw from 'twin.macro';
 import styled from 'styled-components';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import Loader from '../components/utils/Loader';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 //import {ReactComponent as SvgDotPatternIcon} from "../images/dot-pattern.svg"
 // Styling
@@ -16,7 +17,7 @@ const Container = tw.div`relative`;
 const Content = tw.div`max-w-screen-xl mx-auto py-20 lg:py-24`;
 const Form = tw.form`mx-auto lg:max-w-lg max-w-sm`;
 const FormContainer = styled.div`
-  ${tw`p-10 sm:p-12 md:p-16 bg-primary-300 text-gray-100 rounded-lg relative`}
+  ${tw`p-10 sm:p-12 md:p-16 bg-blue-500 text-gray-100 rounded-lg relative`}
   form {
     ${tw`mt-4`}
   }
@@ -85,7 +86,8 @@ const FindServicePage = ({ history }) => {
                 console.log(values);
                 createServiceRequest({
                   variables: {
-                    ...values
+                    ...values,
+                    createServiceRequestLocation:data.me.address
                   }
                 });
               }}
@@ -99,6 +101,7 @@ const FindServicePage = ({ history }) => {
                   placeholder="E.g. john@mail.com"
                   onChange={handleChange}
                   required
+                  
                 />
               </InputContainer>
 
@@ -120,9 +123,15 @@ const FindServicePage = ({ history }) => {
                   id="loc-input"
                   type="email"
                   name="location"
-                  placeholder={data.me.address}
+                  value={data.me.address}
                   disabled={true}
+                  tw='text-black'
                 />
+                <Link to={{
+                          pathname: `/profile`
+                        }}>
+                <button tw='bg-white opacity-75 hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow'>Change Location</button>
+                </Link>
               </InputContainer>
 
               <TwoColumn>

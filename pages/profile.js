@@ -45,7 +45,9 @@ const CommonProfilePage = ()=>{
                   </Link>
                 </Level.Item>
                 <Level.Item>
+                  <Link to={'/profile/serviceRequestsForMe'}>
                   <Button color={"link"}>Service requests for me </Button>
+                  </Link>
                 </Level.Item>
               </Level>
               <Level>
@@ -54,6 +56,18 @@ const CommonProfilePage = ()=>{
                 </Level.Item>
                 <Level.Item>
                   <hr/>
+                </Level.Item>
+              </Level>
+              <Level>
+                <Level.Item>
+                  <Link to={"/myJobPostings"}>
+                    <Button color={"link"}>My Job Postings</Button>
+                  </Link>
+                </Level.Item>
+                <Level.Item>
+                  <Link to={'/profile/serviceRequestsSent'}>
+                  <Button color={"link"}>Service requests for me </Button>
+                  </Link>
                 </Level.Item>
               </Level>
             </Columns.Column>
