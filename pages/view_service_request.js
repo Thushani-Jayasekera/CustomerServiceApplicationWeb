@@ -572,7 +572,7 @@ const ViewServiceRequestPage = () => {
                       </tr>
                       <tr>
                         <td>Total Amount Paid to date</td>
-                        <td>{serviceReqDetails.task}</td>
+                        <td>{serviceReqDetails.toDatePayment? serviceReqDetails.toDatePayment: "No Payments done yet"}</td>
                       </tr>
                       <tr>
                         <td>Status of Request</td>
