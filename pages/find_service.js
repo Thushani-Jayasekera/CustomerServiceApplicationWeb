@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import Loader from '../components/utils/Loader';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { now } from 'underscore';
 
 //import {ReactComponent as SvgDotPatternIcon} from "../images/dot-pattern.svg"
 // Styling
@@ -72,6 +73,19 @@ const FindServicePage = ({ history }) => {
     });
   };
 
+const today = new Date();
+const dd = today.getDate();
+const mm = today.getMonth()+1; //January is 0 so need to add 1 to make it 1!
+const yyyy = today.getFullYear();
+if(dd<10){
+  dd='0'+dd
+} 
+if(mm<10){
+  mm='0'+mm
+} 
+
+const todayMin = yyyy+'-'+mm+'-'+dd;
+
   return (
     <Container>
       <Header/>
@@ -100,6 +114,7 @@ const FindServicePage = ({ history }) => {
                   name={'createServiceRequestDate'}
                   placeholder="E.g. john@mail.com"
                   onChange={handleChange}
+                  min={todayMin}
                   required
                   
                 />
