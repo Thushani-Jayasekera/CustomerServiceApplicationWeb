@@ -13,9 +13,9 @@ import {
 } from '../components/misc/Buttons.js';
 import tw from 'twin.macro';
 import styled from 'styled-components';
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { gql, NetworkStatus, useMutation, useQuery } from '@apollo/client';
 import Loader from '../components/utils/Loader';
-import { GET_SERVICE_PROVIDER_BY_PROFESSION ,GET_ME} from '../gql/query';
+import { GET_PROVIDERS_BY_PROFESSION_IN_PROVINCE ,GET_ME} from '../gql/query';
 
 import { css } from 'styled-components/macro'; //eslint-disable-line
 import { Container, ContentWithPaddingXl } from '../components/misc/Layouts.js';
@@ -23,7 +23,9 @@ import { SectionHeading } from '../components/misc/Headings.js';
 import profileImg from "../images/profile.png"
 import Providers from '../components/Providers';
 import Pagination from '../components/Pagination';
-import {  Message } from "react-bulma-components";
+import {  Columns, Form, Message } from "react-bulma-components";
+
+import FeatherIcon from 'feather-icons-react';
 
 const levenshtein = require('fast-levenshtein');
 const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`;
@@ -94,36 +96,92 @@ const CardContent = tw.p`mt-1 text-sm font-medium text-gray-600`;
 
 const SelectOptionPage = ({ history }) => {
   const { type } = useParams();
+  const [checked, setChecked] = useState(false);
+  const [citychecked, setCityChecked] = useState(false);
   const [values, setValues] = useState({ profession: '' });
   const [currentPage, setCurrentPage] = useState(1);
   const [tilesPerPage, setTilesPerPage] = useState(2);
   const [searchTerm, setSearchTerm] = useState('');
-  const { loading, error, data, fetchMore } = useQuery(
-    GET_SERVICE_PROVIDER_BY_PROFESSION,
+  const [city,setCity]=useState('');
+  const [province,setProvince]=useState('');
+  const [rating,setRating]=useState('');
+  const { loading, error, data, refetch , networkStatus} = useQuery(
+    GET_PROVIDERS_BY_PROFESSION_IN_PROVINCE,
     {
       variables: {
-        searchServiceProviderbyProfessionProfession: `${type}`
-      }
+        searchServiceProviderbyProfessioninProvinceProfession: `${type}`,
+        searchServiceProviderbyProfessioninProvinceProvince:province,
+        searchServiceProviderbyProfessioninProvinceCity:city,
+        searchServiceProviderbyProfessioninProvinceRating:rating
+      },
+      notifyOnNetworkStatusChange:true,
     }
   );
 
   const meQuery=useQuery(GET_ME);
+  if(networkStatus===NetworkStatus.refetch) return 'Refetching...'
   if (loading||meQuery.loading) return <Loader />;
 
   const me_id=meQuery.data.me.id
 
   const  heading = 'Explore Service Providers';
-  const items = data.searchServiceProviderbyProfession;
+  const items = data.searchServiceProviderbyProfessioninProvince;
 
   const MIN_DISTANCE=7;
   
   console.log(items);
 
   const handleChange = event => {
+    setRating( event.target.value);
     setValues({
       ...values,
       [event.target.name]: event.target.value
     });
+  };
+
+  const handleCheck = event => {
+    setChecked(!checked);
+    console.log(checked,"province");
+    if(!checked){
+      setProvince(meQuery.data.me.province);
+      setValues({
+        ...values,
+        [event.target.name]: meQuery.data.me.province
+      });
+
+    }else{
+      setProvince('');
+      setValues({
+        ...values,
+        [event.target.name]:''
+      });
+    }
+  
+   
+    refetch();
+  };
+
+  const handleCityCheck = event => {
+    setCityChecked(!citychecked);
+    console.log(citychecked,"city");
+    if(!citychecked){
+      setCity(meQuery.data.me.city);
+      console.log(city);
+      setValues({
+        ...values,
+        [event.target.name]: meQuery.data.me.city
+      })
+
+    }else{
+      console.log(citychecked,"ciy");
+      setCity('');
+      setValues({
+        ...values,
+        [event.target.name]:''
+      });
+    }
+    refetch();
+  
   };
 
   const paginate=(pageNumber)=>setCurrentPage(pageNumber);
@@ -139,15 +197,53 @@ const SelectOptionPage = ({ history }) => {
         <HeaderRow>
           <Heading>{heading}</Heading>
         </HeaderRow>
-        <Actions>
-          <input
-            type="text"
-            placeholder="Enter Service Provider Name"
-            onChange={event => {
+        <br/>
+        {city,province,rating}
+        <Container>
+        <Columns>
+        
+        <Form.Input
+         type="text"
+         placeholder="Enter Service Provider Name"
+         onChange={event => {
               setSearchTerm(event.target.value);
-            }}
-          />
-        </Actions>
+            }}/>
+     <br/>
+     <FeatherIcon icon="filter"/>
+     <Container>
+       <label>
+         Sort By
+      <select class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
+         name={'searchServiceProviderbyProfessioninProvinceRating'}
+         onChange={handleChange}
+         value={rating}>
+        <option value=''>Rating {rating}</option>
+        <option value='0'>Highest to Lowest</option>
+        <option value='1'>Lowest to Highest</option>
+    </select>
+    </label>
+    </Container>
+      <label>
+      <input
+          type="checkbox"
+          checked={checked}
+          onChange={handleCheck}
+          name={'searchServiceProviderbyProfessioninProvinceProvince'}
+        />
+        View Providers only in my province
+      </label>
+      <label>
+      <input
+          type="checkbox"
+          checked={citychecked}
+          onChange={handleCityCheck}
+          name={'searchServiceProviderbyProfessioninProvinceCity'}
+        />
+        View Providers only in my city
+      </label>
+ 
+      </Columns>
+      </Container>
         <Providers items={items} loading={loading} searchTerm={searchTerm} me_id={me_id}/>
 
         
