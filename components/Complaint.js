@@ -1,7 +1,7 @@
 import React from 'react';
 import tw from 'twin.macro';
 
-const Testimonial = tw.div`px-3 py-3 sm:px-5 sm:py-5 focus:outline-none flex! flex-col justify-between bg-gray-200 rounded my-5 hover:bg-secondary-100`;
+const Testimonial = tw.div`px-3 py-3 sm:px-5 sm:py-5 focus:outline-none flex! flex-col justify-between bg-gray-200 rounded my-5 hover:bg-primary-300`;
 const QuoteContainer = tw.div`relative`;
 // const QuoteIcon = tw(QuoteIconBase)`absolute opacity-15 top-0 left-0 transform -translate-y-2 -translate-x-1/2 sm:-translate-x-full w-10 fill-current text-primary-500`
 const Quote = tw.blockquote`font-medium sm:font-normal relative text-sm sm:text-xl text-center sm:text-left`;

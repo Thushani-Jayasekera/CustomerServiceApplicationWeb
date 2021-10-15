@@ -30,6 +30,15 @@ const MAKE_ME_SERVICE_PROVIDER = gql`
   }
 `;
 
+const   UPDATE_ME = gql`
+    mutation Mutation($updateMeFullname: String, $updateMeContactNum: String, $updateMeAddress: String, $updateMeProfession: String, $updateMeProvince: String, $updateMeCity: String, $updateMeTown: String, $updateMePostalCode: String) {
+        updateMe(fullname: $updateMeFullname, contactNum: $updateMeContactNum, address: $updateMeAddress, profession: $updateMeProfession, province: $updateMeProvince, city: $updateMeCity, town: $updateMeTown, postalCode: $updateMePostalCode) {
+            id
+            username
+            email
+        }
+    }
+`
 const ADD_DETAILS = gql`
   mutation AddDetailsSR(
     $registerServiceRequesterContactNum: String!
@@ -185,20 +194,23 @@ const REJECT_SR = gql`
   }
 `;
 
-
-const COMPLETE_SR=gql`
-mutation CompleteServiceRequestMutation($completeServiceRequestId: ID, $completeServiceRequestFinalAmount: Int) {
-  completeServiceRequest(id: $completeServiceRequestId, finalAmount: $completeServiceRequestFinalAmount) {
-    requester_id
-    provider_id
-    id
-    task
-    state
+const COMPLETE_SR = gql`
+  mutation CompleteServiceRequestMutation(
+    $completeServiceRequestId: ID
+    $completeServiceRequestFinalAmount: Int
+  ) {
+    completeServiceRequest(
+      id: $completeServiceRequestId
+      finalAmount: $completeServiceRequestFinalAmount
+    ) {
+      requester_id
+      provider_id
+      id
+      task
+      state
+    }
   }
-}
 `;
-
-
 
 const START_SR = gql`
   mutation StartServiceRequestMutation($startServiceRequestId: ID) {
@@ -208,7 +220,6 @@ const START_SR = gql`
       task
       state
     }
-
   }
 `;
 
@@ -355,6 +366,7 @@ const ACCEPT_JOB_BID = gql`
     }
   }
 `;
+
 export {
   MAKE_ME_SERVICE_PROVIDER,
   ADD_DETAILS,
@@ -370,6 +382,9 @@ export {
   FEEDBACK_SR,
   START_SR,
   CUSTOMER_FEEDBACK_SR,
-  MAKE_COMPLAINT,COMPLETE_SR,
-  ACCEPT_JOB_BID
+  MAKE_COMPLAINT,
+  COMPLETE_SR,
+  ACCEPT_JOB_BID,
+  CREATE_SERVICE,
+  UPDATE_ME
 };

@@ -9,7 +9,9 @@ import Layout from "../components/Layout";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
 const CommonProfilePage = ()=>{
-  const meQuery = useQuery(GET_ME)
+  const meQuery = useQuery(GET_ME,{
+      fetchPolicy:"cache-and-network"
+  })
   if(meQuery.loading){
     return <Loader/>
   }
@@ -20,7 +22,18 @@ const CommonProfilePage = ()=>{
     <Container>
       <Content>
         <Section>
-          <h1 align={"center"}>Profile page </h1>
+          <Level>
+            <Level.Item>
+              <h1>Profile page </h1>
+            </Level.Item>
+            <Level.Side align={"right"}>
+              <Level.Item>
+                <Link to={"/editProfile"}>
+                  <Button color={"info"}>Edit Profile</Button>
+                </Link>
+              </Level.Item>
+            </Level.Side>
+          </Level>
         </Section>
         <Section>
           <Columns>
@@ -75,12 +88,21 @@ const CommonProfilePage = ()=>{
               <Level>
                 <Level.Side>
                   <Level.Item>
-                    <h3>{meQuery.data.me.username}</h3>
+                    <h3>{meQuery.data.me.fullname}</h3>
                   </Level.Item>
                 </Level.Side>
                   <Level.Item>
                     <h6>  <MapPin/> {meQuery.data.me.town} , {meQuery.data.me.city}</h6>
                   </Level.Item>
+              </Level>
+              <Level>
+                <Level.Side>
+                  <Level.Item>
+                   <Block textColor={"info"}>
+                    @{meQuery.data.me.username}
+                   </Block>
+                  </Level.Item>
+                </Level.Side>
               </Level>
               <Level>
                 <Level.Side align={"left"}>

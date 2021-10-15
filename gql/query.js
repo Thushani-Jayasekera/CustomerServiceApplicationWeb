@@ -11,6 +11,7 @@ const GET_ME = gql`
     me {
       id
       username
+      fullname
       email
       nic
       profession
@@ -22,6 +23,7 @@ const GET_ME = gql`
       bio
       service_providing_status
       roles
+      postalCode  
     }
   }
 `;
@@ -149,33 +151,28 @@ const GET_SERVICE_PROVIDER_BY_PROFESSION = gql`
       provider_rating
       provider_review_count
     }
-  
   }
 `;
 
 const GET_PROVIDERS_BY_PROFESSION_IN_PROVINCE = gql`
-  query Query(
-    $searchServiceProviderbyProfessioninProvinceProfession: String!
-    $searchServiceProviderbyProfessioninProvinceProvince: String!
-  ) {
-    searchServiceProviderbyProfessioninProvince(
-      profession: $searchServiceProviderbyProfessioninProvinceProfession
-      province: $searchServiceProviderbyProfessioninProvinceProvince
-    ) {
-      id
-      username
-      fullname
-      postalCode
-      city
-      province
-      bio
-      service_providing_status
-      roles
-      profession
-      provider_rating
-      provider_review_count
-    }
-  }
+query Query($searchServiceProviderbyProfessioninProvinceProfession: String!, $searchServiceProviderbyProfessioninProvinceProvince: String, $searchServiceProviderbyProfessioninProvinceCity: String, $searchServiceProviderbyProfessioninProvinceRating: String) {
+
+searchServiceProviderbyProfessioninProvince(profession: $searchServiceProviderbyProfessioninProvinceProfession, province: $searchServiceProviderbyProfessioninProvinceProvince, city: $searchServiceProviderbyProfessioninProvinceCity, rating: $searchServiceProviderbyProfessioninProvinceRating) {
+  id
+  username
+  fullname
+  profession
+  province
+  postalCode
+  city
+  bio
+  roles
+  service_providing_status
+  provider_rating
+  provider_review_count
+}
+
+}
 `;
 
 const GET_ALL_SERVICE_PROVIDERS = gql`
@@ -417,6 +414,9 @@ const GET_SR_BY_ID = gql`
       location
       requestReview
       requestReview
+      toDatePayment
+      customerReview
+      customerRating
     }
   }
 `;
@@ -437,6 +437,9 @@ const GET_ME_USER_BY_ID_SR_DETAILS = gql`
       location
       requestReview
       requestRating
+      toDatePayment
+      customerReview
+      customerRating
     }
     me {
       id
@@ -639,45 +642,62 @@ const GET_ALL_COMPLAINTS = gql`
 `;
 
 const GET_MY_JOB_POSTINGS = gql`
-    query Query($getMyJobPostingsState: String!) {
-        getMyJobPostings(state: $getMyJobPostingsState){
-            id
-            heading
-            category
-            budgetRange {
-                lowerLimit
-                upperLimit
-            }
-            updatedAt
-        }
+  query Query($getMyJobPostingsState: String!) {
+    getMyJobPostings(state: $getMyJobPostingsState) {
+      id
+      heading
+      category
+      budgetRange {
+        lowerLimit
+        upperLimit
+      }
+      updatedAt
     }
-`
+  }
+`;
 const GET_MY_JOB_POSTING_BIDS = gql`
-    query Query($getMyJobPostingBidsId: ID!) {
-        getMyJobPostingBids(id: $getMyJobPostingBidsId) {
-            id
-            state
-            proposedAmount
-            bidBy {
-                fullname
-                profession
-                provider_rating
-            }
-            detailedBreakdown
-            proposedDate
-            updatedAt
-        }
+  query Query($getMyJobPostingBidsId: ID!) {
+    getMyJobPostingBids(id: $getMyJobPostingBidsId) {
+      id
+      state
+      proposedAmount
+      bidBy {
+        fullname
+        profession
+        provider_rating
+      }
+      detailedBreakdown
+      proposedDate
+      updatedAt
     }
-`
+  }
+`;
 
-const GET_JOB_POSTING_STATE  = gql`
-    query Query($jobPostingId: ID!) {
-        jobPosting(id: $jobPostingId) {
-            id
-            state
-        }
+const GET_JOB_POSTING_STATE = gql`
+  query Query($jobPostingId: ID!) {
+    jobPosting(id: $jobPostingId) {
+      id
+      state
     }
-`
+  }
+`;
+
+const GET_USERS_BY_AC_STATE = gql`
+  query Query($takeUsersAccountState: String!) {
+    takeUsers(accountState: $takeUsersAccountState) {
+      email
+      nic
+      fullname
+      username
+      contactNum
+      address
+      city
+      provider_rating
+      provider_review_count
+    }
+  }
+`;
+
 export {
   IS_LOGGED_IN,
   GET_ME,
@@ -706,6 +726,7 @@ export {
   GET_PROVIDERS_BY_PROFESSION_IN_PROVINCE,
   GET_ALL_COMPLAINTS,
   GET_MY_JOB_POSTINGS,
-    GET_MY_JOB_POSTING_BIDS,
-  GET_JOB_POSTING_STATE
+  GET_MY_JOB_POSTING_BIDS,
+  GET_JOB_POSTING_STATE,
+  GET_USERS_BY_AC_STATE
 };

@@ -16,6 +16,7 @@ import tamil from "./translations/tamil";
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
 import {setContext} from "apollo-link-context";
 import { ToastProvider } from "react-toast-notifications";
+import { CloudinaryContext } from "cloudinary-react";
 const uri = process.env.API_URI;
 const httpLink = createHttpLink({uri});
 const cache = new InMemoryCache();
@@ -77,10 +78,12 @@ const App = () => {
 
     return (
       <ApolloProvider client={client}>
-        <ToastProvider>
-          <GlobalStyles/>
-          <Pages />
-        </ToastProvider>
+        <CloudinaryContext cloudName={"ded0k5ukr"}>
+          <ToastProvider>
+            <GlobalStyles/>
+            <Pages />
+          </ToastProvider>
+        </CloudinaryContext>
       </ApolloProvider>
 );
 };

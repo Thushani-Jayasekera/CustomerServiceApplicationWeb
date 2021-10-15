@@ -36,6 +36,7 @@ import ServiceProviderStatusPage from './view_serviceRequest_status_provider';
 import addComplaintPage from './add_complaint';
 import MyJobPostingsPage from "./my_job_postings";
 import MyJobPostingBidsPage from "./my_job_posting_bids";
+import EditProfilePage from "./editProfile";
 
 const Pages = () => {
   return (
@@ -112,6 +113,10 @@ const Pages = () => {
         path={'/service_request/:id'}
         component={ViewServiceRequestPage}
       />
+      <LoggedInRoute
+          exact path={"/editProfile"}
+          component={EditProfilePage}
+          />
 
       <LoggedInRoute
         exact
