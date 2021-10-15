@@ -195,7 +195,7 @@ const Requests = ({ requests, loading, state, user,history }) => {
                   </Column>
 
                   <Column>
-                    
+                    <div>
 
                  
                      
@@ -387,7 +387,7 @@ const Requests = ({ requests, loading, state, user,history }) => {
 
 
 
-                   
+                   </div>
                   </Column>
                 </TwoColumn>
               </Card>

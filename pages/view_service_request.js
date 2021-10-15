@@ -40,6 +40,8 @@ import {
 } from '../gql/mutation';
 import { ValuesOfCorrectType } from 'graphql/validation/rules/ValuesOfCorrectType';
 import ReactStars from 'react-rating-stars-component';
+import { NetworkStatus } from '@apollo/client';
+
 
 //const Container = tw.div`relative`;
 const Content2 = tw.div`max-w-screen-xl mx-auto py-20 lg:py-24`;
@@ -100,10 +102,11 @@ const ViewServiceRequestPage = () => {
   const now = new Date();
   now.setMinutes(now.getMinutes() + 25);
   console.log(now);
-  const sr_request_query = useQuery(GET_ME_USER_BY_ID_SR_DETAILS, {
+  const {data,loading,error,refetch, networkStatus} = useQuery(GET_ME_USER_BY_ID_SR_DETAILS, {
     variables: {
       getServiceRequestByIdId: `${id}`
-    }
+    },
+    notifyOnNetworkStatusChange: true,
   });
 
   //console.log(data_provider);
@@ -270,9 +273,10 @@ const ViewServiceRequestPage = () => {
   );
 
   //const providerDetails=data_provider.getUserbyId;
-  if (sr_request_query.loading) return <Loader />;
+  if (networkStatus === NetworkStatus.refetch) return 'Refetching!';
+  if (loading) return <Loader />;
 
-  const data_serviceRequest = sr_request_query.data;
+  const data_serviceRequest =data;
   console.log(data_serviceRequest);
   const serviceReqDetails = data_serviceRequest.getServiceRequestByID;
 
@@ -310,6 +314,7 @@ const ViewServiceRequestPage = () => {
         cancelServiceRequestId: id
       }
     });
+    refetch();
   };
 
   const rejectRequest = event => {
@@ -319,6 +324,7 @@ const ViewServiceRequestPage = () => {
         rejectServiceRequestId: id
       }
     });
+    refetch();
   };
 
   const startRequest = event => {
@@ -328,6 +334,7 @@ const ViewServiceRequestPage = () => {
         startServiceRequestId: id
       }
     });
+    refetch();
   };
 
   const completeRequest = event => {
@@ -337,6 +344,7 @@ const ViewServiceRequestPage = () => {
         completeServiceRequestId: id
       }
     });
+    refetch();
   };
 
   const acceptRequest = event => {
@@ -347,6 +355,7 @@ const ViewServiceRequestPage = () => {
         acceptServiceRequestEstimate: values.acceptServiceRequestEstimate
       }
     });
+    refetch();
   };
 
   const ratingChanged = newRating => {
@@ -572,7 +581,9 @@ const ViewServiceRequestPage = () => {
                       </tr>
                       <tr>
                         <td>Total Amount Paid to date</td>
-                        <td>{serviceReqDetails.task}</td>
+                        <td> {serviceReqDetails.toDatePayment
+                            ? `${serviceReqDetails.toDatePayment} LKR`
+                            : 'No Payments Yet'}</td>
                       </tr>
                       <tr>
                         <td>Status of Request</td>
@@ -702,6 +713,79 @@ const ViewServiceRequestPage = () => {
                           </Testimonial>
                         </TestimonialContainer>
                         </>):(<></>)}
+                        {serviceReqDetails.customerReview?(<>
+                          <TestimonialContainer >
+                          <Testimonial>
+                            <Image src={''} />
+                            <Quote>"{serviceReqDetails.customerReview}"</Quote>
+                            <ReactStars 
+                            count={5}
+                            onChange={ratingChanged}
+                            size={24}
+                            activeColor="#ffd700"
+                            id="star"
+                            value={serviceReqDetails.customerRating}
+                            edit={false}/>
+                            <CustomerName>- PROVIDER TO CUSTOMER FEEDBACK</CustomerName>
+                          </Testimonial>
+                        </TestimonialContainer>
+                        
+                        </>):(<>
+                          <>
+                          {serviceReqDetails.state==='Reviewed' && serviceReqDetails.customerReview===null?(<>
+                          
+                            <FormContainer>
+                    <div tw="mx-auto max-w-4xl">
+                      <h2>Add Review about your customer</h2>
+                     <Form
+                      onSubmit={event => {
+                        event.preventDefault();
+                        console.log(values);
+                        customerfeedbackServiceRequest({
+                          variables: {
+                            customerfeedbackServiceRequestId: id,
+                            customerfeedbackServiceRequestCustomerRating:
+                              rating,
+                              customerfeedbackServiceRequestCustomerReview:
+                              values.customerfeedbackServiceRequestRequestReview
+                          }
+                        });
+                      }}
+                    >
+                    <Columns>
+                    <h5>How much do you rate your customer?  - {rating}/5</h5>
+                    </Columns>
+                      <ReactStars
+                        count={5}
+                        onChange={ratingChanged}
+                        size={24}
+                        activeColor="#ffd700"
+                        id="star"
+                      />
+                      
+                      
+                     
+                      <InputContainer tw="flex-1">
+                      <Label htmlFor="review-input">Share your experience </Label>
+                      <TextArea
+                        id="review-input"
+                        name={'customerfeedbackServiceRequestRequestReview'}
+                        placeholder="Add your Review Here!"
+                        onChange={handleChange}
+                        required
+                      />
+                    </InputContainer>
+                    <SubmitButton type="submit" value="Submit">
+                        Submit Review
+                      </SubmitButton>
+                      </Form>
+                      </div>
+                      </FormContainer>
+                          </>):(<></>)}
+
+                    </>
+                        
+                        </>)}
                     </>)
                     }
                     </>
@@ -713,7 +797,7 @@ const ViewServiceRequestPage = () => {
 
 
 
-              {serviceReqDetails.state === 'Completed' && myDetails.id === provider_id && status!=='Reviewed' && serviceReqDetails.state!=='Reviewed'? (
+              {serviceReqDetails.state === 'Completed' && myDetails.id === provider_id && status!=='Reviewed' && serviceReqDetails.customerReview===null? (
                     <>
                       <FormContainer>
                     <div tw="mx-auto max-w-4xl">
@@ -798,7 +882,10 @@ const ViewServiceRequestPage = () => {
                             <CustomerName>- CUSTOMER FEEDBACK</CustomerName>
                           </Testimonial>
                         </TestimonialContainer>
-                        </>):(<></>)}
+                        </>):(<>
+                        
+                        
+                        </>)}
                     </>)
                     }
                     </>)
@@ -923,6 +1010,7 @@ const ViewServiceRequestPage = () => {
                               values.rescheduleServiceRequestTime
                           }
                         });
+                        refetch();
                       }}
                     >
                       <InputContainer>
@@ -1061,6 +1149,7 @@ const ViewServiceRequestPage = () => {
                               values.editServiceRequestImage3
                           }
                         });
+                        refetch();
                       }}
                     >
                       <InputContainer tw="flex-1">

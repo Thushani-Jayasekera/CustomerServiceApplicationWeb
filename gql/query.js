@@ -155,28 +155,24 @@ const GET_SERVICE_PROVIDER_BY_PROFESSION = gql`
 `;
 
 const GET_PROVIDERS_BY_PROFESSION_IN_PROVINCE = gql`
-  query Query(
-    $searchServiceProviderbyProfessioninProvinceProfession: String!
-    $searchServiceProviderbyProfessioninProvinceProvince: String!
-  ) {
-    searchServiceProviderbyProfessioninProvince(
-      profession: $searchServiceProviderbyProfessioninProvinceProfession
-      province: $searchServiceProviderbyProfessioninProvinceProvince
-    ) {
-      id
-      username
-      fullname
-      postalCode
-      city
-      province
-      bio
-      service_providing_status
-      roles
-      profession
-      provider_rating
-      provider_review_count
-    }
-  }
+query Query($searchServiceProviderbyProfessioninProvinceProfession: String!, $searchServiceProviderbyProfessioninProvinceProvince: String, $searchServiceProviderbyProfessioninProvinceCity: String, $searchServiceProviderbyProfessioninProvinceRating: String) {
+
+searchServiceProviderbyProfessioninProvince(profession: $searchServiceProviderbyProfessioninProvinceProfession, province: $searchServiceProviderbyProfessioninProvinceProvince, city: $searchServiceProviderbyProfessioninProvinceCity, rating: $searchServiceProviderbyProfessioninProvinceRating) {
+  id
+  username
+  fullname
+  profession
+  province
+  postalCode
+  city
+  bio
+  roles
+  service_providing_status
+  provider_rating
+  provider_review_count
+}
+
+}
 `;
 
 const GET_ALL_SERVICE_PROVIDERS = gql`
@@ -418,6 +414,9 @@ const GET_SR_BY_ID = gql`
       location
       requestReview
       requestReview
+      toDatePayment
+      customerReview
+      customerRating
     }
   }
 `;
@@ -438,6 +437,9 @@ const GET_ME_USER_BY_ID_SR_DETAILS = gql`
       location
       requestReview
       requestRating
+      toDatePayment
+      customerReview
+      customerRating
     }
     me {
       id
