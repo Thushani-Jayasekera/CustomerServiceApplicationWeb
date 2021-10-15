@@ -11,6 +11,7 @@ const GET_ME = gql`
     me {
       id
       username
+      fullname
       email
       nic
       profession
@@ -22,6 +23,7 @@ const GET_ME = gql`
       bio
       service_providing_status
       roles
+      postalCode  
     }
   }
 `;
