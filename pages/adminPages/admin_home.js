@@ -46,7 +46,7 @@ const AdminHome = props => {
       <Container>
         <TwoColumn>
           <LeftColumn>
-            <Heading>Welcom to the Admin Panel</Heading>
+            <Heading>Welcome to the Admin Panel</Heading>
             <Paragraph>All the Customizations are upto you</Paragraph>
           </LeftColumn>
           <RightColumn>

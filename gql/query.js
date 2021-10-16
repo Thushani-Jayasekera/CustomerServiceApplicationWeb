@@ -691,8 +691,10 @@ const GET_JOB_POSTING_STATE = gql`
 const GET_USERS_BY_AC_STATE = gql`
   query Query($takeUsersAccountState: String!) {
     takeUsers(accountState: $takeUsersAccountState) {
+      id
       email
       nic
+      profession
       fullname
       username
       contactNum
