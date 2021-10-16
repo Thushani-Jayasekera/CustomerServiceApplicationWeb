@@ -38,6 +38,7 @@
     "graphql": "^14.5.8",
     "hoist-non-react-statics": "^3.3.2",
     "i18next": "^20.6.1",
+    "javascript-time-ago": "^2.3.8",
     "mdbreact": "^5.1.0",
     "normalize.css": "8.0.1",
     "postcss": "^8.3.6",
@@ -61,8 +62,7 @@
     "styled-components": "^4.4.1",
     "tailwindcss": "^2.2.7",
     "twin.macro": "^2.6.2",
-    "underscore": "^1.13.1",
-    "javascript-time-ago": "2.3.8"
+    "underscore": "^1.13.1"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
