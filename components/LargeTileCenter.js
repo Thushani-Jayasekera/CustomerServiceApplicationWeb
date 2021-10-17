@@ -53,12 +53,12 @@ const LargeTileCenter = ({top_left,top_middle,top_right,center_middle,bottom_lef
            </Level.Side>
          </Level>
          <Button.Group>
-           <Button color={"success"} onClick={green_button_fn}>
+           {(green_button_text)&&(<Button color={"success"} onClick={green_button_fn}>
              {green_button_text}
-           </Button>
-           <Button color={"danger"}>
+           </Button>)}
+           {red_button_text &&(<Button color={"danger"} onClick={red_button_fn}>
              {red_button_text}
-           </Button>
+           </Button>)}
          </Button.Group>
        </Box>
      )

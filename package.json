@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Customer service application get it done",
   "scripts": {
-    "dev": "parcel serve index.html",
+    "dev": "parcel serve index.html --no-cache",
     "deploy": "parcel build index.html"
   },
   "repository": {
@@ -42,6 +42,7 @@
     "javascript-time-ago": "2.3.8",
     "mdbreact": "^5.1.0",
     "normalize.css": "8.0.1",
+    "payhere-js-sdk": "^1.0.1",
     "postcss": "^8.3.6",
     "react": "^17.0.2",
     "react-bulma-components": "^4.0.7",

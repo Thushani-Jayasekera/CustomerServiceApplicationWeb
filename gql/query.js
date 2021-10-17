@@ -372,17 +372,23 @@ const GET_ALL_SERVICE_TYPES = gql`
 `;
 
 const GET_MY_BIDS = gql`
-  query Query {
-    getMyBids {
-      proposedAmount
-      proposedDate
-      detailedBreakdown
-      state
-      jobPosting {
-        id
-      }
+    query Query($state: String) {
+        getMyBids(state: $state) {
+            id
+            proposedAmount
+            proposedDate
+            detailedBreakdown
+            jobPosting {
+                id
+                heading
+                postedBy {
+                    username
+                }
+            }
+            state
+            updatedAt
+        }
     }
-  }
 `;
 
 const GET_USER_BY_ID = gql`
@@ -685,8 +691,10 @@ const GET_JOB_POSTING_STATE = gql`
 const GET_USERS_BY_AC_STATE = gql`
   query Query($takeUsersAccountState: String!) {
     takeUsers(accountState: $takeUsersAccountState) {
+      id
       email
       nic
+      profession
       fullname
       username
       contactNum

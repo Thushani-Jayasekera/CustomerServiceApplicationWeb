@@ -37,6 +37,8 @@ import addComplaintPage from './add_complaint';
 import MyJobPostingsPage from "./my_job_postings";
 import MyJobPostingBidsPage from "./my_job_posting_bids";
 import EditProfilePage from "./editProfile";
+import PaymentPage from "./payment";
+import PaymentSuccessPage from "./payment/paymentSuccess";
 
 const Pages = () => {
   return (
@@ -49,6 +51,8 @@ const Pages = () => {
       <Route exact path="/admin/addService" component={AddService} />
       <Route exact path="/admin/userManage" component={UserManage} />
       <Route exact path="/admin/complaints" component={Complaints} />
+      <Route exact path={"/payment"} component={PaymentPage}/>
+      <Route exact path={"/payment/success"} component={PaymentSuccessPage} />
       <ServiceRequesterRoute
         exact
         path="/service_requester/createRequest/:provider_id"

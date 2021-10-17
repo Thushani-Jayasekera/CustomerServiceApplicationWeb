@@ -36,6 +36,7 @@ const MyJobPostingsPage = ()=>{
                   <Button onClick={switchState("open")}>Open Jobs</Button>
                   <Button onClick={switchState("bid_selected")} >Bid selected Jobs</Button>
                   <Button onClick={switchState("closed")}>Closed Jobs</Button>
+                  <Button onClick={switchState("completed")}>Completed</Button>
                 </Button.Group>
               </Container>
             </Section>
