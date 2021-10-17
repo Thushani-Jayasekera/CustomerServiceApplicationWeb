@@ -397,6 +397,15 @@ const REMOVE_SERVICE_PROVIDER = gql`
   }
 `;
 
+const CHANGE_JOB_BID_STATE = gql`
+  mutation ChangeStateJobBidMutation($jobBidId: ID!, $jobBidState: String!) {
+    changeStateJobBid(jobBidId: $jobBidId, jobBidState: $jobBidState) {
+      id
+      state
+    }
+  }
+`;
+
 export {
   MAKE_ME_SERVICE_PROVIDER,
   ADD_DETAILS,
@@ -418,5 +427,6 @@ export {
   CREATE_SERVICE,
   SET_ACCOUNT_STATE,
   UPDATE_ME,
-  REMOVE_SERVICE_PROVIDER
+  REMOVE_SERVICE_PROVIDER,
+  CHANGE_JOB_BID_STATE
 };

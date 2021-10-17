@@ -17,20 +17,23 @@ type BudgetRange {
 }
 
 type Complaint {
-    complainer: String!
+    complainer: ID
     complaint: String!
     createdAt: DateTime!
     id: ID!
-    victim: String!
+    title: String
+    victim: String
 }
 
 type JobBid {
     bidBy: User
     detailedBreakdown: String
+    id: ID!
     jobPosting: JobPosting
     proposedAmount: Float!
     proposedDate: DateTime!
     state: String
+    updatedAt: DateTime
 }
 
 type JobPosting {
@@ -42,6 +45,7 @@ type JobPosting {
     location: Location!
     postedBy: User!
     skills: [String]!
+    state: String
     updatedAt: DateTime
 }
 
@@ -58,10 +62,14 @@ type Location {
 }
 
 type Mutation {
+    acceptJobBid(jobBidId: ID!, jobPostingId: ID!): JobBid!
     acceptServiceRequest(estimate: String, id: ID): ServiceRequest!
     adminSignIn(email: String!, password: String!): String!
     adminSignUp(email: String!, password: String!, username: String!): String!
+    approveServiceProvider(provider_id: ID): User!
     cancelServiceRequest(id: ID): ServiceRequest!
+    changeStateJobBid(jobBidId: ID!, jobBidState: String!): JobBid!
+    completeServiceRequest(finalAmount: Int, id: ID): ServiceRequest!
     createBiddingJob(date: String, image1: String, image2: String, image3: String, max_price: String, min_price: String, payMethod: String, task: String!, time: String): ServiceRequest!
     createJobBid(detailedBreakdown: String, jobPosting: ID!, proposedAmount: Float!, proposedDate: String!): JobBid!
     createJobPosting(category: String!, city: String!, description: String!, heading: String!, lowerLimit: Float!, payMethod: String, province: String!, skills: [String], town: String!, upperLimit: Float!): JobPosting!
@@ -70,14 +78,18 @@ type Mutation {
     customerfeedbackServiceRequest(customerRating: Int, customerReview: String, id: ID): ServiceRequest!
     editServiceRequest(id: ID, image1: String, image2: String, image3: String, task: String!): ServiceRequest!
     feedbackServiceRequest(id: ID, requestRating: Int, requestReview: String): ServiceRequest!
-    makeComplaint(complainer: String, complaint: String, victim: String): Complaint!
+    makeComplaint(complainer: ID, complaint: String, title: String, victim: String): Complaint!
     makeMeServiceProvider(address: String!, bio: String, city: String!, contactNumber: String!, fullname: String!, nic: String!, profession: String!, province: String!, town: String!): User!
     registerServiceRequester(address: String!, city: String!, contactNum: String!, postalCode: String!): User!
+    rejectJobBid(jobBidId: ID!): JobBid
     rejectServiceRequest(id: ID): ServiceRequest!
     rescheduleServiceRequest(date: String!, id: ID, time: String!): ServiceRequest!
+    setProfileState(providerID: ID, state: String): User!
     signIn(email: String!, password: String!): String!
     signUp(email: String!, password: String!, username: String!): String!
     startServiceRequest(estimate: String, id: ID): ServiceRequest!
+    suspendServiceProvider(provider_id: ID): User!
+    updateMe(address: String, city: String, contactNum: String, fullname: String, postalCode: String, profession: String, province: String, town: String): User
 }
 
 type Query {
@@ -87,7 +99,8 @@ type Query {
     canceledServiceRequestsbyMe: [ServiceRequest!]
     completedServiceRequestsForMe: [ServiceRequest!]
     completedServiceRequestsbyMe: [ServiceRequest!]
-    getMyBids: [JobBid]
+    getMyBids(state: String): [JobBid]
+    getMyJobPostingBids(id: ID!): [JobBid]
     getMyJobPostings(state: String!): [JobPosting]
     getServiceRequestByID(id: ID!): ServiceRequest!
     getUserbyId(id: ID!): User!
@@ -103,13 +116,15 @@ type Query {
     reviewedServiceRequestsbyMe: [ServiceRequest!]
     searchServiceProviderbyName(name: String!): [User!]!
     searchServiceProviderbyProfession(profession: String!): [User!]!
-    searchServiceProviderbyProfessioninProvince(profession: String!, province: String!): [User!]!
+    searchServiceProviderbyProfessioninProvince(city: String, profession: String!, province: String, rating: String): [User!]!
     startedServiceRequestsForMe: [ServiceRequest!]
     startedServiceRequestsbyMe: [ServiceRequest!]
+    takeUsers(accountState: String!): [User!]!
     users: [User!]!
     viewAllComplaints: [Complaint!]!
     viewAllServiceProviders: [User!]!
     viewAllServiceTypes: [Service]
+    viewAllServices: [Service!]!
 }
 
 type Service {
@@ -121,6 +136,8 @@ type Service {
 }
 
 type ServiceRequest {
+    customerRating: Int
+    customerReview: String
     date: String
     estimate: String
     id: ID!
@@ -138,6 +155,7 @@ type ServiceRequest {
     state: String
     task: String!
     time: String
+    toDatePayment: String
 }
 
 type User {
@@ -151,6 +169,7 @@ type User {
     nic: String
     postalCode: String
     profession: String
+    profile_state: String
     provider_rating: String
     provider_review_count: String
     province: String

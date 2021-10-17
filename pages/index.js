@@ -37,6 +37,11 @@ import MyJobPostingsPage from './my_job_postings';
 import MyJobPostingBidsPage from './my_job_posting_bids';
 import EditProfilePage from './editProfile';
 import ViewServiceProvider from '../components/adminComponents/ViewServiceProvider';
+import MyJobPostingsPage from './my_job_postings';
+import MyJobPostingBidsPage from './my_job_posting_bids';
+import EditProfilePage from './editProfile';
+import PaymentPage from './payment';
+import PaymentSuccessPage from './payment/paymentSuccess';
 
 const Pages = () => {
   return (
@@ -54,6 +59,9 @@ const Pages = () => {
         path="/viewServiceProvider/:id"
         component={ViewServiceProvider}
       />
+      <Route exact path={'/payment'} component={PaymentPage} />
+      <Route exact path={'/payment/success'} component={PaymentSuccessPage} />
+
       <ServiceRequesterRoute
         exact
         path="/service_requester/createRequest/:provider_id"
