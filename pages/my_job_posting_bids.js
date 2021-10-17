@@ -64,7 +64,7 @@ const MyJobPostingBidsPage = ({match,history})=>{
       const checkoutData = new CheckoutParams({
         returnUrl: `https://customerserviceapplication.netlify.app/payment/success`,
         cancelUrl: `https://customerserviceapplication.netlify.app/payment/success`,
-        notifyUrl: `${process.env.API_URI}/payment/notify`,
+        notifyUrl: `https://customerserviceapplication.herokuapp.com/payment/notify`,
         order_id: 'B'+bid_id,
         itemTitle: "Test",
         currency: CurrencyType.LKR,
