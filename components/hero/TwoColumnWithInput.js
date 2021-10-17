@@ -70,7 +70,7 @@ export default ({ roundedHeaderButton }) => {
             {/*  <img src={CustomersLogoStripImage} alt="Our Customers" />*/}
             {/*</CustomersLogoStrip>*/}
             <div>
-              <Image publicId={'sample'} width={"50"}/>
+              <Image crossOrigin={"anonymous"} publicId={'sample'} width={"50"}/>
             </div>
           </LeftColumn>
           <RightColumn>

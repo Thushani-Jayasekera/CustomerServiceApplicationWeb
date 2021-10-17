@@ -375,6 +375,15 @@ const SET_ACCOUNT_STATE = gql`
   }
 `;
 
+const CHANGE_JOB_BID_STATE = gql`
+    mutation ChangeStateJobBidMutation($jobBidId: ID!, $jobBidState: String!) {
+        changeStateJobBid(jobBidId: $jobBidId, jobBidState: $jobBidState) {
+            id
+            state
+        }
+    }
+`
+
 export {
   MAKE_ME_SERVICE_PROVIDER,
   ADD_DETAILS,
@@ -395,5 +404,6 @@ export {
   ACCEPT_JOB_BID,
   CREATE_SERVICE,
   SET_ACCOUNT_STATE,
-  UPDATE_ME
+  UPDATE_ME,
+  CHANGE_JOB_BID_STATE
 };

@@ -63,11 +63,12 @@ type Location {
 
 type Mutation {
     acceptJobBid(jobBidId: ID!, jobPostingId: ID!): JobBid!
-    acceptServiceProvider(provider_id: ID): User!
     acceptServiceRequest(estimate: String, id: ID): ServiceRequest!
     adminSignIn(email: String!, password: String!): String!
     adminSignUp(email: String!, password: String!, username: String!): String!
+    approveServiceProvider(provider_id: ID): User!
     cancelServiceRequest(id: ID): ServiceRequest!
+    changeStateJobBid(jobBidId: ID!, jobBidState: String!): JobBid!
     completeServiceRequest(finalAmount: Int, id: ID): ServiceRequest!
     createBiddingJob(date: String, image1: String, image2: String, image3: String, max_price: String, min_price: String, payMethod: String, task: String!, time: String): ServiceRequest!
     createJobBid(detailedBreakdown: String, jobPosting: ID!, proposedAmount: Float!, proposedDate: String!): JobBid!
@@ -80,8 +81,10 @@ type Mutation {
     makeComplaint(complainer: ID, complaint: String, title: String, victim: String): Complaint!
     makeMeServiceProvider(address: String!, bio: String, city: String!, contactNumber: String!, fullname: String!, nic: String!, profession: String!, province: String!, town: String!): User!
     registerServiceRequester(address: String!, city: String!, contactNum: String!, postalCode: String!): User!
+    rejectJobBid(jobBidId: ID!): JobBid
     rejectServiceRequest(id: ID): ServiceRequest!
     rescheduleServiceRequest(date: String!, id: ID, time: String!): ServiceRequest!
+    setProfileState(providerID: ID, state: String): User!
     signIn(email: String!, password: String!): String!
     signUp(email: String!, password: String!, username: String!): String!
     startServiceRequest(estimate: String, id: ID): ServiceRequest!
@@ -166,6 +169,7 @@ type User {
     nic: String
     postalCode: String
     profession: String
+    profile_state: String
     provider_rating: String
     provider_review_count: String
     province: String
