@@ -62,9 +62,9 @@ const MyJobPostingBidsPage = ({match,history})=>{
         country:"Sri Lanka"
       })
       const checkoutData = new CheckoutParams({
-        returnUrl: 'http://localhost:1234/payment/success',
-        cancelUrl: 'http://localhost:1234/payment/cancel',
-        notifyUrl: 'http://localhost:4000/payment/notify',
+        returnUrl: `https://customerserviceapplication.netlify.app/payment/success`,
+        cancelUrl: `https://customerserviceapplication.netlify.app/payment/success`,
+        notifyUrl: `${process.env.API_URI}/payment/notify`,
         order_id: 'B'+bid_id,
         itemTitle: "Test",
         currency: CurrencyType.LKR,
