@@ -15,12 +15,11 @@ const OuterContainer = styled.div`
   align-items: center;
   background-color: white;
   margin: 10px;
-  height: 8vh;
+  height: 64px;
   width: 100%;
   box-sizing: border-box;
   @media screen and (max-width: 1000px) {
     flex-direction: column;
-    height: 20vh;
   }
 `;
 
