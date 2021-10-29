@@ -421,6 +421,8 @@ const GET_SR_BY_ID = gql`
       time
       payMethod
       task
+      image1
+      image2
       min_price
       max_price
       state
@@ -444,6 +446,8 @@ const GET_ME_USER_BY_ID_SR_DETAILS = gql`
       time
       payMethod
       task
+      image1
+      image2
       min_price
       max_price
       state
@@ -473,6 +477,8 @@ const GET_SERVICE_REQUESTS_OF_ME = gql`
       date
       time
       task
+      image1
+      image2
       min_price
       max_price
       location
@@ -496,6 +502,8 @@ const GET_SERVICE_REQUESTS_OF_ME = gql`
       date
       time
       task
+      image1
+      image2
       min_price
       max_price
       location
@@ -508,6 +516,8 @@ const GET_SERVICE_REQUESTS_OF_ME = gql`
       time
       payMethod
       task
+      image1
+      image2
       min_price
       max_price
       location
@@ -520,6 +530,8 @@ const GET_SERVICE_REQUESTS_OF_ME = gql`
       date
       payMethod
       task
+      image1
+      image2
       min_price
       max_price
       location
@@ -532,6 +544,8 @@ const GET_SERVICE_REQUESTS_OF_ME = gql`
       time
       payMethod
       task
+      image1
+      image2
       min_price
       max_price
       location
@@ -542,6 +556,8 @@ const GET_SERVICE_REQUESTS_OF_ME = gql`
       time
       payMethod
       task
+      image1
+      image2
       min_price
       max_price
       provider_id
@@ -562,6 +578,8 @@ const GET_SERVICE_REQUESTS_FOR_ME = gql`
       date
       time
       task
+      image1
+      image2
       min_price
       max_price
       location
@@ -576,6 +594,8 @@ const GET_SERVICE_REQUESTS_FOR_ME = gql`
       max_price
       payMethod
       task
+      image1
+      image2
       location
     }
     completedServiceRequestsForMe {
@@ -585,6 +605,8 @@ const GET_SERVICE_REQUESTS_FOR_ME = gql`
       date
       time
       task
+      image1
+      image2
       min_price
       max_price
       location
@@ -597,6 +619,8 @@ const GET_SERVICE_REQUESTS_FOR_ME = gql`
       time
       payMethod
       task
+      image1
+      image2
       min_price
       max_price
       location
@@ -609,6 +633,8 @@ const GET_SERVICE_REQUESTS_FOR_ME = gql`
       date
       payMethod
       task
+      image1
+      image2
       min_price
       max_price
       location
@@ -621,6 +647,8 @@ const GET_SERVICE_REQUESTS_FOR_ME = gql`
       time
       payMethod
       task
+      image1
+      image2
       min_price
       max_price
       location
@@ -631,6 +659,8 @@ const GET_SERVICE_REQUESTS_FOR_ME = gql`
       time
       payMethod
       task
+      image1
+      image2
       min_price
       max_price
       provider_id

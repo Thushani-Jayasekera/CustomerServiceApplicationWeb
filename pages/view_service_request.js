@@ -41,7 +41,7 @@ import {
 import { ValuesOfCorrectType } from 'graphql/validation/rules/ValuesOfCorrectType';
 import ReactStars from 'react-rating-stars-component';
 import { NetworkStatus } from '@apollo/client';
-
+import { Image as CDNImage} from "cloudinary-react";
 
 //const Container = tw.div`relative`;
 const Content2 = tw.div`max-w-screen-xl mx-auto py-20 lg:py-24`;
@@ -628,6 +628,13 @@ const ViewServiceRequestPage = () => {
                       </tr>
                     </tbody>
                   </Table>
+                  <Columns alignItems='center' alignContent='center'>
+                  {serviceReqDetails.image1?<CDNImage crossOrigin={"anonymous"} cloudName="dpb0ths5c" publicId={serviceReqDetails.image1} width={"400"} height={"400"} margin={5}/>:<></>}
+                  
+                  {serviceReqDetails.image2?<CDNImage crossOrigin={"anonymous"} cloudName="dpb0ths5c" publicId={serviceReqDetails.image2} width={"400"} height={"400"}/>:<></>}
+                 
+                  
+                  </Columns>
                   {serviceReqDetails.state === 'Completed' && myDetails.id === requester_id && status!=='Reviewed'? (
                     <>
                       <FormContainer>

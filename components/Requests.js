@@ -20,14 +20,16 @@ import FeatherIcon from 'feather-icons-react';
 import { Columns, Container, Message } from 'react-bulma-components';
 
 import { REJECT_SR, START_SR, COMPLETE_SR } from '../gql/mutation';
-
+import { Image } from "cloudinary-react";
 import { CANCEL_SR } from '../gql/mutation';
 import {
   BrowserRouter as Router,
   Link,
 } from 'react-router-dom';
 import SlideshowWithPagination from 'react-slideshow-with-pagination';
+import ImagePicker from 'react-image-picker'
 import reactStars from 'react-rating-stars-component';
+import SmartGallery from 'react-smart-gallery';
 
 const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`;
 const TwoColumn = tw.div`flex flex-col sm:flex-row justify-between`;
@@ -133,6 +135,7 @@ const Requests = ({ requests, loading, state, user,history }) => {
   if (loading || loading_reject || loading_cancel||loading_start||loading_complete) {
     return <Loader />;
   }
+  
 
   return (
     <>
@@ -145,6 +148,7 @@ const Requests = ({ requests, loading, state, user,history }) => {
           enableMouseEvents={false}
         >
           {requests.map((request, index) => (
+            
             <CardContainer key={index}>
               <Card
                 className="group"
@@ -154,6 +158,7 @@ const Requests = ({ requests, loading, state, user,history }) => {
                 animate="rest"
               >
                 <TwoColumn>
+               
                   <Column>
              <Container>
                <br/>
