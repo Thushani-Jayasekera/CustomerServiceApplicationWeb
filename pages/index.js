@@ -39,6 +39,7 @@ import EditProfilePage from './editProfile';
 import ViewServiceProvider from '../components/adminComponents/ViewServiceProvider';
 import PaymentPage from './payment';
 import PaymentSuccessPage from './payment/paymentSuccess';
+import MessengerPage from './messenger';
 
 const Pages = () => {
   return (
@@ -58,6 +59,7 @@ const Pages = () => {
       />
       <Route exact path={'/payment'} component={PaymentPage} />
       <Route exact path={'/payment/success'} component={PaymentSuccessPage} />
+      <Route exact path={'/message'} component={MessengerPage}/>
 
       <ServiceRequesterRoute
         exact

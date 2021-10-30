@@ -66,6 +66,8 @@
     "slick-carousel": "^1.8.1",
     "styled-components": "^4.4.1",
     "tailwindcss": "^2.2.7",
+    "talkjs": "^0.15.0",
+    "timeago.js": "^4.0.2",
     "twin.macro": "^2.6.2",
     "underscore": "^1.13.1"
   },
