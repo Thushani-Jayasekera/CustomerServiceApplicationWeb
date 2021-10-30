@@ -4,6 +4,17 @@
   box-sizing: border-box;
 }
 
+.adminSignupBody {
+  background: #f6f5f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: 'Montserrat', sans-serif;
+  height: 100vh;
+  margin: -20px 0 50px;
+}
+
 span {
   font-size: 12px;
 }
@@ -129,4 +140,57 @@ span {
 
 .admincontainer.right-panel-active .adminoverlay-right {
   transform: translateX(20%);
+}
+
+@media screen and (max-width: 722px) {
+  .adminSignupBody {
+    height: 200vh;
+  }
+  .admincontainer {
+    height: 95%;
+  }
+  .adminform-admincontainer {
+    height: 50%;
+  }
+  .adminsign-in-admincontainer {
+    top: 0;
+    width: 100%;
+  }
+  .admincontainer.right-panel-active .adminsign-in-admincontainer {
+    transform: translateY(100%);
+  }
+  .adminsign-up-admincontainer {
+    top: 50%;
+    left: 0;
+    width: 100%;
+  }
+  .admincontainer.right-panel-active .adminsign-up-admincontainer {
+    transform: translateY(0%);
+  }
+  .adminoverlay-admincontainer {
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 50%;
+  }
+  .admincontainer.right-panel-active .adminoverlay-admincontainer {
+    transform: translateY(-100%);
+  }
+
+  .adminoverlay-left {
+    transform: translateY(-20%);
+  }
+
+  .admincontainer.right-panel-active .adminoverlay-left {
+    transform: translateY(0);
+  }
+
+  .adminoverlay-right {
+    bottom: 0;
+    transform: translateY(0);
+  }
+
+  .admincontainer.right-panel-active .adminoverlay-right {
+    transform: translateY(20%);
+  }
 }
