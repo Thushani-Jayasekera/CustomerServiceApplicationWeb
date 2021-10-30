@@ -361,7 +361,9 @@ const MAKE_COMPLAINT = gql`
       title: $makeComplaintTitle
       complaint: $makeComplaintComplaint
     ) {
-      complainer
+      complainer {
+        username
+      }
       victim
       title
       complaint
