@@ -746,6 +746,56 @@ const GET_USERS_BY_AC_STATE = gql`
   }
 `;
 
+const GET_MESGS_OF_CONV=gql`
+query Query($getNewMessagesConversationId2: ID) {
+  getNewMessages(conversationID: $getNewMessagesConversationId2) {
+    id
+    conversationID
+    text
+  sender
+    createdAt
+  }
+  me {
+    id
+    username
+    contactNum
+  }
+}
+`;
+
+const GET_CONVERSATIONS=gql`
+query Query {
+  conversationsOfUser {
+    id
+    members
+    createdAt
+  }
+}
+`;
+const GET_USER_MSG_DETAILS=gql`
+query MessageQuery {
+  users {
+    id
+    username
+    email
+    contactNum
+  }
+  conversationsOfUser {
+    id
+    members
+    createdAt
+  }
+  me {
+    username
+    id
+    email
+    fullname
+    contactNum
+  }
+}
+
+`;
+
 export {
   IS_LOGGED_IN,
   GET_ME,
@@ -776,5 +826,8 @@ export {
   GET_MY_JOB_POSTINGS,
   GET_MY_JOB_POSTING_BIDS,
   GET_JOB_POSTING_STATE,
-  GET_USERS_BY_AC_STATE
+  GET_USERS_BY_AC_STATE,
+  GET_USER_MSG_DETAILS,
+  GET_CONVERSATIONS,
+  GET_MESGS_OF_CONV,
 };

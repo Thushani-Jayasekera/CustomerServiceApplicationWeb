@@ -406,6 +406,28 @@ const CHANGE_JOB_BID_STATE = gql`
   }
 `;
 
+const SEND_NEW_MESSAGE=gql`
+mutation AddMessageMutation($conversationId: ID, $sender: ID, $text: String) {
+  addMessage(conversationID: $conversationId, sender: $sender, text: $text) {
+    id
+    conversationID
+    sender
+    text
+    createdAt
+  }
+}
+`;
+
+const ADD_NEW_CONVERSATION=gql`
+mutation NewConverstionMutation($newConverstionSenderId3: ID, $newConverstionRecieverId3: ID) {
+  newConverstion(senderID: $newConverstionSenderId3, recieverID: $newConverstionRecieverId3) {
+    id
+    members
+    createdAt
+  }
+}
+`;
+
 export {
   MAKE_ME_SERVICE_PROVIDER,
   ADD_DETAILS,
@@ -428,5 +450,7 @@ export {
   SET_ACCOUNT_STATE,
   UPDATE_ME,
   REMOVE_SERVICE_PROVIDER,
-  CHANGE_JOB_BID_STATE
+  CHANGE_JOB_BID_STATE,
+  SEND_NEW_MESSAGE,
+  ADD_NEW_CONVERSATION
 };
