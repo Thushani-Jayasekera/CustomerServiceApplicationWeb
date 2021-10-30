@@ -31,11 +31,17 @@ function Complaints() {
         </Section>
         {complaint_query.data &&
           complaint_query.data.viewAllComplaints.map(complaint => {
+            let date =
+              complaint.createdAt.substring(0, 10) +
+              ' ' +
+              complaint.createdAt.substring(11, 19);
+            console.log(date);
             return (
               <Complaint
                 key={complaint.id}
                 id={complaint.id}
                 title={complaint.title}
+                date={date}
                 complaint={complaint.complaint}
                 complainer={complaint.complainer.username}
                 victim={complaint.victim}

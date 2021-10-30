@@ -1,7 +1,5 @@
 import React from 'react';
 import AdminNavbar from '../../components/AdminNavbar';
-import { useQuery } from '@apollo/client';
-import { GET_USERS_BY_AC_STATE } from '../../gql/query';
 import tw from 'twin.macro';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';

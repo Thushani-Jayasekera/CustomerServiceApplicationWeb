@@ -1,113 +1,67 @@
 import React from 'react';
-import tw from 'twin.macro';
 import styled from 'styled-components';
+import { FaAngleDoubleRight } from 'react-icons/fa';
 
 /*************************** Styles *****************************/
+
+const Article = styled.article`
+  @import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap');
+  & h3 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 30px;
+    letter-spacing: 5px;
+  }
+  & h4 {
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    color: hsl(210, 22%, 49%);
+    background: hsl(212, 33%, 89%);
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+  }
+`;
+
+const LittleContainer = styled.p`
+  letter-spacing: 0.1rem;
+  margin: 5px auto;
+`;
+const ComplaintContainer = styled.p`
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 2rem;
+  align-items: center;
+  margin-bottom: 1.25rem;
+`;
+const ComplaintText = styled.p`
+  margin-bottom: 0;
+  color: hsl(209, 34%, 30%);
+`;
+
 const OuterContainer = styled.div`
-  background-color: gray;
+  background-color: #2caeba;
   margin: 10px;
   padding: 10px;
   width: 100%;
   height: 250px;
   box-sizing: border-box;
 `;
-
-const InnerContainer = styled.div`
-  height: 10%;
-  width: 100%;
-  margin: 5px auto;
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-const ComplaintContainer = styled.div`
-  height: 45%;
-  width: 100%;
-  margin: 5px auto;
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-const LeftContainer = styled.div`
-  width: 25%;
-`;
-
-const RightContainer = styled.div`
-  width: 75%;
-`;
-
-const Title = styled.p`
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  font-size: 15px;
-  color: black;
-`;
-// const Testimonial = tw.div`px-3 py-3 sm:px-5 sm:py-5 focus:outline-none flex! flex-col justify-between bg-gray-200 rounded my-5 hover:bg-primary-300`;
-// const QuoteContainer = tw.div`relative`;
-// // const QuoteIcon = tw(QuoteIconBase)`absolute opacity-15 top-0 left-0 transform -translate-y-2 -translate-x-1/2 sm:-translate-x-full w-10 fill-current text-primary-500`
-// const Quote = tw.blockquote`font-medium sm:font-normal relative text-sm sm:text-xl text-center sm:text-left`;
-// const CustomerNameAndProfileContainer = tw.div`mt-4 sm:mt-0 sm:ml-1 flex flex-col`;
-// const CustomerName = tw.span`text-lg font-semibold`;
-// const CustomerProfile = tw.span`text-sm font-normal text-gray-700`;
-// const CustomerInfoAndControlsContainer = tw.div`mt-8 flex items-center flex-col sm:flex-row justify-center text-center sm:text-left`;
-// const ControlsContainer = tw.div`sm:ml-auto flex`;
+/*************************** End Styles *****************************/
 
 const Complaint = ({ id, complainer, victim, title, complaint, date }) => {
   return (
     <OuterContainer>
-      <InnerContainer>
-        <LeftContainer>
-          <Title>Complainer Name</Title>
-        </LeftContainer>
-        <RightContainer>
-          <Title>{complainer}</Title>
-        </RightContainer>
-      </InnerContainer>
-      <InnerContainer>
-        <LeftContainer>
-          <Title>Victim Name</Title>
-        </LeftContainer>
-        <RightContainer>
-          <Title>{victim}</Title>
-        </RightContainer>
-      </InnerContainer>
-      {/* <InnerContainer>
-        <LeftContainer>
-          <Title>Date And Time</Title>
-        </LeftContainer>
-        <RightContainer>
-          <Title>{date}</Title>
-        </RightContainer>
-      </InnerContainer> */}
-      <InnerContainer>
-        <LeftContainer>
-          <Title>Title</Title>
-        </LeftContainer>
-        <RightContainer>
-          <Title>{title}</Title>
-        </RightContainer>
-      </InnerContainer>
-      <ComplaintContainer>
-        <LeftContainer>
-          <Title>Complaint</Title>
-        </LeftContainer>
-        <RightContainer>
-          <Title>{complaint}</Title>
-        </RightContainer>
-      </ComplaintContainer>
+      <Article>
+        <h3>{title}</h3>
+        <LittleContainer>Complained By :{complainer}</LittleContainer>
+        <LittleContainer>{date}</LittleContainer>
+        <h4>Victim :{victim}</h4>
+        <ComplaintContainer>
+          <FaAngleDoubleRight style={{ color: 'black' }}></FaAngleDoubleRight>
+          <ComplaintText>{complaint}</ComplaintText>
+        </ComplaintContainer>
+      </Article>
     </OuterContainer>
-
-    // <Testimonial>
-    //   <QuoteContainer>
-    //     <Quote>Complainer : {complainer}</Quote>
-    //     <Quote>Victim : {victim}</Quote>
-    //     <ControlsContainer>Date And Time : {date}</ControlsContainer>
-    //   </QuoteContainer>
-    //   <QuoteContainer>
-    //     <CustomerName>About : {title}</CustomerName>
-    //     <ControlsContainer>{complaint}</ControlsContainer>
-    //   </QuoteContainer>
-    // </Testimonial>
   );
 };
 export default Complaint;
