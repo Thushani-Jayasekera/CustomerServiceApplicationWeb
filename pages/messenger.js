@@ -13,6 +13,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import MessageBox from "../components/utils/MessageBox";
 import { useToasts } from 'react-toast-notifications';
 
+const levenshtein = require('fast-levenshtein');
 
 const MeesengerPage = () => {
     const [conversation, setConversations]=useState([]);
@@ -21,6 +22,7 @@ const MeesengerPage = () => {
     const [newMessage,setNewMessage]= useState('');
     const[sent,setSent]=useState('');
     const { addToast } = useToasts();
+    const [searchTerm, setSearchTerm] = useState('');
  
 
     const {loading,error,data} = useQuery(GET_USER_MSG_DETAILS);
@@ -59,6 +61,7 @@ const MeesengerPage = () => {
     const conversations=data.conversationsOfUser;
     const allUsers=data.users;
     console.log(currentChat);
+    const MIN_DISTANCE=7;
 
     const sendMessage = e => {
         //e.preventDefault();
@@ -99,9 +102,29 @@ const MeesengerPage = () => {
                   
                   <div className="chatOnline">
                     <div className="chatOnlineWrapper">
-                    <input placeholder="Search for friends" className="chatMenuInput" 
+                    <input placeholder="Search for users to chat" className="chatMenuInput" onChange={event => {
+              setSearchTerm(event.target.value);
+            }}
             />
-                        {allUsers.map((u)=>(
+                        {allUsers.filter(val => {
+            console.log(val);
+            if (searchTerm == '') {
+             
+              if(val.id!==user.id){
+                return val;
+              }
+              
+            } else{
+              //use levenshtein-fast algorithm use to find names which are simillar according to a distance
+             if (
+
+               (levenshtein.get(val.username.substr(0,Math.min(searchTerm.length,val.username.length)).toLowerCase(), searchTerm.toLowerCase()) <=  MIN_DISTANCE )
+            ) {
+              if(val.id!==user.id){
+                return val;
+              }
+            }}
+          }).map((u)=>(
                             <div className="userDiv">
                               
                                 <p>{u.username}</p>
