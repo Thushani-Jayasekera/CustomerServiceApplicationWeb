@@ -40,6 +40,7 @@ const GET_ME_AS_SERVICE_PROVIDER = gql`
       town
       bio
       service_providing_status
+      profile_state  
       roles
     }
   }
@@ -440,6 +441,7 @@ const GET_SR_BY_ID = gql`
 const GET_ME_USER_BY_ID_SR_DETAILS = gql`
   query GetServiceRequestDetails($getServiceRequestByIdId: ID!) {
     getServiceRequestByID(id: $getServiceRequestByIdId) {
+      id
       requester_id
       provider_id
       date
@@ -461,7 +463,10 @@ const GET_ME_USER_BY_ID_SR_DETAILS = gql`
     }
     me {
       id
+      fullname  
       username
+      contactNum
+      address  
       email
       city
     }

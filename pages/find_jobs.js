@@ -32,6 +32,9 @@ const FindJobsPage = ()=>{
     nextFetchPolicy:"cache-and-network",
   })
   if(loading || job_query.loading) return <Loader/>
+  if(data.me.profile_state === "suspended"){
+    return <p>You are suspended</p>
+  }
   return(
     <Layout>
       <Header roundedHeaderButton={true}/>
