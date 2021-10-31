@@ -30,15 +30,33 @@ const MAKE_ME_SERVICE_PROVIDER = gql`
   }
 `;
 
-const   UPDATE_ME = gql`
-    mutation Mutation($updateMeFullname: String, $updateMeContactNum: String, $updateMeAddress: String, $updateMeProfession: String, $updateMeProvince: String, $updateMeCity: String, $updateMeTown: String, $updateMePostalCode: String) {
-        updateMe(fullname: $updateMeFullname, contactNum: $updateMeContactNum, address: $updateMeAddress, profession: $updateMeProfession, province: $updateMeProvince, city: $updateMeCity, town: $updateMeTown, postalCode: $updateMePostalCode) {
-            id
-            username
-            email
-        }
+const UPDATE_ME = gql`
+  mutation Mutation(
+    $updateMeFullname: String
+    $updateMeContactNum: String
+    $updateMeAddress: String
+    $updateMeProfession: String
+    $updateMeProvince: String
+    $updateMeCity: String
+    $updateMeTown: String
+    $updateMePostalCode: String
+  ) {
+    updateMe(
+      fullname: $updateMeFullname
+      contactNum: $updateMeContactNum
+      address: $updateMeAddress
+      profession: $updateMeProfession
+      province: $updateMeProvince
+      city: $updateMeCity
+      town: $updateMeTown
+      postalCode: $updateMePostalCode
+    ) {
+      id
+      username
+      email
     }
-`
+  }
+`;
 const ADD_DETAILS = gql`
   mutation AddDetailsSR(
     $registerServiceRequesterContactNum: String!
@@ -343,15 +361,15 @@ const MAKE_COMPLAINT = gql`
       title: $makeComplaintTitle
       complaint: $makeComplaintComplaint
     ) {
-      complainer
+      complainer {
+        username
+      }
       victim
       title
       complaint
     }
   }
 `;
-
-
 
 const ACCEPT_JOB_BID = gql`
   mutation Mutation(
@@ -375,14 +393,42 @@ const SET_ACCOUNT_STATE = gql`
   }
 `;
 
+const REMOVE_SERVICE_PROVIDER = gql`
+  mutation RemoveServiceProviderMutation($removeServiceProviderId: ID) {
+    removeServiceProvider(id: $removeServiceProviderId)
+  }
+`;
+
 const CHANGE_JOB_BID_STATE = gql`
-    mutation ChangeStateJobBidMutation($jobBidId: ID!, $jobBidState: String!) {
-        changeStateJobBid(jobBidId: $jobBidId, jobBidState: $jobBidState) {
-            id
-            state
-        }
+  mutation ChangeStateJobBidMutation($jobBidId: ID!, $jobBidState: String!) {
+    changeStateJobBid(jobBidId: $jobBidId, jobBidState: $jobBidState) {
+      id
+      state
     }
-`
+  }
+`;
+
+const SEND_NEW_MESSAGE=gql`
+mutation AddMessageMutation($conversationId: ID, $sender: ID, $text: String) {
+  addMessage(conversationID: $conversationId, sender: $sender, text: $text) {
+    id
+    conversationID
+    sender
+    text
+    createdAt
+  }
+}
+`;
+
+const ADD_NEW_CONVERSATION=gql`
+mutation NewConverstionMutation($newConverstionSenderId3: ID, $newConverstionRecieverId3: ID) {
+  newConverstion(senderID: $newConverstionSenderId3, recieverID: $newConverstionRecieverId3) {
+    id
+    members
+    createdAt
+  }
+}
+`;
 
 export {
   MAKE_ME_SERVICE_PROVIDER,
@@ -405,5 +451,8 @@ export {
   CREATE_SERVICE,
   SET_ACCOUNT_STATE,
   UPDATE_ME,
-  CHANGE_JOB_BID_STATE
+  REMOVE_SERVICE_PROVIDER,
+  CHANGE_JOB_BID_STATE,
+  SEND_NEW_MESSAGE,
+  ADD_NEW_CONVERSATION
 };

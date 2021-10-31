@@ -30,16 +30,21 @@ function Complaints() {
           </Content>
         </Section>
         {complaint_query.data &&
-          complaint_query.data.viewAllComplaints.map((obj, i) => {
+          complaint_query.data.viewAllComplaints.map(complaint => {
+            let date =
+              complaint.createdAt.substring(0, 10) +
+              ' ' +
+              complaint.createdAt.substring(11, 19);
+            console.log(date);
             return (
               <Complaint
-                key={i}
-                id={obj.id}
-                title={obj.title}
-                complaint={obj.complaint}
-                complainer={obj.complainer}
-                victim={obj.victim}
-                date={obj.createdAt}
+                key={complaint.id}
+                id={complaint.id}
+                title={complaint.title}
+                date={date}
+                complaint={complaint.complaint}
+                complainer={complaint.complainer.username}
+                victim={complaint.victim}
               />
             );
           })}
@@ -49,13 +54,6 @@ function Complaints() {
               <Message.Body>There are no complaints found</Message.Body>
             </Message>
           )}
-        {/* <Complaint
-        complainer="Siripala"
-        victim="Sirisena"
-        title="I want to say about malan"
-        complaint="Malan is very nice."
-        date="09/25/2021 09.35PM"
-      /> */}
       </Container>
     </div>
   );

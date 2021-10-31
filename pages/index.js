@@ -34,11 +34,13 @@ import ServiceRequesterStatusPage from './view_serviceRequest_status_requester';
 import ProfilePage from './profile_page';
 import ServiceProviderStatusPage from './view_serviceRequest_status_provider';
 import addComplaintPage from './add_complaint';
-import MyJobPostingsPage from "./my_job_postings";
-import MyJobPostingBidsPage from "./my_job_posting_bids";
-import EditProfilePage from "./editProfile";
-import PaymentPage from "./payment";
-import PaymentSuccessPage from "./payment/paymentSuccess";
+import MyJobPostingsPage from './my_job_postings';
+import MyJobPostingBidsPage from './my_job_posting_bids';
+import EditProfilePage from './editProfile';
+import ViewServiceProvider from '../components/adminComponents/ViewServiceProvider';
+import PaymentPage from './payment';
+import PaymentSuccessPage from './payment/paymentSuccess';
+import MessengerPage from './messenger';
 
 const Pages = () => {
   return (
@@ -51,8 +53,15 @@ const Pages = () => {
       <Route exact path="/admin/addService" component={AddService} />
       <Route exact path="/admin/userManage" component={UserManage} />
       <Route exact path="/admin/complaints" component={Complaints} />
-      <Route exact path={"/payment"} component={PaymentPage}/>
-      <Route exact path={"/payment/success"} component={PaymentSuccessPage} />
+      <Route
+        exact
+        path="/viewServiceProvider/:id"
+        component={ViewServiceProvider}
+      />
+      <Route exact path={'/payment'} component={PaymentPage} />
+      <Route exact path={'/payment/success'} component={PaymentSuccessPage} />
+      <Route exact path={'/message'} component={MessengerPage}/>
+
       <ServiceRequesterRoute
         exact
         path="/service_requester/createRequest/:provider_id"
@@ -93,14 +102,14 @@ const Pages = () => {
       />
       <ServiceRequesterRoute
         exact
-        path={"/myJobPostings"}
+        path={'/myJobPostings'}
         component={MyJobPostingsPage}
       />
       <ServiceRequesterRoute
-          exact
-          path={"/myJobPostings/:id"}
-          component={MyJobPostingBidsPage}
-        />
+        exact
+        path={'/myJobPostings/:id'}
+        component={MyJobPostingBidsPage}
+      />
       <ServiceProviderRoute
         exact
         path={'/service_provider/find_jobs'}
@@ -117,10 +126,7 @@ const Pages = () => {
         path={'/service_request/:id'}
         component={ViewServiceRequestPage}
       />
-      <LoggedInRoute
-          exact path={"/editProfile"}
-          component={EditProfilePage}
-          />
+      <LoggedInRoute exact path={'/editProfile'} component={EditProfilePage} />
 
       <LoggedInRoute
         exact

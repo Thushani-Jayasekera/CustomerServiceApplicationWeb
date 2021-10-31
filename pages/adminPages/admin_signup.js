@@ -48,17 +48,6 @@ const H1 = styled.h1`
   margin: 0;
 `;
 
-const Body = styled.div`
-  background: #f6f5f7;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  font-family: 'Montserrat', sans-serif;
-  height: 100vh;
-  margin: -20px 0 50px;
-`;
-
 const P = styled.p`
   font-size: 14px;
   font-weight: 100;
@@ -162,7 +151,7 @@ const AdminSignUp = props => {
   });
 
   return (
-    <Body>
+    <body className="adminSignupBody">
       <div className="admincontainer" id="admincontainer">
         <div className="adminform-admincontainer adminsign-up-admincontainer">
           <Form
@@ -267,7 +256,7 @@ const AdminSignUp = props => {
         </div>
       </div>
       <Copyright />
-    </Body>
+    </body>
   );
 };
 

@@ -10,7 +10,11 @@ import styled from 'styled-components';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import Loader from '../components/utils/Loader';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import { now } from 'underscore';
+import { now, size } from 'underscore';
+import { useToasts } from 'react-toast-notifications';
+import { Columns } from 'react-bulma-components';
+
+
 
 //import {ReactComponent as SvgDotPatternIcon} from "../images/dot-pattern.svg"
 // Styling
@@ -49,7 +53,13 @@ const SubmitButton = tw.button`w-full sm:w-32 mt-6 py-3 bg-gray-100 text-primary
 
 //TODO// //Prevent from booking servcice requests for user it self
 const FindServicePage = ({ history }) => {
+  const { addToast } = useToasts();
   const { provider_id } = useParams();
+  const [image, setImage] = useState('');
+  const [image2, setImage2] = useState('');
+  const[uploading,setUploading]=useState(false);
+  const [url, setUrl] = useState('');
+  const [url2, setUrl2] = useState('');
   const [values, setValues] = useState({
     createServiceRequestProviderId: provider_id
   });
@@ -73,22 +83,69 @@ const FindServicePage = ({ history }) => {
     });
   };
 
-const today = new Date();
-const dd = today.getDate();
-const mm = today.getMonth()+1; //January is 0 so need to add 1 to make it 1!
-const yyyy = today.getFullYear();
-if(dd<10){
-  dd='0'+dd
-} 
-if(mm<10){
-  mm='0'+mm
-} 
+  const today = new Date();
+  const dd = today.getDate();
+  const mm = today.getMonth() + 1; //January is 0 so need to add 1 to make it 1!
+  const yyyy = today.getFullYear();
+  if (dd < 10) {
+    dd = '0' + dd;
+  }
+  if (mm < 10) {
+    mm = '0' + mm;
+  }
 
-const todayMin = yyyy+'-'+mm+'-'+dd;
+  const todayMin = yyyy + '-' + mm + '-' + dd;
+
+  const uploadImage = e => {
+    e.preventDefault();
+    setUploading(true);
+    addToast('Started uploading photo', { appearance: 'info' });
+    const data = new FormData();
+    data.append('file', image);
+    data.append('upload_preset', 'serviceRequest');
+    data.append('cloud_name', 'dpb0ths5c');
+    fetch('  https://api.cloudinary.com/v1_1/dpb0ths5c/upload', {
+      method: 'post',
+      body: data
+    })
+      .then(resp => resp.json())
+      .then(data => {
+        setUrl(data.url);
+        setUploading(false);
+        addToast('Successfully uploaded photo', { appearance: 'success' });
+      })
+      .catch(err => console.log(err));
+
+    console.log(url);
+  };
+
+  const uploadImage2 = e => {
+    e.preventDefault();
+    setUploading(true);
+    addToast('Started uploading photo', { appearance: 'info' });
+    const data = new FormData();
+    data.append('file', image2);
+    data.append('upload_preset', 'serviceRequest');
+    data.append('cloud_name', 'dpb0ths5c');
+    fetch('  https://api.cloudinary.com/v1_1/dpb0ths5c/upload', {
+      method: 'post',
+      body: data
+    })
+      .then(resp => resp.json())
+      .then(data => {
+        setUrl2(data.url);
+        setUploading(false);
+        addToast('Successfully uploaded photo', { appearance: 'success' });
+      })
+      .catch(err => console.log(err));
+    
+    
+    console.log(url2);
+  };
 
   return (
     <Container>
-      <Header/>
+      <Header />
       <Content>
         <FormContainer>
           <div tw="mx-auto max-w-4xl">
@@ -101,7 +158,9 @@ const todayMin = yyyy+'-'+mm+'-'+dd;
                 createServiceRequest({
                   variables: {
                     ...values,
-                    createServiceRequestLocation:data.me.address
+                    createServiceRequestLocation: data.me.address,
+                    createServiceRequestImage1: url,
+                    createServiceRequestImage2: url2
                   }
                 });
               }}
@@ -116,7 +175,11 @@ const todayMin = yyyy+'-'+mm+'-'+dd;
                   onChange={handleChange}
                   min={todayMin}
                   required
-                  
+                  value={
+                    values.createServiceRequestDate
+                      ? values.createServiceRequestDate
+                      : ''
+                  }
                 />
               </InputContainer>
 
@@ -129,6 +192,11 @@ const todayMin = yyyy+'-'+mm+'-'+dd;
                   placeholder="E.g. john@mail.com"
                   onChange={handleChange}
                   required
+                  value={
+                    values.createServiceRequestTime
+                      ? values.createServiceRequestTime
+                      : ''
+                  }
                 />
               </InputContainer>
 
@@ -140,12 +208,16 @@ const todayMin = yyyy+'-'+mm+'-'+dd;
                   name="location"
                   value={data.me.address}
                   disabled={true}
-                  tw='text-black'
+                  tw="text-black"
                 />
-                <Link to={{
-                          pathname: `/profile`
-                        }}>
-                <button tw='bg-white opacity-75 hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow'>Change Location</button>
+                <Link
+                  to={{
+                    pathname: `/profile`
+                  }}
+                >
+                  <button tw="bg-white opacity-75 hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+                    Change Location
+                  </button>
                 </Link>
               </InputContainer>
 
@@ -159,6 +231,11 @@ const todayMin = yyyy+'-'+mm+'-'+dd;
                       name={'createServiceRequestMinPrice'}
                       placeholder="Min value"
                       onChange={handleChange}
+                      value={
+                        values.createServiceRequestMinPrice
+                          ? values.createServiceRequestMinPrice
+                          : ''
+                      }
                     />
                   </InputContainer>
                 </Column>
@@ -170,6 +247,11 @@ const todayMin = yyyy+'-'+mm+'-'+dd;
                       name={'createServiceRequestMaxPrice'}
                       placeholder="Max Value"
                       onChange={handleChange}
+                      value={
+                        values.createServiceRequestMaxPrice
+                          ? values.createServiceRequestMaxPrice
+                          : ''
+                      }
                     />
                   </InputContainer>
                 </Column>
@@ -180,6 +262,11 @@ const todayMin = yyyy+'-'+mm+'-'+dd;
                 <select
                   name={'createServiceRequestPayMethod'}
                   onChange={handleChange}
+                  value={
+                    values.createServiceRequestPayMethod
+                      ? values.createServiceRequestPayMethod
+                      : ''
+                  }
                 >
                   <option value="">Choose..</option>
                   <option value="1">Cash</option>
@@ -195,35 +282,40 @@ const todayMin = yyyy+'-'+mm+'-'+dd;
                   placeholder="E.g. Details about the service request"
                   onChange={handleChange}
                   required
+                  value={
+                    values.createServiceRequestTask
+                      ? values.createServiceRequestTask
+                      : ''
+                  }
                 />
               </InputContainer>
-              <InputContainer tw="flex-1">
-                <Label htmlFor="name-input">
-                  Three Images of the issue you are facing (Optional)
-                </Label>
-                <input
-                  type="file"
-                  name={'createServiceRequestImage1'}
-                  accept="image/*"
-                  onChange={handleChange}
-                />
-                <input
-                  type="file"
-                  name={'createServiceRequestImage2'}
-                  accept="image/*"
-                  onChange={handleChange}
-                />
-                <input
-                  type="file"
-                  name={'createServiceRequestImage3'}
-                  accept="image/*"
-                  onChange={handleChange}
-                />
+              <InputContainer>
+              <Label htmlFor="name-input">
+                Images of the issue you are facing (Optional)
+              </Label>
+              
+              <input
+                type="file"
+                onChange={e => setImage(e.target.files[0])}
+              ></input>
+              <button onClick={uploadImage}><p >Click to <b>Upload</b> Selected</p></button>
+              
+              <input
+                type="file"
+                onChange={e => setImage2(e.target.files[0])}
+              ></input>
+              <button onClick={uploadImage2} color='red'><p>Click to <b>Upload</b> Selected</p></button>
+              
               </InputContainer>
+              
 
-              <SubmitButton type="submit" value="Submit">
+              {uploading?<SubmitButton type="submit" value="Submit" disabled={true}>
+                Please wait..
+              </SubmitButton>:<SubmitButton type="submit" value="Submit" disabled={uploading}>
                 Submit
-              </SubmitButton>
+              </SubmitButton>}
+
+              
             </Form>
           </div>
         </FormContainer>
