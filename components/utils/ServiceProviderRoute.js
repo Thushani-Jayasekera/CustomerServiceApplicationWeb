@@ -25,6 +25,8 @@ const ServiceProviderRoute = ({ component: Component, ...rest }) => {
           return (
             <Component {...props} />
           )
+        }else if(data.me.profile_state === "created"){
+          return <p>You are waiting to be accepted</p>
         }
         else {
           return(

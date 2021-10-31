@@ -4,12 +4,17 @@ import Layout from "../components/Layout";
 import Header from "../components/Header";
 import Conversation from "../components/conversations/conversation";
 import Message from "../components/Message";
+import "./messenger.css";
+
 
 import {GET_USER_MSG_DETAILS,} from "../gql/query";
 import { SEND_NEW_MESSAGE,ADD_NEW_CONVERSATION } from "../gql/mutation";
 import { useMutation, useQuery } from "@apollo/client";
 import MessageBox from "../components/utils/MessageBox";
 import { useToasts } from 'react-toast-notifications';
+
+const levenshtein = require('fast-levenshtein');
+
 const MeesengerPage = () => {
     const [conversation, setConversations]=useState([]);
     const [currentChat, setCurrentChat]=useState(null);
@@ -17,6 +22,8 @@ const MeesengerPage = () => {
     const [newMessage,setNewMessage]= useState('');
     const[sent,setSent]=useState('');
     const { addToast } = useToasts();
+    const [searchTerm, setSearchTerm] = useState('');
+ 
 
     const {loading,error,data} = useQuery(GET_USER_MSG_DETAILS);
     const [addMessage, { loading_send, error_send }] = useMutation(
@@ -48,12 +55,13 @@ const MeesengerPage = () => {
       );
     
 
-    if(loading) return <Loader/>
+    if(loading||loading_conv||loading_send) return <Loader/>
     console.log(data);
     const user=data.me;
     const conversations=data.conversationsOfUser;
     const allUsers=data.users;
     console.log(currentChat);
+    const MIN_DISTANCE=7;
 
     const sendMessage = e => {
         //e.preventDefault();
@@ -89,16 +97,47 @@ const MeesengerPage = () => {
         
             <Layout>
              <Header/>
-             <div>
-                 {allUsers.map((u)=>(
-                     <div>
-                         <p>{u.username}</p>
-                         <button onClick={()=>addToConversation(u.id)}>Add to Chat</button>
-                    </div>
-                   
-                 ))}
+             <div className="messenger">
+              
+                  
+                  <div className="chatOnline">
+                    <div className="chatOnlineWrapper">
+                    <input placeholder="Search for users to chat" className="chatMenuInput" onChange={event => {
+              setSearchTerm(event.target.value);
+            }}
+            />
+                        {allUsers.filter(val => {
+            console.log(val);
+            if (searchTerm == '') {
+             
+              if(val.id!==user.id){
+                return val;
+              }
+              
+            } else{
+              //use levenshtein-fast algorithm use to find names which are simillar according to a distance
+             if (
+
+               (levenshtein.get(val.username.substr(0,Math.min(searchTerm.length,val.username.length)).toLowerCase(), searchTerm.toLowerCase()) <=  MIN_DISTANCE )
+            ) {
+              if(val.id!==user.id){
+                return val;
+              }
+            }}
+          }).map((u)=>(
+                            <div className="userDiv">
+                              
+                                <p>{u.username}</p>
+                                <button onClick={()=>addToConversation(u.id)} className="addToChatButton">Add to Chat</button>
+                            </div>
+                          
+                        ))}
                  </div>
-             <div>
+                 </div>
+                 
+
+                  <div className="chatMenu">
+                  <div className="chatMenuWrapper">
                  
                  {conversations.map((c)=>(
                      <div onClick={()=>onClickConversation(c)} color='red'>
@@ -106,29 +145,36 @@ const MeesengerPage = () => {
                      </div>
                  ))}
                  
-             </div>
-             <div>
+                  </div>
+                  </div>
+
+            <div className="chatBox">
+            <div className="chatBoxWrapper">
 
                  {currentChat?<>
-                    <div>
+              <div className="chatBoxTop">
+
                  <MessageBox conversation={currentChat} currentUser={user}/>
                  <p>{sent}</p>
              </div>
                  
                  </>:
                  
-                 <>
-                 Open a conversation to start char
-                 </>}
+                 <span className="noConversationText">
+                 Open a conversation to start a chat.
+                </span>}
              </div>
             
-             <div>
+             <div className="chatBoxBottom">
                  <textarea placeholder="write something.."
+                 className="chatMessageInput"
                  onChange={(e)=>setNewMessage(e.target.value)}></textarea>
-                 <button onClick={sendMessage}>Send</button>
+                 <button className="chatSubmitButton" onClick={sendMessage}>Send</button>
+             </div>
              </div>
 
 
+</div>
              </Layout>
         
     )

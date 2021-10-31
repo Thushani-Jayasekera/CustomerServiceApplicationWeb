@@ -4,6 +4,8 @@ import Loader from '../utils/Loader';
 import { GET_MESGS_OF_CONV } from "../../gql/query";
 import Message from "../Message";
 
+
+
 const MessageBox = ({conversation, currentUser}) => {
     
 
@@ -22,7 +24,7 @@ const MessageBox = ({conversation, currentUser}) => {
     
     return(
         
-            <div styles={{ height: '500px', overflowY: 'scroll' }}>
+            <div >
                 
                 {data.getNewMessages.map(m=>(
                     <>

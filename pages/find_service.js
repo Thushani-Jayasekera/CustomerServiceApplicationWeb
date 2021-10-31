@@ -12,7 +12,7 @@ import Loader from '../components/utils/Loader';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import { now, size } from 'underscore';
 import { useToasts } from 'react-toast-notifications';
-import { Columns } from 'react-bulma-components';
+import { Button, Columns } from "react-bulma-components";
 
 
 
@@ -95,6 +95,7 @@ const FindServicePage = ({ history }) => {
   }
 
   const todayMin = yyyy + '-' + mm + '-' + dd;
+
 
   const uploadImage = e => {
     e.preventDefault();
@@ -298,7 +299,7 @@ const FindServicePage = ({ history }) => {
                 type="file"
                 onChange={e => setImage(e.target.files[0])}
               ></input>
-              <button onClick={uploadImage}><p >Click to <b>Upload</b> Selected</p></button>
+              <Button onClick={uploadImage}>Click to Upload Selected</Button>
               
               <input
                 type="file"
