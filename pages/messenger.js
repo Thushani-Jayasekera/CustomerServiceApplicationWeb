@@ -98,8 +98,7 @@ const MeesengerPage = () => {
             <Layout>
              <Header/>
              <div className="messenger">
-              
-                  
+
                   <div className="chatOnline">
                     <div className="chatOnlineWrapper">
                     <input placeholder="Search for users to chat" className="chatMenuInput" onChange={event => {

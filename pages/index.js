@@ -40,6 +40,7 @@ import ViewServiceProvider from '../components/adminComponents/ViewServiceProvid
 import PaymentPage from './payment';
 import PaymentSuccessPage from './payment/paymentSuccess';
 import MessengerPage from './messenger';
+import Messenger2Page from "./messenger_2";
 
 const Pages = () => {
   return (
@@ -52,6 +53,7 @@ const Pages = () => {
       <Route exact path="/admin/addService" component={AddService} />
       <Route exact path="/admin/userManage" component={UserManage} />
       <Route exact path="/admin/complaints" component={Complaints} />
+      <Route exact path={"/messenger2"} component={Messenger2Page}/>
       <Route
         exact
         path="/viewServiceProvider/:id"
