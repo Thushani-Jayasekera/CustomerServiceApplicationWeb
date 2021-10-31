@@ -3,10 +3,16 @@ import React, { useEffect, useState } from "react";
 import Loader from '../utils/Loader';
 import { GET_USER_BY_ID } from "../../gql/query";
 
-const Conversation = ({conversation, currentUser}) => {
-    const [user,setUser]=useState(null);
+import "./conversation.css";
 
+const Conversation = ({conversation, currentUser}) => {
+    
+   console.log(conversation,currentUser);
    nextid=conversation.members.find((m)=>m!==currentUser.id);
+   if (nextid===null){
+        nextid=currentUser.id;
+   }
+   console.log(nextid);
     const {data,loading,error}= useQuery(GET_USER_BY_ID,{
         variables:{
             getUserbyIdId: nextid
@@ -14,13 +20,14 @@ const Conversation = ({conversation, currentUser}) => {
     }
         );
     if (loading) return <Loader />;
+    console.log(data);
     console.log(data.getUserbyId.username); 
     
     
     return(
         
-            <div>
-                <span>{data.getUserbyId.username}</span>
+        <div className="conversation">
+                <span className="conversationName">{data.getUserbyId.username}</span>
               
             </div>
         
