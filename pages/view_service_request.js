@@ -343,7 +343,8 @@ const ViewServiceRequestPage = () => {
     setValues({});
     completeServiceRequest({
       variables: {
-        completeServiceRequestId: id
+        completeServiceRequestId: id,
+        completeServiceRequestFinalAmount:values.completeServiceRequestFinalAmount
       }
     });
     refetch();
@@ -479,11 +480,10 @@ const ViewServiceRequestPage = () => {
                       rounded
                       className="button is-success is-centered is-medium mx-4 my-2 px-6"
                       disabled={
-                        serviceReqDetails.state === 'Pending' ||
-                        serviceReqDetails.state === 'Canceled' ||
-                        serviceReqDetails.state === 'Rejected'
+                        serviceReqDetails.state === 'Pending' || serviceReqDetails.state ==='Accepted' || serviceReqDetails.state ==='Canceled' ||serviceReqDetails.state ==='Rejected' || serviceReqDetails.state ==='Started' ||serviceReqDetails.hasPaid === true
+                       
                       }
-                      onClick={get_payment_function(serviceReqDetails.id,serviceReqDetails.estimate)}
+                      onClick={get_payment_function(serviceReqDetails.id,serviceReqDetails.finalAmount)}
                     >
                       Make Payment
                     </Button>
@@ -538,6 +538,14 @@ const ViewServiceRequestPage = () => {
                       >
                         Reject
                       </Button>
+
+                      <Actions>
+                        <input
+                          type="text"
+                          placeholder="Enter final value for customer payment"
+                          name={'completeServiceRequestFinalAmount'}
+                          onChange={handleChange}
+                        />
                       <Button
                       rounded
                       className="button is-success is-medium mx-4 my-2 px-6"
@@ -546,8 +554,9 @@ const ViewServiceRequestPage = () => {
                         serviceReqDetails.state!=='Started'
                       }
                     >
-                      Mark Completed
+                      Completed
                     </Button>
+                    </Actions>
                     </Columns>
                   </>
                 )}
@@ -610,11 +619,18 @@ const ViewServiceRequestPage = () => {
                         </td>
                       </tr>
                       <tr>
-                        <td>Total Amount Paid to date</td>
-                        <td> {serviceReqDetails.toDatePayment
-                            ? `${serviceReqDetails.toDatePayment} LKR`
-                            : 'No Payments Yet'}</td>
+                        <td>Final Amount</td>
+                        <td> {serviceReqDetails.finalPayment
+                            ? `${serviceReqDetails.finalPayment} LKR`
+                            : 'Not entered Yet'}</td>
                       </tr>
+                      <tr>
+                        <td>Payment status</td>
+                        <td> {serviceReqDetails.hasPaid===true
+                            ? `Paid`
+                            : 'No Payment Made Yet'}</td>
+                      </tr>
+                     
                       <tr>
                         <td>Status of Request</td>
                         <td>
@@ -736,7 +752,7 @@ const ViewServiceRequestPage = () => {
                       serviceReqDetails.state==='Reviewed' && myDetails.id === requester_id?(<>
                           <TestimonialContainer >
                           <Testimonial>
-                            <Image src={''} />
+                            
                             <Quote>"{serviceReqDetails.requestReview}"</Quote>
                             <ReactStars 
                             count={5}
@@ -753,7 +769,7 @@ const ViewServiceRequestPage = () => {
                         {serviceReqDetails.customerReview?(<>
                           <TestimonialContainer >
                           <Testimonial>
-                            <Image src={''} />
+                           
                             <Quote>"{serviceReqDetails.customerReview}"</Quote>
                             <ReactStars 
                             count={5}
@@ -906,7 +922,7 @@ const ViewServiceRequestPage = () => {
                       serviceReqDetails.state==='Reviewed'&& myDetails.id === provider_id?(<>
                         <TestimonialContainer >
                           <Testimonial>
-                            <Image src={''} />
+                            
                             <Quote>"{serviceReqDetails.requestReview}"</Quote>
                             <ReactStars 
                             count={5}
@@ -1018,7 +1034,14 @@ const ViewServiceRequestPage = () => {
                     >
                       Reject
                     </Button>
-                    <Button
+                    <Actions>
+                        <input
+                          type="text"
+                          placeholder="Enter final value for customer payment"
+                          name={'completeServiceRequestFinalAmount'}
+                          onChange={handleChange}
+                        />
+                      <Button
                       rounded
                       className="button is-success is-medium mx-4 my-2 px-6"
                       onClick={completeRequest}
@@ -1026,8 +1049,9 @@ const ViewServiceRequestPage = () => {
                         serviceReqDetails.state!=='Started'
                       }
                     >
-                      Mark Completed
+                      Completed
                     </Button>
+                    </Actions>
                   </>
                 )}
 
@@ -1177,13 +1201,8 @@ const ViewServiceRequestPage = () => {
                           variables: {
                             editServiceRequestId: id,
                             editServiceRequestTask:
-                              values.editServiceRequestTask,
-                            editServiceRequestImage1:
-                              values.editServiceRequestImage1,
-                            editServiceRequestImage2:
-                              values.editServiceRequestImage2,
-                            editServiceRequestImage3:
-                              values.editServiceRequestImage3
+                              values.editServiceRequestTask
+                          
                           }
                         });
                         refetch();
@@ -1199,29 +1218,7 @@ const ViewServiceRequestPage = () => {
                           required
                         />
                       </InputContainer>
-                      <InputContainer tw="flex-1">
-                        <Label htmlFor="name-input">
-                          Three Images of the issue you are facing (Optional)
-                        </Label>
-                        <input
-                          type="file"
-                          name={'editServiceRequestImage1'}
-                          accept="image/*"
-                          onChange={handleChange}
-                        />
-                        <input
-                          type="file"
-                          name={'editServiceRequestImage2'}
-                          accept="image/*"
-                          onChange={handleChange}
-                        />
-                        <input
-                          type="file"
-                          name={'editServiceRequestImage3'}
-                          accept="image/*"
-                          onChange={handleChange}
-                        />
-                      </InputContainer>
+                     
 
                       <SubmitButton type="submit" value="Submit">
                         Confirm Edit

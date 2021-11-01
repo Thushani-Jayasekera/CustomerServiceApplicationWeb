@@ -59,12 +59,14 @@ const UPDATE_ME = gql`
 `;
 const ADD_DETAILS = gql`
   mutation AddDetailsSR(
+    $registerServiceRequesterFullname: String!,
     $registerServiceRequesterContactNum: String!
     $registerServiceRequesterAddress: String!
     $registerServiceRequesterCity: String!
     $registerServiceRequesterPostalCode: String!
   ) {
     registerServiceRequester(
+      fullname: $registerServiceRequesterFullname
       contactNum: $registerServiceRequesterContactNum
       address: $registerServiceRequesterAddress
       city: $registerServiceRequesterCity
@@ -215,7 +217,7 @@ const REJECT_SR = gql`
 const COMPLETE_SR = gql`
   mutation CompleteServiceRequestMutation(
     $completeServiceRequestId: ID
-    $completeServiceRequestFinalAmount: Int
+    $completeServiceRequestFinalAmount: String
   ) {
     completeServiceRequest(
       id: $completeServiceRequestId
@@ -279,16 +281,12 @@ const EDIT_SR = gql`
   mutation EditServiceRequestMutation(
     $editServiceRequestTask: String!
     $editServiceRequestId: ID
-    $editServiceRequestImage1: String
-    $editServiceRequestImage2: String
-    $editServiceRequestImage3: String
+
   ) {
     editServiceRequest(
       id: $editServiceRequestId
       task: $editServiceRequestTask
-      image1: $editServiceRequestImage1
-      image2: $editServiceRequestImage2
-      image3: $editServiceRequestImage3
+
     ) {
       task
     }

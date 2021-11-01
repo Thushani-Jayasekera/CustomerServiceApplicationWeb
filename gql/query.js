@@ -431,9 +431,10 @@ const GET_SR_BY_ID = gql`
       location
       requestReview
       requestReview
-      toDatePayment
+      finalAmount
       customerReview
       customerRating
+      hasPaid
     }
   }
 `;
@@ -457,9 +458,10 @@ const GET_ME_USER_BY_ID_SR_DETAILS = gql`
       location
       requestReview
       requestRating
-      toDatePayment
+      finalAmount
       customerReview
       customerRating
+      hasPaid
     }
     me {
       id
