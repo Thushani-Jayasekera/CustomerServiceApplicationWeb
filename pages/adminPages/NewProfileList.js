@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { GET_USERS_BY_AC_STATE } from '../../gql/query';
-import { SET_ACCOUNT_STATE, REMOVE_SERVICE_PROVIDER } from '../../gql/mutation';
+import { SET_ACCOUNT_STATE } from '../../gql/mutation';
 import { useToasts } from 'react-toast-notifications';
-import user from '../../images/user.png';
+import user from '../../images/user.jpg';
 import styled from 'styled-components';
 
 /*************************** Styles *****************************/
@@ -15,11 +15,12 @@ const OuterContainer = styled.div`
   align-items: center;
   background-color: white;
   margin: 10px;
-  height: 64px;
+  height: 8vh;
   width: 100%;
   box-sizing: border-box;
   @media screen and (max-width: 1000px) {
     flex-direction: column;
+    height: 20vh;
   }
 `;
 
@@ -75,31 +76,32 @@ const Profession = styled.div`
   width: 30%;
 `;
 
-function SuspendedList() {
-  const [suspendedList, setSuspendedList] = useState([]);
+function NewProfileList() {
+  const [profileList, setProfileList] = useState([]);
 
-  const suspended_profiles = useQuery(GET_USERS_BY_AC_STATE, {
+  const { loading, error } = useQuery(GET_USERS_BY_AC_STATE, {
     variables: {
-      takeUsersAccountState: 'suspended'
+      takeUsersAccountState: 'created'
     },
-    onCompleted: data => setSuspendedList(data.takeUsers),
+    onCompleted: data => setProfileList(data.takeUsers),
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-and-network'
   });
 
   const { addToast } = useToasts();
-  const [setState, { data, error, loading }] = useMutation(SET_ACCOUNT_STATE, {
+  const [setState, currentStatus] = useMutation(SET_ACCOUNT_STATE, {
     onCompleted: data => {
       addToast('Successfully Done.', { appearance: 'success' });
     },
     onError: error => {
-      addToast('Failed...', { appearance: 'error' });
+      addToast('Failed ', { appearance: 'error' });
     }
   });
 
-  const ReAllocate = id => {
-    let new_list = suspendedList.filter(user => user.id !== id);
-    setSuspendedList(new_list);
+  const ApproveProfile = id => {
+    let profiles_list = profileList.filter(obj => obj.id !== id);
+    setProfileList(profiles_list);
+    console.log('Profile Approved');
     setState({
       variables: {
         providerId: id,
@@ -107,31 +109,23 @@ function SuspendedList() {
       }
     });
   };
-  const [remove_Profile, setRemoveProfile] = useMutation(
-    REMOVE_SERVICE_PROVIDER,
-    {
-      onCompleted: data => {
-        addToast('Successfully Deleted.', { appearance: 'success' });
-      },
-      onError: error => {
-        addToast('Failed to delete.', { appearance: 'error' });
-      }
-    }
-  );
-  const RemoveProfile = id => {
-    let new_list = suspendedList.filter(user => user.id !== id);
-    setSuspendedList(new_list);
-    remove_Profile({
+
+  const RejectProfile = id => {
+    let profiles_list = profileList.filter(obj => obj.id !== id);
+    setProfileList(profiles_list);
+    console.log('Profile Rejected');
+    setState({
       variables: {
-        removeServiceProviderId: id
+        providerId: id,
+        state: 'suspended'
       }
     });
   };
 
   return (
-    <div>
-      {suspendedList &&
-        suspendedList.map(obj => {
+    <>
+      {profileList &&
+        profileList.map(obj => {
           const { id, username, profession } = obj;
           return (
             <OuterContainer key={id}>
@@ -166,7 +160,7 @@ function SuspendedList() {
                 </Link>
 
                 <button
-                  onClick={() => ReAllocate(id)}
+                  onClick={() => ApproveProfile(id)}
                   style={{
                     backgroundColor: '#22d72e',
                     width: '100px',
@@ -174,10 +168,10 @@ function SuspendedList() {
                     padding: '5px 20px'
                   }}
                 >
-                  Activate
+                  Approve
                 </button>
                 <button
-                  onClick={() => RemoveProfile(id)}
+                  onClick={() => RejectProfile(id)}
                   style={{
                     backgroundColor: 'Red',
                     width: '100px',
@@ -186,14 +180,14 @@ function SuspendedList() {
                     padding: '5px 20px'
                   }}
                 >
-                  Delete
+                  Reject
                 </button>
               </RightContainer>
             </OuterContainer>
           );
         })}
-    </div>
+    </>
   );
 }
 
-export default SuspendedList;
+export default NewProfileList;
