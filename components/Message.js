@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import { format, render, cancel, register } from 'timeago.js';
 
-const Message = ({message,own,conversation}) => {
-    console.log("message");
-    
-    return(
-        
-            <div>
+import './message.css';
 
-               <div>
-                  
-               </div>
-               {own==='sender'?
-               <p>You:</p>:<p>User</p>}
-               <p>{message.text}</p>
-               <div>{format(message.createdAt)}</div>
-            </div>
-        
-    )
+const Message = ({ message, own, conversation }) => {
+  console.log('message js');
 
-}
+  return (
+    <div>
+      
+
+      <div className={own === 'sender' ? 'message own' : 'message'}>
+      {own === 'sender' ? <p>You:</p> : <p>User:</p>}
+        <div className="messageTop">
+          <p>{message.text}</p>
+        </div>
+        <div className="messageBottom">{format(message.createdAt)}</div>
+      </div>
+    </div>
+  );
+};
 export default Message;

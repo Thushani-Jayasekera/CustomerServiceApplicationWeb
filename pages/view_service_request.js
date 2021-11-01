@@ -42,6 +42,7 @@ import { ValuesOfCorrectType } from 'graphql/validation/rules/ValuesOfCorrectTyp
 import ReactStars from 'react-rating-stars-component';
 import { NetworkStatus } from '@apollo/client';
 import { Image as CDNImage} from "cloudinary-react";
+import { CheckoutParams, CurrencyType, Customer, PayhereCheckout } from "payhere-js-sdk";
 
 //const Container = tw.div`relative`;
 const Content2 = tw.div`max-w-screen-xl mx-auto py-20 lg:py-24`;
@@ -296,6 +297,7 @@ const ViewServiceRequestPage = () => {
 
   const dayName = days[date.getDay()];
   console.log(date.getDay());
+  let showDay
   showDay = `${serviceReqDetails.date}, ${dayName}`;
   const myDetails = data_serviceRequest.me;
 
@@ -381,7 +383,34 @@ const ViewServiceRequestPage = () => {
       renderView: 2
     });
   };
-
+  const get_payment_function = (request_id,request_amount)=>(event)=>{
+    event.preventDefault()
+    try {
+      const customer = new Customer({
+        first_name:data.me.fullname,
+        last_name:data.me.fullname,
+        phone:data.me.contactNum,
+        email:data.me.email,
+        address:data.me.address,
+        city:data.me.city,
+        country:"Sri Lanka"
+      })
+      const checkoutData = new CheckoutParams({
+        returnUrl: `https://customerserviceapplication.netlify.app/payment/success`,
+        cancelUrl: `https://customerserviceapplication.netlify.app/payment/success`,
+        notifyUrl: `https://customerserviceapplication.herokuapp.com/payment/notify_sr`,
+        order_id: 'R'+request_id,
+        itemTitle: "Test",
+        currency: CurrencyType.LKR,
+        amount: request_amount
+      })
+      const checkout =new PayhereCheckout(customer,checkoutData,(error)=>alert(error))
+      checkout.start()
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
   ////////////////////////////////////////////////////////////////
   {
     switch (view.renderView) {
@@ -454,6 +483,7 @@ const ViewServiceRequestPage = () => {
                         serviceReqDetails.state === 'Canceled' ||
                         serviceReqDetails.state === 'Rejected'
                       }
+                      onClick={get_payment_function(serviceReqDetails.id,serviceReqDetails.estimate)}
                     >
                       Make Payment
                     </Button>
