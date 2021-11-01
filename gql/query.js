@@ -472,7 +472,28 @@ const GET_ME_USER_BY_ID_SR_DETAILS = gql`
     }
   }
 `;
-
+const GET_JOB_BID_BY_ID =  gql`
+    query Query($getJobBidByIdId: ID!) {
+        getJobBidById(id: $getJobBidByIdId) {
+            id
+            bidBy {
+                fullname
+                profession
+            }
+            jobPosting {
+                id
+                postedBy {
+                    id
+                    fullname
+                }
+            }
+            providerReview
+            providerRating
+            requesterReview
+            requesterRating
+        }
+    }
+`
 const GET_SERVICE_REQUESTS_OF_ME = gql`
   query Query {
     acceptedServiceRequestsbyMe {
@@ -853,5 +874,6 @@ export {
   GET_PROFILES,
   GET_USER_MSG_DETAILS,
   GET_CONVERSATIONS,
-  GET_MESGS_OF_CONV
+  GET_MESGS_OF_CONV,
+  GET_JOB_BID_BY_ID
 };

@@ -430,6 +430,18 @@ mutation NewConverstionMutation($newConverstionSenderId3: ID, $newConverstionRec
 }
 `;
 
+const ADD_REVIEW =  gql`
+    mutation Mutation($type: String, $addReviewToBidId: ID, $rating: Float, $review: String) {
+        addReviewToBid(type: $type, id: $addReviewToBidId, rating: $rating, review: $review) {
+            id
+            providerReview
+            providerRating
+            requesterReview
+            requesterRating
+        }
+    }
+`
+
 export {
   MAKE_ME_SERVICE_PROVIDER,
   ADD_DETAILS,
@@ -454,5 +466,6 @@ export {
   REMOVE_SERVICE_PROVIDER,
   CHANGE_JOB_BID_STATE,
   SEND_NEW_MESSAGE,
-  ADD_NEW_CONVERSATION
+  ADD_NEW_CONVERSATION,
+  ADD_REVIEW
 };
