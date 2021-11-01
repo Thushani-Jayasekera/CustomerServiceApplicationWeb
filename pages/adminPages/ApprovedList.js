@@ -4,7 +4,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import { GET_USERS_BY_AC_STATE } from '../../gql/query';
 import { SET_ACCOUNT_STATE, REMOVE_SERVICE_PROVIDER } from '../../gql/mutation';
 import { useToasts } from 'react-toast-notifications';
-import userImage from '../../images/user.png';
+import userImage from '../../images/user.jpg';
 import styled from 'styled-components';
 
 /*************************** Styles *****************************/

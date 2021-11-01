@@ -4,7 +4,7 @@ import tw from 'twin.macro';
 import styled from 'styled-components';
 import { css } from 'styled-components/macro';
 
-import useAnimatedNavToggler from './helpers/useAnimatedNavToggler.js';
+import useAnimatedNavToggler from '../helpers/useAnimatedNavToggler.js';
 
 // import logo from "../../images/logo.svg";
 import { Menu as MenuIcon } from 'react-feather';

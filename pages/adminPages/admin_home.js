@@ -5,7 +5,7 @@ import { css } from 'styled-components/macro';
 import Header from '../../components/Header';
 import DesignIllustration from '../../images/design-illustration-3.svg';
 import CustomersLogoStripImage from '../../images/customers-logo-strip.png';
-import AdminNavbar from '../../components/AdminNavbar';
+import AdminNavbar from '../../components/adminComponents/AdminNavbar';
 
 //************************Styles**********************/
 const Container = tw.div`relative`;

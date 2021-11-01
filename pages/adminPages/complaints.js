@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import AdminNavbar from '../../components/AdminNavbar';
+import AdminNavbar from '../../components/adminComponents/AdminNavbar';
 import tw from 'twin.macro';
-import Complaint from '../../components/Complaint';
+import Complaint from '../../components/adminComponents/Complaint';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_COMPLAINTS } from '../../gql/query';
 import Loader from '../../components/utils/Loader';
