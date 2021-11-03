@@ -293,6 +293,16 @@ const EDIT_SR = gql`
   }
 `;
 
+const CONFIRM_CASH_PAYMENT= gql`
+
+mutation ConfirmCashPaymentMutation($confirmCashPaymentId: ID) {
+  confirmCashPayment(id: $confirmCashPaymentId) {
+    id
+    hasPaid
+  }
+}
+`;
+
 const FEEDBACK_SR = gql`
   mutation FeedbackServiceRequestMutation(
     $feedbackServiceRequestId: ID
@@ -465,5 +475,6 @@ export {
   CHANGE_JOB_BID_STATE,
   SEND_NEW_MESSAGE,
   ADD_NEW_CONVERSATION,
-  ADD_REVIEW
+  ADD_REVIEW,
+  CONFIRM_CASH_PAYMENT
 };
