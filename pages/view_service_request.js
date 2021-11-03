@@ -689,6 +689,15 @@ const ViewServiceRequestPage = () => {
                             : 'No Payment Made Yet'}
                         </td>
                       </tr>
+                      <tr>
+                        <td>Payment Method</td>
+                        <td>
+                          {' '}
+                          {serviceReqDetails.payMethod === '0'
+                            ? `Card`
+                            : 'Cash'}
+                        </td>
+                      </tr>
 
                       <tr>
                         <td>Status of Request</td>

@@ -23,7 +23,7 @@ import { SectionHeading } from '../components/misc/Headings.js';
 import profileImg from "../images/profile.png"
 import Providers from '../components/Providers';
 import Pagination from '../components/Pagination';
-import {  Columns, Form, Message } from "react-bulma-components";
+import {  Columns, Form, Message ,Box} from "react-bulma-components";
 
 import FeatherIcon from 'feather-icons-react';
 
@@ -211,6 +211,7 @@ const SelectOptionPage = ({ history }) => {
      <br/>
      <FeatherIcon icon="filter"/>
      <Container>
+       <Box>
        <label>
          Sort By
       <select class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
@@ -222,25 +223,31 @@ const SelectOptionPage = ({ history }) => {
         <option value='1'>Lowest to Highest</option>
     </select>
     </label>
+    </Box>
     </Container>
+    <Box>
       <label>
       <input
           type="checkbox"
+          className="mx-5"
           checked={checked}
           onChange={handleCheck}
           name={'searchServiceProviderbyProfessioninProvinceProvince'}
         />
         View Providers only in my province
       </label>
+      
       <label>
       <input
           type="checkbox"
+          className="mx-5"
           checked={citychecked}
           onChange={handleCityCheck}
           name={'searchServiceProviderbyProfessioninProvinceCity'}
         />
         View Providers only in my city
       </label>
+      </Box>
  
       </Columns>
       </Container>

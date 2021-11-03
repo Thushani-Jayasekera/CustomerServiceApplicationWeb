@@ -180,6 +180,7 @@ const GET_PROVIDERS_BY_PROFESSION_IN_PROVINCE = gql`
       service_providing_status
       provider_rating
       provider_review_count
+      profile_url
     }
   }
 `;
