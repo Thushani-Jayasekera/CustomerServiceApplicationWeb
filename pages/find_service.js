@@ -70,6 +70,7 @@ const FindServicePage = ({ history }) => {
     { loading_mutation, error_mutation }
   ] = useMutation(CREATE_NEW_SR, {
     onCompleted: data => {
+      addToast('Successfully Created the request! Check status on profile', { appearance: 'success' });
       history.push('/');
     }
   });
@@ -213,7 +214,7 @@ const FindServicePage = ({ history }) => {
                 />
                 <Link
                   to={{
-                    pathname: `/profile`
+                    pathname: `/editProfile`
                   }}
                 >
                   <button tw="bg-white opacity-75 hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
@@ -305,7 +306,7 @@ const FindServicePage = ({ history }) => {
                 type="file"
                 onChange={e => setImage2(e.target.files[0])}
               ></input>
-              <button onClick={uploadImage2} color='red'><p>Click to <b>Upload</b> Selected</p></button>
+              <Button onClick={uploadImage2}>Click to Upload Selected</Button>
               
               </InputContainer>
               

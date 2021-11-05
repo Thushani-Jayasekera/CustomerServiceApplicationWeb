@@ -133,7 +133,7 @@ const Providers=({items, loading,searchTerm,me_id})=>{
                   <Column>
                     <CardImageContainer
                       imageSrc={
-                        card.image?card.image:`${profileImg}`
+                        card.profile_url?card.profile_url:`${profileImg}`
                       }
                     >
                       <CardRatingContainer>

@@ -26,12 +26,15 @@ const LittleContainer = styled.p`
   letter-spacing: 0.1rem;
   margin: 5px auto;
 `;
-const ComplaintContainer = styled.p`
+const ComplaintContainer = styled.div`
   display: grid;
   grid-template-columns: auto 1fr;
+
   column-gap: 2rem;
   align-items: center;
   margin-bottom: 1.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 const ComplaintText = styled.p`
   margin-bottom: 0;
@@ -43,7 +46,7 @@ const OuterContainer = styled.div`
   margin: 10px;
   padding: 10px;
   width: 100%;
-  height: 250px;
+  height: 275px;
   box-sizing: border-box;
 `;
 /*************************** End Styles *****************************/
