@@ -8,7 +8,7 @@ import "./conversation.css";
 const Conversation = ({conversation, currentUser}) => {
     
    console.log(conversation,currentUser);
-   nextid=conversation.members.find((m)=>m!==currentUser.id);
+   let nextid=conversation.members.find((m)=>m!==currentUser.id);
    if (nextid===null){
         nextid=currentUser.id;
    }
