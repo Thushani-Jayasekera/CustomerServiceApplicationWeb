@@ -40,6 +40,7 @@ const UPDATE_ME = gql`
     $updateMeCity: String
     $updateMeTown: String
     $updateMePostalCode: String
+    $updateMeProfileUrl:String  
   ) {
     updateMe(
       fullname: $updateMeFullname
@@ -50,6 +51,7 @@ const UPDATE_ME = gql`
       city: $updateMeCity
       town: $updateMeTown
       postalCode: $updateMePostalCode
+      profile_url: $updateMeProfileUrl  
     ) {
       id
       username
