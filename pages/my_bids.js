@@ -13,10 +13,13 @@ import { CHANGE_JOB_BID_STATE } from "../gql/mutation";
 import { useToasts } from "react-toast-notifications";
 TimeAgo.addDefaultLocale(en)
 const timeAgo = new TimeAgo('en-US')
-const MyBidsPage = ()=>{
+const MyBidsPage = ({history})=>{
   const get_green_button_text = (state)=>{
     if(state === "selected"){
       return "Complete Job"
+    }
+    else if(state === "paid"){
+      return "Add review"
     }
     else{
       return null
@@ -47,7 +50,15 @@ const MyBidsPage = ()=>{
           }
         }).then((data)=>console.log(data)).catch((error)=>console.log(error))
       }
-    }else{
+    }
+    else if(state ==="paid"){
+      return (event)=>{
+        event.preventDefault()
+        console.log("Clicked")
+        history.push("/providerReview/add/"+id)
+      }
+    }
+    else{
       return undefined
     }
   }

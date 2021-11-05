@@ -180,6 +180,7 @@ const GET_PROVIDERS_BY_PROFESSION_IN_PROVINCE = gql`
       service_providing_status
       provider_rating
       provider_review_count
+      profile_url
     }
   }
 `;
@@ -431,9 +432,10 @@ const GET_SR_BY_ID = gql`
       location
       requestReview
       requestReview
-      toDatePayment
+      finalAmount
       customerReview
       customerRating
+      hasPaid
     }
   }
 `;
@@ -457,9 +459,10 @@ const GET_ME_USER_BY_ID_SR_DETAILS = gql`
       location
       requestReview
       requestRating
-      toDatePayment
+      finalAmount
       customerReview
       customerRating
+      hasPaid
     }
     me {
       id
@@ -472,7 +475,28 @@ const GET_ME_USER_BY_ID_SR_DETAILS = gql`
     }
   }
 `;
-
+const GET_JOB_BID_BY_ID =  gql`
+    query Query($getJobBidByIdId: ID!) {
+        getJobBidById(id: $getJobBidByIdId) {
+            id
+            bidBy {
+                fullname
+                profession
+            }
+            jobPosting {
+                id
+                postedBy {
+                    id
+                    fullname
+                }
+            }
+            providerReview
+            providerRating
+            requesterReview
+            requesterRating
+        }
+    }
+`
 const GET_SERVICE_REQUESTS_OF_ME = gql`
   query Query {
     acceptedServiceRequestsbyMe {
@@ -751,54 +775,72 @@ const GET_USERS_BY_AC_STATE = gql`
   }
 `;
 
-const GET_MESGS_OF_CONV=gql`
-query Query($getNewMessagesConversationId2: ID) {
-  getNewMessages(conversationID: $getNewMessagesConversationId2) {
-    id
-    conversationID
-    text
-  sender
-    createdAt
+const GET_PROFILES = gql`
+  query Query {
+    takeServiceProviders {
+      id
+      email
+      nic
+      profession
+      fullname
+      username
+      contactNum
+      address
+      city
+      provider_rating
+      provider_review_count
+      profile_state
+    }
   }
-  me {
-    id
-    username
-    contactNum
-  }
-}
 `;
 
-const GET_CONVERSATIONS=gql`
-query Query {
-  conversationsOfUser {
-    id
-    members
-    createdAt
+const GET_MESGS_OF_CONV = gql`
+  query Query($getNewMessagesConversationId2: ID) {
+    getNewMessages(conversationID: $getNewMessagesConversationId2) {
+      id
+      conversationID
+      text
+      sender
+      createdAt
+    }
+    me {
+      id
+      username
+      contactNum
+    }
   }
-}
 `;
-const GET_USER_MSG_DETAILS=gql`
-query MessageQuery {
-  users {
-    id
-    username
-    email
-    contactNum
-  }
-  conversationsOfUser {
-    id
-    members
-    createdAt
-  }
-  me {
-    username
-    id
-    email
-    fullname
-    contactNum
-  }
-}
 
+const GET_CONVERSATIONS = gql`
+  query Query {
+    conversationsOfUser {
+      id
+      members
+      createdAt
+    }
+  }
+`;
+const GET_USER_MSG_DETAILS = gql`
+  query MessageQuery {
+    users {
+      id
+      username
+      email
+      contactNum
+    }
+    conversationsOfUser {
+      id
+      members
+      createdAt
+    }
+    me {
+      username
+      id
+      email
+      fullname
+      contactNum
+    }
+  }
 `;
 
 export {
@@ -832,7 +874,9 @@ export {
   GET_MY_JOB_POSTING_BIDS,
   GET_JOB_POSTING_STATE,
   GET_USERS_BY_AC_STATE,
+  GET_PROFILES,
   GET_USER_MSG_DETAILS,
   GET_CONVERSATIONS,
   GET_MESGS_OF_CONV,
+  GET_JOB_BID_BY_ID
 };

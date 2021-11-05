@@ -59,12 +59,14 @@ const UPDATE_ME = gql`
 `;
 const ADD_DETAILS = gql`
   mutation AddDetailsSR(
+    $registerServiceRequesterFullname: String!,
     $registerServiceRequesterContactNum: String!
     $registerServiceRequesterAddress: String!
     $registerServiceRequesterCity: String!
     $registerServiceRequesterPostalCode: String!
   ) {
     registerServiceRequester(
+      fullname: $registerServiceRequesterFullname
       contactNum: $registerServiceRequesterContactNum
       address: $registerServiceRequesterAddress
       city: $registerServiceRequesterCity
@@ -215,7 +217,7 @@ const REJECT_SR = gql`
 const COMPLETE_SR = gql`
   mutation CompleteServiceRequestMutation(
     $completeServiceRequestId: ID
-    $completeServiceRequestFinalAmount: Int
+    $completeServiceRequestFinalAmount: String
   ) {
     completeServiceRequest(
       id: $completeServiceRequestId
@@ -279,20 +281,26 @@ const EDIT_SR = gql`
   mutation EditServiceRequestMutation(
     $editServiceRequestTask: String!
     $editServiceRequestId: ID
-    $editServiceRequestImage1: String
-    $editServiceRequestImage2: String
-    $editServiceRequestImage3: String
+
   ) {
     editServiceRequest(
       id: $editServiceRequestId
       task: $editServiceRequestTask
-      image1: $editServiceRequestImage1
-      image2: $editServiceRequestImage2
-      image3: $editServiceRequestImage3
+
     ) {
       task
     }
   }
+`;
+
+const CONFIRM_CASH_PAYMENT= gql`
+
+mutation ConfirmCashPaymentMutation($confirmCashPaymentId: ID) {
+  confirmCashPayment(id: $confirmCashPaymentId) {
+    id
+    hasPaid
+  }
+}
 `;
 
 const FEEDBACK_SR = gql`
@@ -430,6 +438,18 @@ mutation NewConverstionMutation($newConverstionSenderId3: ID, $newConverstionRec
 }
 `;
 
+const ADD_REVIEW =  gql`
+    mutation Mutation($type: String, $addReviewToBidId: ID, $rating: Float, $review: String) {
+        addReviewToBid(type: $type, id: $addReviewToBidId, rating: $rating, review: $review) {
+            id
+            providerReview
+            providerRating
+            requesterReview
+            requesterRating
+        }
+    }
+`
+
 export {
   MAKE_ME_SERVICE_PROVIDER,
   ADD_DETAILS,
@@ -454,5 +474,7 @@ export {
   REMOVE_SERVICE_PROVIDER,
   CHANGE_JOB_BID_STATE,
   SEND_NEW_MESSAGE,
-  ADD_NEW_CONVERSATION
+  ADD_NEW_CONVERSATION,
+  ADD_REVIEW,
+  CONFIRM_CASH_PAYMENT
 };

@@ -24,7 +24,7 @@ const MessageBox = ({conversation, currentUser}) => {
     
     return(
         
-            <div >
+            < >
                 
                 {data.getNewMessages.map(m=>(
                     <>
@@ -33,7 +33,7 @@ const MessageBox = ({conversation, currentUser}) => {
                     </>
                 ))}
                 
-            </div>
+            </>
         
     )
 

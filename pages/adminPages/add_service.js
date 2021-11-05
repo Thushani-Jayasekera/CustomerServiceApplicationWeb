@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { CREATE_SERVICE } from '../../gql/mutation';
 import Layout from '../../components/Layout';
-import AdminNavbar from '../../components/AdminNavbar';
+import AdminNavbar from '../../components/adminComponents/AdminNavbar';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 import { gql, useMutation } from '@apollo/client';

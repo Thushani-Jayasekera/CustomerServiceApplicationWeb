@@ -4,7 +4,7 @@ import { format, render, cancel, register } from 'timeago.js';
 import './message.css';
 
 const Message = ({ message, own, conversation }) => {
-  console.log('message');
+  console.log('message js');
 
   return (
     <div>

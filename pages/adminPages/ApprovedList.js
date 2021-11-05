@@ -4,77 +4,146 @@ import { useQuery, useMutation } from '@apollo/client';
 import { GET_USERS_BY_AC_STATE } from '../../gql/query';
 import { SET_ACCOUNT_STATE, REMOVE_SERVICE_PROVIDER } from '../../gql/mutation';
 import { useToasts } from 'react-toast-notifications';
-import userImage from '../../images/user.png';
+import userImage from '../../images/user.jpg';
 import styled from 'styled-components';
 
 /*************************** Styles *****************************/
 const OuterContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   background-color: white;
-  margin: 10px;
-  height: 8vh;
+  box-shadow: black;
+  margin: 8px;
   width: 100%;
   box-sizing: border-box;
-  @media screen and (max-width: 1000px) {
-    flex-direction: column;
-    height: 20vh;
+  @media screen and (min-width: 720px) {
+    flex-direction: row;
+    justify-content: flex-start;
   }
 `;
 
 const LeftContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  flex-direction: column;
   align-items: center;
-  background-color: white;
-  flex: 1 0 auto;
-  width: 60%;
-  height: 100%;
-  @media (max-width: 990px) {
-    flex-direction: column;
+  width: 100%;
+  @media screen and (min-width: 720px) {
+    flex-direction: row;
+    width: 8%;
+    height: 60px;
   }
 `;
 
-const RightContainer = styled.div`
+const DetailsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
+  flex-direction: row;
+  justify-content: center;
   background-color: white;
-  flex: 1 0 auto;
-  width: 40%;
-  height: 100%;
-  @media (max-width: 990px) {
-    flex-direction: column;
-  }
-`;
-
-const ImageContainer = styled.div`
-  height: 100%;
-  @media (max-width: 990px) {
-    height: 30%;
-  }
-`;
-
-const Image = styled.img`
-  display: block;
-  height: 100%;
-  @media (max-width: 1070px) {
-    height: 100%;
-    width: 100%;
+  align-items: center;
+  width: 100%;
+  border-bottom: 0.5px dotted hsl(210, 22%, 49%);
+  @media screen and (min-width: 720px) {
+    flex-direction: row;
+    width: 49%;
+    border-bottom: 0px;
   }
 `;
 
 const UserName = styled.div`
-  width: 30%;
+  font-size: 0.875rem;
+  text-align: center;
+  letter-spacing: 0.1rem;
+  text-transform: capitalize;
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
+  width: 40%;
+  @media screen and (min-width: 720px) {
+    font-size: 1rem;
+    line-height: 1;
+  }
 `;
 
 const Profession = styled.div`
-  width: 30%;
+  font-size: 0.875rem;
+  text-align: center;
+  letter-spacing: 0.1rem;
+  text-transform: capitalize;
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
+  color: #c59d5f;
+  width: 40%;
+  @media screen and (min-width: 720px) {
+    font-size: 1rem;
+    line-height: 1;
+  }
 `;
+
+const ButtonContainer = styled.div`
+  background-color: white;
+  overflow: hidden;
+  width: 60%;
+  background-color: white;
+  @media screen and (min-width: 720px) {
+    width: 43%;
+  }
+`;
+
+const Button = styled.button`
+  height: 100%;
+  width: 100%;
+  margin-top: 0.5rem;
+  background: #2caeba;
+  color: hsl(185, 94%, 87%);
+  padding: 0.25rem 0.5rem;
+  text-transform: capitalize;
+  border-radius: 0.25rem;
+  transition: all 0.3s linear;
+  border-color: transparent;
+  cursor: pointer;
+  :hover {
+    background: hsl(184, 80%, 74%);
+    color: hsl(184, 91%, 17%);
+  }
+  @media screen and (min-width: 720px) {
+    width: 30%;
+    margin: 3px;
+  }
+`;
+
+const ImageContainer = styled.div`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 0 auto;
+  margin-bottom: 1.5rem;
+  @media screen and (min-width: 720px) {
+    width: 60px;
+    height: 100%;
+    border-radius: 0;
+    margin: 0;
+  }
+`;
+
+const Image = styled.img`
+  width: 100%;
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  @media screen and (min-width: 720px) {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+`;
+
+/*************************** End of Styles *****************************/
+
 function ApprovedList() {
   const [approvedList, setApprovedList] = useState([]);
 
@@ -141,56 +210,28 @@ function ApprovedList() {
                 <ImageContainer>
                   <Image src={userImage} alt="" />
                 </ImageContainer>
+              </LeftContainer>
+              <DetailsContainer>
                 <UserName>
                   <h3 style={{}}>{username}</h3>
                 </UserName>
                 <Profession>
                   <h3 style={{}}>{profession}</h3>
                 </Profession>
-              </LeftContainer>
-              <RightContainer>
+              </DetailsContainer>
+              <ButtonContainer>
                 <Link
                   to={{
                     pathname: `/viewServiceProvider/${id}`,
                     state: { users: user }
                   }}
                 >
-                  <button
-                    style={{
-                      backgroundColor: 'yellow',
-                      display: 'block',
-                      width: '100px',
-                      padding: '5px 20px'
-                    }}
-                  >
-                    Visit
-                  </button>
+                  <Button>Visit</Button>
                 </Link>
 
-                <button
-                  onClick={() => Suspend(id)}
-                  style={{
-                    backgroundColor: '#22d72e',
-                    width: '100px',
-                    display: 'block',
-                    padding: '5px 20px'
-                  }}
-                >
-                  Suspend
-                </button>
-                <button
-                  onClick={() => RemoveProfile(id)}
-                  style={{
-                    backgroundColor: 'Red',
-                    width: '100px',
-                    color: 'white',
-                    display: 'block',
-                    padding: '5px 20px'
-                  }}
-                >
-                  Delete
-                </button>
-              </RightContainer>
+                <Button onClick={() => Suspend(id)}>Suspend</Button>
+                <Button onClick={() => RemoveProfile(id)}>Delete</Button>
+              </ButtonContainer>
             </OuterContainer>
           );
         })}

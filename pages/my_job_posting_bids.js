@@ -136,6 +136,23 @@ const MyJobPostingBidsPage = ({match,history})=>{
               })
             )
           }
+          {
+            jobPostingQuery.data.jobPosting.state ==="completed" && (
+             jobBidQuery.data.getMyJobPostingBids.map((obj,index)=>{
+               if(obj.state==="paid"){
+                 return (
+                     <LargeTileCenter key={index} top_left={obj.proposedAmount} top_middle={obj.bidBy.fullname}
+                                         top_right={obj.bidBy.provider_rating} center_middle={obj.detailedBreakdown}
+                                         bottom_left={new Date(obj.proposedDate).toLocaleString()}
+                                         bottom_right={timeAgo.format(new Date(obj.updatedAt))}
+                                         green_button_text={"Add review"}
+                                         green_button_fn={(event)=>{history.push("/requesterReview/add/"+obj.id)}}
+                                         extra={`State of the bid is  ${obj.state}`} />
+                 )
+               }
+             })
+            )
+          }
         </Section>
 
       </Container>

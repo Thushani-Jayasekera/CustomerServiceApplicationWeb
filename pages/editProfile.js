@@ -9,9 +9,12 @@ import Loader from "../components/utils/Loader";
 import { handleChangefn } from "../utils";
 import { UPDATE_ME } from "../gql/mutation";
 import { useToasts } from "react-toast-notifications";
+import { Widget, WidgetLoader } from "react-cloudinary-upload-widget";
+import UploadWidget from "../components/utils/UploadWidget";
 
 const EditProfilePage = ({history})=>{
   const [values,setValues] = useState({})
+  const [image,setImage] = useState({})
   const {addToast} = useToasts()
   const meQuery = useQuery(GET_ME,{
     onCompleted:(data)=>{
@@ -34,10 +37,24 @@ const EditProfilePage = ({history})=>{
     }
   })
   const handleSubmit = (event)=>{
+    const formData = new FormData()
+    formData.append("file",image)
+    formData.append("upload_preset","huhs8y0f")
+    formData.append("cloud_name","ded0k5ukr")
     event.preventDefault()
-    updateMe({
-     variables:values
+    fetch("https://api.cloudinary.com/v1_1/ded0k5ukr/upload",{
+      method:"post",
+      body:formData
+    }).then((resp)=>{
+      resp.json().then(data=>{
+
+      })
+    }).catch((err)=>{
+      console.log(err)
     })
+    // updateMe({
+    //  variables:values
+    // })
   }
   const handleChange = handleChangefn(setValues,values)
   if(meQuery.loading) return <Loader/>
@@ -129,6 +146,9 @@ const EditProfilePage = ({history})=>{
               </Form.Control>
             </Form.Field>
           </form>
+        </Section>
+        <Section>
+          <Form.InputFile inputProps={{"accept":"image/*"}} onChange={(event)=>setImage(event.target.files[0])} />
         </Section>
       </Container>
     </Layout>
