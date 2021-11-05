@@ -8,6 +8,7 @@ import profileImg from "../images/profile.png"
 import Layout from "../components/Layout";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
+import ReactStars from "react-rating-stars-component/dist/react-stars";
 const CommonProfilePage = ()=>{
   const meQuery = useQuery(GET_ME,{
       fetchPolicy:"cache-and-network"
@@ -40,7 +41,7 @@ const CommonProfilePage = ()=>{
             <Columns.Column>
               <Level>
                 <Level.Item>
-                  <img src={profileImg} width={"256px"} />
+                  <img crossOrigin={"anonymous"} src={meQuery.data.me.profile_url || profileImg} width={"256px"} />
                 </Level.Item>
               </Level>
               <Level>
@@ -120,8 +121,23 @@ const CommonProfilePage = ()=>{
                   </Level.Item>
                 </Level.Side>
               </Level>
-              <Level>
+              <Block  textSize={3}>
                 Rating Area
+              </Block>
+              <Level>
+                <Level.Side align={"left"} textWeight={"bold"}>
+                  Rating as a provider:
+                </Level.Side>
+                <Level.Side align={"right"}>
+                  <Level.Item>
+                    {
+                      (meQuery.data.me.rating && meQuery.data.me.rating.providerRating > 0) && (
+                        <ReactStars edit={false} value={meQuery.data.me.rating.providerRating} count={5} size={36} />
+                      )
+                    }
+
+                  </Level.Item>
+                </Level.Side>
               </Level>
               <Level>
                 Send message

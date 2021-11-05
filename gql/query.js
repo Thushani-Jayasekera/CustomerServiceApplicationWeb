@@ -24,6 +24,11 @@ const GET_ME = gql`
       service_providing_status
       roles
       postalCode
+      profile_url  
+      rating{
+          providerRating
+          requesterRating
+      }  
     }
   }
 `;

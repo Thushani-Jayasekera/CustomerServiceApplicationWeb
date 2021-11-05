@@ -14,6 +14,7 @@ const ServiceProviderRoute = ({ component: Component, ...rest }) => {
       {...rest}
       render={props => {
         if(error){
+          console.log(error)
           return(<Redirect
             to={{
               pathname: '/login',
