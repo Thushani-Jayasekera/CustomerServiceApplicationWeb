@@ -127,7 +127,7 @@ const SelectOptionPage = ({ history }) => {
   const  heading = 'Explore Service Providers';
   const items = data.searchServiceProviderbyProfessioninProvince;
 
-  const MIN_DISTANCE=7;
+  const MIN_DISTANCE=3;
   
   console.log(items);
 
