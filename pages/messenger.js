@@ -66,7 +66,7 @@ const MeesengerPage = () => {
   const conversations = data.conversationsOfUser;
   const allUsers = data.users;
   console.log(currentChat);
-  const MIN_DISTANCE = 7;
+  const MIN_DISTANCE = 3;
 
   const sendMessage = e => {
     //e.preventDefault();

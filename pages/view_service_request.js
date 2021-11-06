@@ -107,6 +107,7 @@ const ViewServiceRequestPage = () => {
   //const [user,setUser]=useState({});
 
   const now = new Date();
+
   now.setMinutes(now.getMinutes() + 25);
   console.log(now);
   const { data, loading, error, refetch, networkStatus } = useQuery(
@@ -119,6 +120,19 @@ const ViewServiceRequestPage = () => {
     }
   );
 
+
+
+  let dd = now.getDate();
+  let mm = now.getMonth() + 1; //January is 0 so need to add 1 to make it 1!
+  const yyyy = now.getFullYear();
+  if (dd < 10) {
+    dd = '0' + dd;
+  }
+  if (mm < 10) {
+    mm = '0' + mm;
+  }
+
+  const todayMin = yyyy + '-' + mm + '-' + dd;
   //console.log(data_provider);
 
   const { addToast } = useToasts();
@@ -133,6 +147,7 @@ const ViewServiceRequestPage = () => {
           renderView: 0
         });
         history.push(`/service_request/${id}`);
+        location.reload();
       },
       onError: error => {
         addToast('Failed ', { appearance: 'error' });
@@ -151,6 +166,7 @@ const ViewServiceRequestPage = () => {
           renderView: 0
         });
         history.push(`/service_request/${id}`);
+        location.reload();
       },
       onError: error => {
         addToast('Failed ', { appearance: 'error' });
@@ -169,6 +185,7 @@ const ViewServiceRequestPage = () => {
           renderView: 0
         });
         history.push(`/service_request/${id}`);
+        location.reload();
       },
       onError: error => {
         addToast('Failed ', { appearance: 'error' });
@@ -187,6 +204,7 @@ const ViewServiceRequestPage = () => {
           renderView: 0
         });
         history.push(`/service_request/${id}`);
+        location.reload();
       },
       onError: error => {
         addToast('Failed ', { appearance: 'error' });
@@ -206,6 +224,7 @@ const ViewServiceRequestPage = () => {
       });
 
       history.push(`/service_request/${id}`);
+      location.reload();
     },
     onError: error => {
       console.log(error);
@@ -224,6 +243,7 @@ const ViewServiceRequestPage = () => {
           renderView: 0
         });
         history.push(`/service_request/${id}`);
+        location.reload();
       },
       onError: error => {
         addToast('Failed ', { appearance: 'error' });
@@ -242,6 +262,7 @@ const ViewServiceRequestPage = () => {
         renderView: 0
       });
       history.push(`/service_request/${id}`);
+      location.reload();
     },
     onError: error => {
       addToast('Failed ', { appearance: 'error' });
@@ -257,6 +278,7 @@ const ViewServiceRequestPage = () => {
           renderView: 0
         });
         history.push(`/service_request/${id}`);
+        location.reload();
       },
       onError: error => {
         addToast('Failed ', { appearance: 'error' });
@@ -303,7 +325,7 @@ const ViewServiceRequestPage = () => {
   });
 
   //const providerDetails=data_provider.getUserbyId;
-  if (networkStatus === NetworkStatus.refetch) return 'Refetching!';
+  if (networkStatus === NetworkStatus.refetch) return <Loader />;
   if (loading) return <Loader />;
 
   const data_serviceRequest = data;
@@ -1184,6 +1206,7 @@ const ViewServiceRequestPage = () => {
                           placeholder="E.g. john@mail.com"
                           onChange={handleChange}
                           required
+                          min={todayMin}
                         />
                       </InputContainer>
 
@@ -1316,6 +1339,7 @@ const ViewServiceRequestPage = () => {
                           placeholder="E.g. Details about the service request"
                           onChange={handleChange}
                           required
+                          
                         />
                       </InputContainer>
 

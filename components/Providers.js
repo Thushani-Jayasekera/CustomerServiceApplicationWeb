@@ -89,7 +89,7 @@ const CardReview = tw.div`font-medium text-xs text-gray-600`;
 const CardText = tw.div`p-4 text-gray-900`;
 const CardTitle = tw.h5`text-lg font-semibold group-hover:text-primary-500`;
 const CardContent = tw.p`mt-1 text-sm font-medium text-gray-600`;
-const MIN_DISTANCE=4;
+const MIN_DISTANCE=2;
 
 
 
@@ -160,7 +160,7 @@ const Providers=({items, loading,searchTerm,me_id})=>{
                   <Column>
                   <Link
                         to={{
-                          pathname: `/profile`
+                          pathname: `/user/${card.id}`
                         }}
                       >
                       <CardButton className="button is-info px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5 ">
