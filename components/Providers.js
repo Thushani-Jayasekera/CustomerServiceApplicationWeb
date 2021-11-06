@@ -160,7 +160,7 @@ const Providers=({items, loading,searchTerm,me_id})=>{
                   <Column>
                   <Link
                         to={{
-                          pathname: `/profile`
+                          pathname: `/user/${card.id}`
                         }}
                       >
                       <CardButton className="button is-info px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5 ">

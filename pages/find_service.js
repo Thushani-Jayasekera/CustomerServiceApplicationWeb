@@ -226,7 +226,7 @@ const FindServicePage = ({ history }) => {
               <TwoColumn>
                 <Column>
                   <InputContainer>
-                    <Label htmlFor="min-input">Price Range</Label>
+                    <Label htmlFor="min-input">Price Range (LKR)</Label>
                     <Input
                       id="min-input"
                       type="text"

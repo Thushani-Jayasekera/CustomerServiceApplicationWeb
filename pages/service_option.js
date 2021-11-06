@@ -119,7 +119,7 @@ const SelectOptionPage = ({ history }) => {
   );
 
   const meQuery=useQuery(GET_ME);
-  if(networkStatus===NetworkStatus.refetch) return 'Refetching...'
+  if(networkStatus===NetworkStatus.refetch) return <Loader />;
   if (loading||meQuery.loading) return <Loader />;
 
   const me_id=meQuery.data.me.id
