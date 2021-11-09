@@ -9,7 +9,7 @@ import {
   Section
 } from 'react-bulma-components';
 import { MapPin } from 'react-feather';
-import profileImg from '../../images/profile.png';
+import profileImg from '../../images/user.jpg';
 import Layout from '../Layout';
 import Header from '../Header';
 

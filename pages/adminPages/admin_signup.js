@@ -11,11 +11,13 @@ const SIGNUP_ADMIN = gql`
     $adminSignUpUsername: String!
     $adminSignUpEmail: String!
     $adminSignUpPassword: String!
+    $adminSignUpSecurityKey: String!
   ) {
     adminSignUp(
       username: $adminSignUpUsername
       email: $adminSignUpEmail
       password: $adminSignUpPassword
+      securityKey: $adminSignUpSecurityKey
     )
   }
 `;
@@ -129,12 +131,16 @@ const AdminSignUp = props => {
   };
 
   const client = useApolloClient();
+
   const [adminSignUp, { loading, error }] = useMutation(SIGNUP_ADMIN, {
     onCompleted: data => {
       console.log(data.adminSignUp);
       localStorage.setItem('token', data.adminSignUp);
       client.writeData({ data: { isLoggedIn: true } });
       props.history.push('/adminHome');
+    },
+    onError: error => {
+      addToast(error.message.substring(15), { appearance: 'error' });
     }
   });
 
@@ -170,7 +176,7 @@ const AdminSignUp = props => {
             <Input
               type="text"
               name={'adminSignUpUsername'}
-              placeholder="User Name"
+              placeholder="Full Name"
               onChange={handleChange}
             />
             <Input
@@ -183,6 +189,12 @@ const AdminSignUp = props => {
               type="password"
               name={'adminSignUpPassword'}
               placeholder="Password"
+              onChange={handleChange}
+            />
+            <Input
+              type="password"
+              name={'adminSignUpSecurityKey'}
+              placeholder="Security Key"
               onChange={handleChange}
             />
             <Button type="submit">Sign Up</Button>

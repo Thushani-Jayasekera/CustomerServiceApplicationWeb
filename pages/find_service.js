@@ -63,6 +63,7 @@ const FindServicePage = ({ history }) => {
   const [values, setValues] = useState({
     createServiceRequestProviderId: provider_id
   });
+  const [errors,setErrors]=useState({maxprice:''})
   console.log(values);
   const { loading, error, data } = useQuery(GET_ME_AS_SERVICE_REQUESTER);
   const [
@@ -71,17 +72,30 @@ const FindServicePage = ({ history }) => {
   ] = useMutation(CREATE_NEW_SR, {
     onCompleted: data => {
       addToast('Successfully Created the request! Check status on profile', { appearance: 'success' });
-      history.push('/');
+      history.push(`/hireNow/${provider_id}`);
     }
   });
   if (loading) {
     return <Loader />;
   }
+  
   const handleChange = event => {
     setValues({
       ...values,
       [event.target.name]: event.target.value
     });
+
+    switch (event.target.name) {
+      case 'createServiceRequestMaxPrice': 
+   
+         parseInt(event.target.value) < parseInt(values.createServiceRequestMinPrice)
+            ? errors.maxprice='Max price should be higher than min price'
+            :errors.maxprice= ''
+        break;
+     
+
+
+  };
   };
 
   const today = new Date();
@@ -96,7 +110,7 @@ const FindServicePage = ({ history }) => {
   }
 
   const todayMin = yyyy + '-' + mm + '-' + dd;
-
+  
 
   const uploadImage = e => {
     e.preventDefault();
@@ -224,9 +238,12 @@ const FindServicePage = ({ history }) => {
               </InputContainer>
 
               <TwoColumn>
+            
                 <Column>
+
                   <InputContainer>
-                    <Label htmlFor="min-input">Price Range</Label>
+                    <Label htmlFor="min-input">Price Range (LKR)</Label>
+                    
                     <Input
                       id="min-input"
                       type="text"
@@ -243,6 +260,7 @@ const FindServicePage = ({ history }) => {
                 </Column>
                 <Column>
                   <InputContainer>
+                  
                     <Input
                       id="max-input"
                       type="text"
@@ -258,6 +276,7 @@ const FindServicePage = ({ history }) => {
                   </InputContainer>
                 </Column>
               </TwoColumn>
+              <p  tw="font-sans text-base text-pink-600 ">{errors.maxprice}</p>
 
               <InputContainer tw="flex-1">
                 <Label htmlFor="method-input">Payment Method</Label>
@@ -313,7 +332,7 @@ const FindServicePage = ({ history }) => {
 
               {uploading?<SubmitButton type="submit" value="Submit" disabled={true}>
                 Please wait..
-              </SubmitButton>:<SubmitButton type="submit" value="Submit" disabled={uploading}>
+              </SubmitButton>:<SubmitButton type="submit" value="Submit" disabled={uploading||errors.maxprice!==''}>
                 Submit
               </SubmitButton>}
 

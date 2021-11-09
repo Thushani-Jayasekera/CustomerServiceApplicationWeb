@@ -68,6 +68,20 @@ const useStyles = makeStyles(theme => ({
   appbar: {
     backgroundColor: '#6147E0',
     color: '#222'
+  },
+  tabs: {
+    backgroundColor: '#2E126D',
+    fontFamily: 'SFProDisplay',
+    fontSize: '1.5rem',
+    letterSpacing: '2px',
+    color: '#fff',
+    '&:hover': {
+      color: '#fff'
+    }
+  },
+  tabsContent: {
+    minHeight: '70vh',
+    backgroundColor: '#2E126D'
   }
 }));
 
@@ -92,30 +106,36 @@ function UserManage() {
                 aria-label="nav tabs example"
               >
                 <LinkTab
-                  label="New Profiles"
-                  href="/drafts"
-                  {...a11yProps(0)}
-                />
-                <LinkTab
-                  label="Suspended Profiles"
-                  href="/trash"
-                  {...a11yProps(1)}
-                />
-                <LinkTab
+                  className={classes.tabs}
                   label="Approved Profiles"
                   href="/spam"
                   {...a11yProps(2)}
                 />
+                <LinkTab
+                  className={classes.tabs}
+                  label="Suspended Profiles"
+                  href="/trash"
+                  {...a11yProps(1)}
+                />
+
+                <LinkTab
+                  className={classes.tabs}
+                  label="New Profiles"
+                  href="/drafts"
+                  {...a11yProps(0)}
+                />
               </Tabs>
             </AppBar>
-            <TabPanel value={value} index={0}>
-              <NewProfileList />
+            <TabPanel className={classes.tabsContent} value={value} index={0}>
+              <ApprovedList />
             </TabPanel>
-            <TabPanel value={value} index={1}>
+
+            <TabPanel className={classes.tabsContent} value={value} index={1}>
               <SuspendedList />
             </TabPanel>
-            <TabPanel value={value} index={2}>
-              <ApprovedList />
+
+            <TabPanel className={classes.tabsContent} value={value} index={2}>
+              <NewProfileList />
             </TabPanel>
           </div>
         </Content>
