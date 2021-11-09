@@ -15,6 +15,7 @@ import UploadWidget from "../components/utils/UploadWidget";
 const EditProfilePage = ({history})=>{
   const [values,setValues] = useState({})
   const [image,setImage] = useState({})
+  const [imgPresent,setImagePresent] = useState(false)
   const {addToast} = useToasts()
   const meQuery = useQuery(GET_ME,{
     onCompleted:(data)=>{
@@ -26,7 +27,8 @@ const EditProfilePage = ({history})=>{
         updateMeProvince: data.me.province,
         updateMeCity: data.me.city,
         updateMeTown: data.me.town,
-        updateMePostalCode: data.me.postalCode
+        updateMePostalCode: data.me.postalCode,
+        updateMeProfileUrl:data.me.profile_url
       })
     }
   })
@@ -37,24 +39,40 @@ const EditProfilePage = ({history})=>{
     }
   })
   const handleSubmit = (event)=>{
-    const formData = new FormData()
-    formData.append("file",image)
-    formData.append("upload_preset","huhs8y0f")
-    formData.append("cloud_name","ded0k5ukr")
     event.preventDefault()
-    fetch("https://api.cloudinary.com/v1_1/ded0k5ukr/upload",{
-      method:"post",
-      body:formData
-    }).then((resp)=>{
-      resp.json().then(data=>{
-
+    if(imgPresent){
+      console.log(image)
+      const formData = new FormData()
+      formData.append("file",image)
+      formData.append("upload_preset","huhs8y0f")
+      formData.append("cloud_name","ded0k5ukr")
+      event.preventDefault()
+      fetch("https://api.cloudinary.com/v1_1/ded0k5ukr/upload",{
+        method:"post",
+        body:formData
+      }).then((resp)=>{
+        resp.json().then(data=>{
+          console.log(data.url)
+          updateMe({
+            variables:{
+              ...values,
+              updateMeProfileUrl:data.url
+            }
+          })
+        })
+      }).catch((err)=>{
+        addToast("Image upload error",{appearance:"error"})
+        console.log(err)
       })
-    }).catch((err)=>{
-      console.log(err)
-    })
-    // updateMe({
-    //  variables:values
-    // })
+    }else{
+      updateMe({
+        variables:{
+          ...values
+        }
+      })
+    }
+
+
   }
   const handleChange = handleChangefn(setValues,values)
   if(meQuery.loading) return <Loader/>
@@ -64,7 +82,7 @@ const EditProfilePage = ({history})=>{
       <Container>
         <Section>
           <Content>
-            <h1>Edit profile page</h1>
+            <h1>Edit profile page </h1>
           </Content>
         </Section>
         <Section>
@@ -133,6 +151,14 @@ const EditProfilePage = ({history})=>{
                 <Form.Input type={"text"} name={"updateMePostalCode"} value={values.updateMePostalCode || ""} onChange={handleChange} />
               </Form.Control>
             </Form.Field>
+            <Form.Field>
+              <Form.Label>
+                Profile image (optional, .png,.jpg,.bmp accepted)
+              </Form.Label>
+              <Form.Control>
+                <Form.InputFile inputProps={{"accept":"image/*"}} onChange={(event)=>{setImage(event.target.files[0]);setImagePresent(true)}} />
+              </Form.Control>
+            </Form.Field>
             <Form.Field kind="group">
               <Form.Control>
                 <Button color="success" type={"submit"}>Update</Button>
@@ -146,9 +172,6 @@ const EditProfilePage = ({history})=>{
               </Form.Control>
             </Form.Field>
           </form>
-        </Section>
-        <Section>
-          <Form.InputFile inputProps={{"accept":"image/*"}} onChange={(event)=>setImage(event.target.files[0])} />
         </Section>
       </Container>
     </Layout>

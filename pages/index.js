@@ -42,6 +42,7 @@ import PaymentSuccessPage from './payment/paymentSuccess';
 import MessengerPage from './messenger';
 import Messenger2Page from "./messenger_2";
 import ReviewPage from "./review";
+import ViewProfilePage from "./viewProfile";
 
 const Pages = () => {
   return (
@@ -93,6 +94,7 @@ const Pages = () => {
         component={ServiceProviderRegisterPage}
       />
       <LoggedInRoute exact path={'/profile'} component={CommonProfilePage} />
+      <LoggedInRoute exact path={'/user/:id'} component={ViewProfilePage}/>
 
       <ServiceProviderRoute
         exact

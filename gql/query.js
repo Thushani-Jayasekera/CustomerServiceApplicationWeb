@@ -24,6 +24,11 @@ const GET_ME = gql`
       service_providing_status
       roles
       postalCode
+      profile_url  
+      rating{
+          providerRating
+          requesterRating
+      }  
     }
   }
 `;
@@ -408,8 +413,18 @@ const GET_USER_BY_ID = gql`
       username
       roles
       service_providing_status
+      profession
+      town
       city
       postalCode
+      profile_url
+      fullname
+      bio
+      provider_rating
+      contactNum
+      email
+      address
+
     }
   }
 `;
@@ -843,6 +858,50 @@ const GET_USER_MSG_DETAILS = gql`
   }
 `;
 
+const GET_REVIEWED_REQ_OF_PROVIDER=gql`
+query Query($getReviewedRequestsofUserId: ID) {
+  getReviewedRequestsofUser(id: $getReviewedRequestsofUserId) {
+    id
+    date
+    time
+    requestRating
+    requestReview
+    finalAmount
+  }
+}
+`;
+
+const GET_USER_WITH_REVIEWS=gql`
+query Query($getUserbyIdId4: ID!, $getReviewedRequestsofUserId2: ID) {
+  getUserbyId(id: $getUserbyIdId4) {
+          id
+      username
+      roles
+      service_providing_status
+      profession
+      town
+      city
+      postalCode
+      profile_url
+      fullname
+      bio
+      provider_rating
+      contactNum
+      email
+      address
+  }
+  getReviewedRequestsofUser(id: $getReviewedRequestsofUserId2) {
+    id
+    date
+    task
+    requestRating
+    requestReview
+    finalAmount
+    state
+  }
+}
+`;
+
 export {
   IS_LOGGED_IN,
   GET_ME,
@@ -878,5 +937,7 @@ export {
   GET_USER_MSG_DETAILS,
   GET_CONVERSATIONS,
   GET_MESGS_OF_CONV,
-  GET_JOB_BID_BY_ID
+  GET_JOB_BID_BY_ID,
+  GET_REVIEWED_REQ_OF_PROVIDER,
+  GET_USER_WITH_REVIEWS
 };

@@ -17,12 +17,18 @@ type BudgetRange {
 }
 
 type Complaint {
-    complainer: ID
+    complainer: User
     complaint: String!
     createdAt: DateTime!
     id: ID!
     title: String
     victim: String
+}
+
+type Conversation {
+    createdAt: DateTime
+    id: ID
+    members: [ID]
 }
 
 type JobBid {
@@ -32,6 +38,10 @@ type JobBid {
     jobPosting: JobPosting
     proposedAmount: Float!
     proposedDate: DateTime!
+    providerRating: Float
+    providerReview: String
+    requesterRating: Float
+    requesterReview: String
     state: String
     updatedAt: DateTime
 }
@@ -61,9 +71,17 @@ type Location {
     town: String!
 }
 
+type Message {
+    body: String
+    from: String
+    to: String!
+}
+
 type Mutation {
     acceptJobBid(jobBidId: ID!, jobPostingId: ID!): JobBid!
     acceptServiceRequest(estimate: String, id: ID): ServiceRequest!
+    addMessage(conversationID: ID, sender: ID, text: String): NewMessage
+    addReviewToBid(id: ID, rating: Float, review: String, type: String): JobBid
     adminSignIn(email: String!, password: String!): String!
     adminSignUp(email: String!, password: String!, username: String!): String!
     approveServiceProvider(provider_id: ID): User!
@@ -80,16 +98,27 @@ type Mutation {
     feedbackServiceRequest(id: ID, requestRating: Int, requestReview: String): ServiceRequest!
     makeComplaint(complainer: ID, complaint: String, title: String, victim: String): Complaint!
     makeMeServiceProvider(address: String!, bio: String, city: String!, contactNumber: String!, fullname: String!, nic: String!, profession: String!, province: String!, town: String!): User!
+    newConverstion(recieverID: ID, senderID: ID): Conversation
     registerServiceRequester(address: String!, city: String!, contactNum: String!, postalCode: String!): User!
     rejectJobBid(jobBidId: ID!): JobBid
     rejectServiceRequest(id: ID): ServiceRequest!
+    removeServiceProvider(id: ID): Boolean!
     rescheduleServiceRequest(date: String!, id: ID, time: String!): ServiceRequest!
+    sendMessage(body: String, from: String, to: String): Message
     setProfileState(providerID: ID, state: String): User!
     signIn(email: String!, password: String!): String!
     signUp(email: String!, password: String!, username: String!): String!
     startServiceRequest(estimate: String, id: ID): ServiceRequest!
     suspendServiceProvider(provider_id: ID): User!
-    updateMe(address: String, city: String, contactNum: String, fullname: String, postalCode: String, profession: String, province: String, town: String): User
+    updateMe(address: String, city: String, contactNum: String, fullname: String, postalCode: String, profession: String, profile_url: String, province: String, town: String): User
+}
+
+type NewMessage {
+    conversationID: ID
+    createdAt: DateTime
+    id: ID
+    sender: ID
+    text: String
 }
 
 type Query {
@@ -99,9 +128,12 @@ type Query {
     canceledServiceRequestsbyMe: [ServiceRequest!]
     completedServiceRequestsForMe: [ServiceRequest!]
     completedServiceRequestsbyMe: [ServiceRequest!]
+    conversationsOfUser: [Conversation]
+    getJobBidById(id: ID!): JobBid!
     getMyBids(state: String): [JobBid]
     getMyJobPostingBids(id: ID!): [JobBid]
     getMyJobPostings(state: String!): [JobPosting]
+    getNewMessages(conversationID: ID): [NewMessage]
     getServiceRequestByID(id: ID!): ServiceRequest!
     getUserbyId(id: ID!): User!
     jobPosting(id: ID!): JobPosting!
@@ -119,12 +151,18 @@ type Query {
     searchServiceProviderbyProfessioninProvince(city: String, profession: String!, province: String, rating: String): [User!]!
     startedServiceRequestsForMe: [ServiceRequest!]
     startedServiceRequestsbyMe: [ServiceRequest!]
+    takeServiceProviders: [User!]!
     takeUsers(accountState: String!): [User!]!
     users: [User!]!
     viewAllComplaints: [Complaint!]!
     viewAllServiceProviders: [User!]!
     viewAllServiceTypes: [Service]
     viewAllServices: [Service!]!
+}
+
+type Rating {
+    providerRating: Float
+    requesterRating: Float
 }
 
 type Service {
@@ -170,9 +208,11 @@ type User {
     postalCode: String
     profession: String
     profile_state: String
+    profile_url: String
     provider_rating: String
     provider_review_count: String
     province: String
+    rating: Rating
     requester_rating: String
     roles: [String]
     service_providing_status: Boolean
