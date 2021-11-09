@@ -57,7 +57,7 @@ const DetailsContainer = styled.div`
 const UserName = styled.div`
   font-size: 0.875rem;
   text-align: center;
-  letter-spacing: 0.1rem;
+
   text-transform: capitalize;
   line-height: 1.25;
   margin-bottom: 0.75rem;
@@ -65,13 +65,13 @@ const UserName = styled.div`
   @media screen and (min-width: 720px) {
     font-size: 1rem;
     line-height: 1;
+    letter-spacing: 0.1rem;
   }
 `;
 
 const Profession = styled.div`
   font-size: 0.875rem;
   text-align: center;
-  letter-spacing: 0.1rem;
   text-transform: capitalize;
   line-height: 1.25;
   margin-bottom: 0.75rem;
@@ -80,6 +80,7 @@ const Profession = styled.div`
   @media screen and (min-width: 720px) {
     font-size: 1rem;
     line-height: 1;
+    letter-spacing: 0.1rem;
   }
 `;
 
@@ -141,11 +142,38 @@ const Image = styled.img`
     border-radius: 0;
   }
 `;
+const SearchContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px;
+  input {
+    width: 100%;
+    border: none;
+    border-color: transparent;
+    background: #f1f5f8;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+  label {
+    font-size: 1.3rem;
+    color: #f1f5f8;
+  }
+  @media screen and (min-width: 720px) {
+    border-radius: 0;
+    margin: 0px;
+    input {
+      width: 50%;
+    }
+  }
+`;
 
 /*************************** End of Styles *****************************/
 
 function ApprovedList() {
   const [approvedList, setApprovedList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const approved_profiles = useQuery(GET_USERS_BY_AC_STATE, {
     variables: {
@@ -181,10 +209,11 @@ function ApprovedList() {
     REMOVE_SERVICE_PROVIDER,
     {
       onCompleted: data => {
-        addToast('Successfully Deleted.', { appearance: 'success' });
+        addToast('Successfully Removed.', { appearance: 'success' });
       },
       onError: error => {
-        addToast('Failed to delete.', { appearance: 'error' });
+        addToast(error.message.substring(15), { appearance: 'error' });
+        console.log(error.message.substring(15));
       }
     }
   );
@@ -201,40 +230,64 @@ function ApprovedList() {
 
   return (
     <div>
-      {approvedList &&
-        approvedList.map(user => {
-          const { id, username, profession } = user;
-          return (
-            <OuterContainer key={id}>
-              <LeftContainer>
-                <ImageContainer>
-                  <Image src={userImage} alt="" />
-                </ImageContainer>
-              </LeftContainer>
-              <DetailsContainer>
-                <UserName>
-                  <h3 style={{}}>{username}</h3>
-                </UserName>
-                <Profession>
-                  <h3 style={{}}>{profession}</h3>
-                </Profession>
-              </DetailsContainer>
-              <ButtonContainer>
-                <Link
-                  to={{
-                    pathname: `/viewServiceProvider/${id}`,
-                    state: { users: user }
-                  }}
-                >
-                  <Button>Visit</Button>
-                </Link>
+      <SearchContainer>
+        <label htmlFor="name">Search</label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          placeholder="Search By Name"
+          onChange={e => {
+            setSearchTerm(e.target.value);
+          }}
+        />
+      </SearchContainer>
 
-                <Button onClick={() => Suspend(id)}>Suspend</Button>
-                <Button onClick={() => RemoveProfile(id)}>Delete</Button>
-              </ButtonContainer>
-            </OuterContainer>
-          );
-        })}
+      {approvedList &&
+        approvedList
+          .filter(obj => {
+            if (searchTerm == '') {
+              return obj;
+              console.log('all are there');
+            } else if (
+              obj.username.toLowerCase().includes(searchTerm.toLowerCase())
+            ) {
+              return obj;
+            }
+          })
+          .map(user => {
+            const { id, username, profession } = user;
+            return (
+              <OuterContainer key={id}>
+                <LeftContainer>
+                  <ImageContainer>
+                    <Image src={userImage} alt="" />
+                  </ImageContainer>
+                </LeftContainer>
+                <DetailsContainer>
+                  <UserName>
+                    <h3 style={{}}>{username}</h3>
+                  </UserName>
+                  <Profession>
+                    <h3 style={{}}>{profession}</h3>
+                  </Profession>
+                </DetailsContainer>
+                <ButtonContainer>
+                  <Link
+                    to={{
+                      pathname: `/viewServiceProvider/${id}`,
+                      state: { users: user }
+                    }}
+                  >
+                    <Button>Visit</Button>
+                  </Link>
+
+                  <Button onClick={() => Suspend(id)}>Suspend</Button>
+                  <Button onClick={() => RemoveProfile(id)}>Remove</Button>
+                </ButtonContainer>
+              </OuterContainer>
+            );
+          })}
     </div>
   );
 }

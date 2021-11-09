@@ -59,7 +59,7 @@ const UPDATE_ME = gql`
 `;
 const ADD_DETAILS = gql`
   mutation AddDetailsSR(
-    $registerServiceRequesterFullname: String!,
+    $registerServiceRequesterFullname: String!
     $registerServiceRequesterContactNum: String!
     $registerServiceRequesterAddress: String!
     $registerServiceRequesterCity: String!
@@ -281,26 +281,23 @@ const EDIT_SR = gql`
   mutation EditServiceRequestMutation(
     $editServiceRequestTask: String!
     $editServiceRequestId: ID
-
   ) {
     editServiceRequest(
       id: $editServiceRequestId
       task: $editServiceRequestTask
-
     ) {
       task
     }
   }
 `;
 
-const CONFIRM_CASH_PAYMENT= gql`
-
-mutation ConfirmCashPaymentMutation($confirmCashPaymentId: ID) {
-  confirmCashPayment(id: $confirmCashPaymentId) {
-    id
-    hasPaid
+const CONFIRM_CASH_PAYMENT = gql`
+  mutation ConfirmCashPaymentMutation($confirmCashPaymentId: ID) {
+    confirmCashPayment(id: $confirmCashPaymentId) {
+      id
+      hasPaid
+    }
   }
-}
 `;
 
 const FEEDBACK_SR = gql`
@@ -352,6 +349,8 @@ const CREATE_SERVICE = gql`
     ) {
       service_name
       description
+      user_type
+      image
     }
   }
 `;
@@ -403,7 +402,15 @@ const SET_ACCOUNT_STATE = gql`
 
 const REMOVE_SERVICE_PROVIDER = gql`
   mutation RemoveServiceProviderMutation($removeServiceProviderId: ID) {
-    removeServiceProvider(id: $removeServiceProviderId)
+    removeServiceProvider(id: $removeServiceProviderId) {
+      id
+    }
+  }
+`;
+
+const REMOVE_COMPLAINT = gql`
+  mutation RemoveComplaintMutation($removeComplaintId: ID) {
+    removeComplaint(id: $removeComplaintId)
   }
 `;
 
@@ -416,39 +423,55 @@ const CHANGE_JOB_BID_STATE = gql`
   }
 `;
 
-const SEND_NEW_MESSAGE=gql`
-mutation AddMessageMutation($conversationId: ID, $sender: ID, $text: String) {
-  addMessage(conversationID: $conversationId, sender: $sender, text: $text) {
-    id
-    conversationID
-    sender
-    text
-    createdAt
-  }
-}
-`;
-
-const ADD_NEW_CONVERSATION=gql`
-mutation NewConverstionMutation($newConverstionSenderId3: ID, $newConverstionRecieverId3: ID) {
-  newConverstion(senderID: $newConverstionSenderId3, recieverID: $newConverstionRecieverId3) {
-    id
-    members
-    createdAt
-  }
-}
-`;
-
-const ADD_REVIEW =  gql`
-    mutation Mutation($type: String, $addReviewToBidId: ID, $rating: Float, $review: String) {
-        addReviewToBid(type: $type, id: $addReviewToBidId, rating: $rating, review: $review) {
-            id
-            providerReview
-            providerRating
-            requesterReview
-            requesterRating
-        }
+const SEND_NEW_MESSAGE = gql`
+  mutation AddMessageMutation($conversationId: ID, $sender: ID, $text: String) {
+    addMessage(conversationID: $conversationId, sender: $sender, text: $text) {
+      id
+      conversationID
+      sender
+      text
+      createdAt
     }
-`
+  }
+`;
+
+const ADD_NEW_CONVERSATION = gql`
+  mutation NewConverstionMutation(
+    $newConverstionSenderId3: ID
+    $newConverstionRecieverId3: ID
+  ) {
+    newConverstion(
+      senderID: $newConverstionSenderId3
+      recieverID: $newConverstionRecieverId3
+    ) {
+      id
+      members
+      createdAt
+    }
+  }
+`;
+
+const ADD_REVIEW = gql`
+  mutation Mutation(
+    $type: String
+    $addReviewToBidId: ID
+    $rating: Float
+    $review: String
+  ) {
+    addReviewToBid(
+      type: $type
+      id: $addReviewToBidId
+      rating: $rating
+      review: $review
+    ) {
+      id
+      providerReview
+      providerRating
+      requesterReview
+      requesterRating
+    }
+  }
+`;
 
 export {
   MAKE_ME_SERVICE_PROVIDER,
@@ -472,6 +495,7 @@ export {
   SET_ACCOUNT_STATE,
   UPDATE_ME,
   REMOVE_SERVICE_PROVIDER,
+  REMOVE_COMPLAINT,
   CHANGE_JOB_BID_STATE,
   SEND_NEW_MESSAGE,
   ADD_NEW_CONVERSATION,
