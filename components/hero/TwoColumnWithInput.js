@@ -7,9 +7,8 @@ import { css } from "styled-components/macro";
 import Header from "../Header";
 import {useTranslation} from "react-i18next";
 // import { ReactComponent as SvgDecoratorBlob1 } from "../../images/svg-decorator-blob-1.svg";
-import DesignIllustration from "/images/design-illustration-2.svg";
-import CustomersLogoStripImage from "../../images/customers-logo-strip.png";
-import { Image } from "cloudinary-react";
+import DesignIllustration from "../../images/design-illustration-2.svg";
+
 import { Section } from "react-bulma-components";
 
 const Container = tw.div`relative`;
@@ -69,9 +68,6 @@ export default ({ roundedHeaderButton }) => {
             {/*  <p>Our TRUSTED Customers</p>*/}
             {/*  <img src={CustomersLogoStripImage} alt="Our Customers" />*/}
             {/*</CustomersLogoStrip>*/}
-            <div>
-              <Image crossOrigin={"anonymous"} publicId={'sample'} width={"50"}/>
-            </div>
           </LeftColumn>
           <RightColumn>
             <IllustrationContainer>

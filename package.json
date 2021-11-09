@@ -26,6 +26,7 @@
     "@mui/icons-material": "^5.0.0",
     "@mui/material": "^5.0.1",
     "@owaiswiz/use-in-view": "^1.0.16",
+    "@testing-library/jest-dom": "^5.15.0",
     "@types/react": "^16.9.17",
     "algoliasearch": "^4.10.5",
     "apollo-link-context": "1.0.19",
@@ -41,6 +42,8 @@
     "hoist-non-react-statics": "^3.3.2",
     "i18next": "^20.6.1",
     "javascript-time-ago": "2.3.8",
+    "jest-svg-transformer": "^1.0.0",
+    "jest-transform-stub": "^2.0.0",
     "mdbreact": "^5.1.0",
     "normalize.css": "8.0.1",
     "payhere-js-sdk": "^1.0.1",
@@ -64,6 +67,7 @@
     "react-slick": "^0.28.1",
     "react-slideshow-with-pagination": "^1.0.2",
     "react-smart-gallery": "^0.2.0",
+    "react-test-renderer": "^17.0.2",
     "react-toast-notifications": "^2.5.1",
     "slick-carousel": "^1.8.1",
     "styled-components": "^4.4.1",
@@ -81,7 +85,9 @@
     "@babel/preset-react": "7.14.5",
     "@parcel/transformer-image": "2.0.0-rc.0",
     "@testing-library/cypress": "5.0.2",
+    "@testing-library/react": "^12.1.2",
     "babel-plugin-styled-components": "1.10.6",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "cypress": "^8.2.0",
     "eslint": "5.16.0",
     "eslint-config-prettier": "5.1.0",
@@ -90,8 +96,10 @@
     "eslint-plugin-react": "7.16.0",
     "eslint-plugin-react-hooks": "2.3.0",
     "graphql-request": "^3.5.0",
+    "jest": "^27.3.1",
     "parcel": "2.0.0-rc.0",
     "prettier": "1.19.1",
-    "test-data-bot": "0.8.0"
+    "test-data-bot": "0.8.0",
+    "@babel/plugin-transform-runtime": "^7.16.0"
   }
 }

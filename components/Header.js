@@ -90,7 +90,7 @@ export default ({ roundedHeaderButton = false, logoLink, links, className, colla
 
 
       {
-        data.isLoggedIn ? (
+        (data) && data.isLoggedIn ? (
          <React.Fragment>
            <NavLink href={"/profile"}>Profile</NavLink>
            <NavLink tw="lg:ml-12!" href={"/"} onClick={
