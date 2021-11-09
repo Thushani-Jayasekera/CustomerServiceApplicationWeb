@@ -38,6 +38,7 @@ const SubmitButton = styled.button`
 
 const AddDetailsPage = ({ history }) => {
   const [values, setValues] = useState({});
+  const [errors, setErrors] = useState({fullname:'',contactNum:''});
   const { loading, error, data } = useQuery(GET_ME, {
     onCompleted: data1 => {
       setValues({
@@ -66,7 +67,30 @@ const AddDetailsPage = ({ history }) => {
       ...values,
       [event.target.name]: event.target.value
     });
+    switch (event.target.name) {
+      case 'registerServiceRequesterFullname': 
+   
+         event.target.value.length < 5
+            ? errors.fullname='Full Name must be 5 characters long!'
+            :errors.fullname= ''
+        break;
+      case 'registerServiceRequesterContactNum': 
+       
+          event.target.value.length !== 12
+          ? errors.contactNum='Contact number should be in +947xxxxxxxx'
+          :errors.contactNum=''
+      
+        break;
+
+
   };
+  console.log(errors);
+
+}
+
+
+
+
   return (
     <Layout>
       <Header />
@@ -95,6 +119,7 @@ const AddDetailsPage = ({ history }) => {
               >
                 <div>
                   <Label>Full Name</Label>
+                  <p  tw="font-sans text-base text-pink-600 ">{errors.fullname}</p>
                   <Input
                     type={'text'}
                     name={'registerServiceRequesterFullname'}
@@ -106,6 +131,7 @@ const AddDetailsPage = ({ history }) => {
                 </div>
                 <div>
                   <Label>Contact Number</Label>
+                  <p  tw="font-sans text-base text-pink-600 ">{errors.contactNum}</p>
                   <Input
                     type={'text'}
                     name={'registerServiceRequesterContactNum'}
@@ -153,7 +179,7 @@ const AddDetailsPage = ({ history }) => {
                     </a>
                   </p>
                 </div>
-                <SubmitButton>Confirm</SubmitButton>
+                <SubmitButton disabled={errors.fullname!==''|errors.contactNum!==''}>Confirm</SubmitButton>
               </Form>
             </FormContainer>
           </MainContainer>
