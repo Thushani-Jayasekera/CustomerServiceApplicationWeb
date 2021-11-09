@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FaAngleDoubleRight } from 'react-icons/fa';
+import { FaAngleDoubleRight, FaTrashAlt } from 'react-icons/fa';
 
 /*************************** Styles *****************************/
 
@@ -27,18 +27,15 @@ const LittleContainer = styled.p`
   margin: 5px auto;
 `;
 const ComplaintContainer = styled.div`
-  display: grid;
-  grid-template-columns: auto 1fr;
-
-  column-gap: 2rem;
-  align-items: center;
-  margin-bottom: 1.25rem;
+  display: flex;
   overflow: hidden;
-  text-overflow: ellipsis;
+  align-items: baseline;
+  margin-bottom: 1.25rem;
 `;
 const ComplaintText = styled.p`
   margin-bottom: 0;
-  color: hsl(209, 34%, 30%);
+  color: black;
+  margin-left: 1rem;
 `;
 
 const OuterContainer = styled.div`
@@ -46,12 +43,46 @@ const OuterContainer = styled.div`
   margin: 10px;
   padding: 10px;
   width: 100%;
-  height: 275px;
   box-sizing: border-box;
+  border-radius: 8px;
+  color: #fff;
+  transition: all 0.2s linear;
+  :hover {
+    margin-left: 2rem;
+  }
 `;
+
+const BottomContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const Button = styled.button`
+  display: block;
+  width: 150px;
+  letter-spacing: 0.1rem;
+  background-color: hsl(360, 67%, 44%);
+  color: white;
+  border: 1px solid hsl(360, 67%, 44%);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  :hover {
+    background-color: white;
+    color: hsl(360, 67%, 44%);
+  }
+`;
+
 /*************************** End Styles *****************************/
 
-const Complaint = ({ id, complainer, victim, title, complaint, date }) => {
+const Complaint = ({
+  id,
+  complainer,
+  victim,
+  title,
+  complaint,
+  date,
+  removeComplaint
+}) => {
   return (
     <OuterContainer>
       <Article>
@@ -60,9 +91,14 @@ const Complaint = ({ id, complainer, victim, title, complaint, date }) => {
         <LittleContainer>{date}</LittleContainer>
         <h4>Victim :{victim}</h4>
         <ComplaintContainer>
-          <FaAngleDoubleRight style={{ color: 'black' }}></FaAngleDoubleRight>
+          <FaAngleDoubleRight
+            style={{ color: 'black', marginRight: '0', marginTop: 2 }}
+          ></FaAngleDoubleRight>
           <ComplaintText>{complaint}</ComplaintText>
         </ComplaintContainer>
+        <BottomContainer>
+          <Button onClick={() => removeComplaint(id)}>Resolved</Button>
+        </BottomContainer>
       </Article>
     </OuterContainer>
   );

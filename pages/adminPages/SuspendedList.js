@@ -142,10 +142,38 @@ const Image = styled.img`
   }
 `;
 
+const SearchContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px;
+  input {
+    width: 100%;
+    border: none;
+    border-color: transparent;
+    background: #f1f5f8;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+  label {
+    font-size: 1.3rem;
+    color: #f1f5f8;
+  }
+  @media screen and (min-width: 720px) {
+    border-radius: 0;
+    margin: 0px;
+    input {
+      width: 50%;
+    }
+  }
+`;
+
 /*************************** End of Styles *****************************/
 
 function SuspendedList() {
   const [suspendedList, setSuspendedList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const suspended_profiles = useQuery(GET_USERS_BY_AC_STATE, {
     variables: {
@@ -180,10 +208,11 @@ function SuspendedList() {
     REMOVE_SERVICE_PROVIDER,
     {
       onCompleted: data => {
-        addToast('Successfully Deleted.', { appearance: 'success' });
+        addToast('Successfully Removed.', { appearance: 'success' });
       },
       onError: error => {
-        addToast('Failed to delete.', { appearance: 'error' });
+        addToast(error.message.substring(15), { appearance: 'error' });
+        console.log(error.message.substring(15));
       }
     }
   );
@@ -199,40 +228,63 @@ function SuspendedList() {
 
   return (
     <div>
+      <SearchContainer>
+        <label htmlFor="name">Search</label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          placeholder="Search By Name"
+          onChange={e => {
+            setSearchTerm(e.target.value);
+          }}
+        />
+      </SearchContainer>
       {suspendedList &&
-        suspendedList.map(obj => {
-          const { id, username, profession } = obj;
-          return (
-            <OuterContainer key={id}>
-              <LeftContainer>
-                <ImageContainer>
-                  <Image src={user} alt="" />
-                </ImageContainer>
-              </LeftContainer>
-              <DetailsContainer>
-                <UserName>
-                  <h3 style={{}}>{username}</h3>
-                </UserName>
-                <Profession>
-                  <h3 style={{}}>{profession}</h3>
-                </Profession>
-              </DetailsContainer>
-              <ButtonContainer>
-                <Link
-                  to={{
-                    pathname: `/viewServiceProvider/${id}`,
-                    state: { users: obj }
-                  }}
-                >
-                  <Button>Visit</Button>
-                </Link>
+        suspendedList
+          .filter(obj => {
+            if (searchTerm == '') {
+              return obj;
+              console.log('all are there');
+            } else if (
+              obj.username.toLowerCase().includes(searchTerm.toLowerCase())
+            ) {
+              return obj;
+            }
+          })
+          .map(obj => {
+            const { id, username, profession } = obj;
+            return (
+              <OuterContainer key={id}>
+                <LeftContainer>
+                  <ImageContainer>
+                    <Image src={user} alt="" />
+                  </ImageContainer>
+                </LeftContainer>
+                <DetailsContainer>
+                  <UserName>
+                    <h3 style={{}}>{username}</h3>
+                  </UserName>
+                  <Profession>
+                    <h3 style={{}}>{profession}</h3>
+                  </Profession>
+                </DetailsContainer>
+                <ButtonContainer>
+                  <Link
+                    to={{
+                      pathname: `/viewServiceProvider/${id}`,
+                      state: { users: obj }
+                    }}
+                  >
+                    <Button>Visit</Button>
+                  </Link>
 
-                <Button onClick={() => ReAllocate(id)}>Activate</Button>
-                <Button onClick={() => RemoveProfile(id)}>Delete</Button>
-              </ButtonContainer>
-            </OuterContainer>
-          );
-        })}
+                  <Button onClick={() => ReAllocate(id)}>Activate</Button>
+                  <Button onClick={() => RemoveProfile(id)}>Remove</Button>
+                </ButtonContainer>
+              </OuterContainer>
+            );
+          })}
     </div>
   );
 }
