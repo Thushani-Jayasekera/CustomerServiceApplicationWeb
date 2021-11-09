@@ -58,6 +58,7 @@ const GET_ME_AS_SERVICE_REQUESTER = gql`
       city
       address
       roles
+      contactNum
     }
   }
 `;

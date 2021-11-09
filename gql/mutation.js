@@ -450,7 +450,15 @@ const ADD_REVIEW =  gql`
             requesterRating
         }
     }
-`
+`;
+
+const SEND_MSG=gql`
+mutation SendMessageMutation($sendMessageBody2: String, $sendMessageTo2: String) {
+  sendMessage(body: $sendMessageBody2, to: $sendMessageTo2) {
+    body
+  }
+}
+`;
 
 export {
   MAKE_ME_SERVICE_PROVIDER,
@@ -478,5 +486,6 @@ export {
   SEND_NEW_MESSAGE,
   ADD_NEW_CONVERSATION,
   ADD_REVIEW,
-  CONFIRM_CASH_PAYMENT
+  CONFIRM_CASH_PAYMENT,
+  SEND_MSG
 };

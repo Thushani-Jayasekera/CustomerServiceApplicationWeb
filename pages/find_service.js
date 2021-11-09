@@ -71,7 +71,7 @@ const FindServicePage = ({ history }) => {
   ] = useMutation(CREATE_NEW_SR, {
     onCompleted: data => {
       addToast('Successfully Created the request! Check status on profile', { appearance: 'success' });
-      history.push('/');
+      history.push(`/hireNow/${provider_id}`);
     }
   });
   if (loading) {
@@ -96,7 +96,7 @@ const FindServicePage = ({ history }) => {
   }
 
   const todayMin = yyyy + '-' + mm + '-' + dd;
-
+  
 
   const uploadImage = e => {
     e.preventDefault();

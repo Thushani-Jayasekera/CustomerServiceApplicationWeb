@@ -43,6 +43,7 @@ import MessengerPage from './messenger';
 import Messenger2Page from "./messenger_2";
 import ReviewPage from "./review";
 import ViewProfilePage from "./viewProfile";
+import SetEmergencyPage from './emergency';
 
 const Pages = () => {
   return (
@@ -70,6 +71,9 @@ const Pages = () => {
         path="/service_requester/createRequest/:provider_id"
         component={FindServicePage}
       />
+      <ServiceRequesterRoute
+        exact path="/hireNow/:id"
+        component={SetEmergencyPage}/>
       <ServiceRequesterRoute exact path={"/requesterReview/add/:id"} component={ReviewPage} />
       <ServiceProviderRoute exact path={"/providerReview/add/:id"} component={ReviewPage}/>
       <ServiceRequesterRoute
