@@ -134,7 +134,7 @@ const ViewProfilePage = ({ history }) => {
                                           <FeatherIcon icon="tool" />
                                           <CardTitle>
                                             {' '}
-                                            {request.task}...
+                                            {request.task}
                                           </CardTitle>
                                         </Columns>
                                         <br />
