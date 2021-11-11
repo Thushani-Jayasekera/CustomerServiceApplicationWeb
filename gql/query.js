@@ -82,6 +82,7 @@ const GET_JOB_POSTING_FEED = gql`
         postedBy {
           username
         }
+        heading
         description
         budgetRange {
           lowerLimit
@@ -919,6 +920,17 @@ query Query($getUserbyIdId4: ID!, $getReviewedRequestsofUserId2: ID) {
 }
 `;
 
+const GET_MY_JOB_BID_FOR_POSTING = gql`
+    query Query($postingId: ID) {
+        getMyBidsForJobPosting(postingId: $postingId) {
+            id
+            proposedAmount
+            proposedDate
+            detailedBreakdown
+        }
+    }
+`
+
 export {
   IS_LOGGED_IN,
   GET_ME,
@@ -956,5 +968,6 @@ export {
   GET_MESGS_OF_CONV,
   GET_JOB_BID_BY_ID,
   GET_REVIEWED_REQ_OF_PROVIDER,
-  GET_USER_WITH_REVIEWS
+  GET_USER_WITH_REVIEWS,
+  GET_MY_JOB_BID_FOR_POSTING
 };

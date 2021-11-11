@@ -23,7 +23,7 @@ import { SectionHeading } from '../components/misc/Headings.js';
 import profileImg from "../images/profile.png"
 import Providers from '../components/Providers';
 import Pagination from '../components/Pagination';
-import {  Columns, Form, Message ,Box} from "react-bulma-components";
+import { Columns, Form, Message, Box, Block } from "react-bulma-components";
 
 import FeatherIcon from 'feather-icons-react';
 
@@ -198,7 +198,7 @@ const SelectOptionPage = ({ history }) => {
           <Heading>{heading}</Heading>
         </HeaderRow>
         <br/>
-        {city,province,rating}
+        {/*{city},{province},{rating}*/}
         <Container>
         <Columns>
         
@@ -211,7 +211,7 @@ const SelectOptionPage = ({ history }) => {
      <br/>
      <FeatherIcon icon="filter"/>
      <Container>
-       <Box>
+       <Block>
        <label>
          Sort By
       <select class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
@@ -223,9 +223,9 @@ const SelectOptionPage = ({ history }) => {
         <option value='1'>Lowest to Highest</option>
     </select>
     </label>
-    </Box>
+    </Block>
     </Container>
-    <Box>
+    <Block>
       <label>
       <input
           type="checkbox"
@@ -247,7 +247,7 @@ const SelectOptionPage = ({ history }) => {
         />
         View Providers only in my city
       </label>
-      </Box>
+      </Block>
  
       </Columns>
       </Container>
@@ -256,7 +256,7 @@ const SelectOptionPage = ({ history }) => {
         
 
           {items.length === 0 && (
-            <Message color={'danger'}>
+            <Message color={'danger'} mt={4}>
               <Message.Body>Sorry, No Providers Found as {type}s. Visit us Later!</Message.Body>
             </Message>
           )}

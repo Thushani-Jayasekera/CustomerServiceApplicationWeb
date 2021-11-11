@@ -44,6 +44,7 @@ import Messenger2Page from "./messenger_2";
 import ReviewPage from "./review";
 import ViewProfilePage from "./viewProfile";
 import SetEmergencyPage from './emergency';
+import PaymentFailurePage from "./payment/paymentFailure";
 
 const Pages = () => {
   return (
@@ -64,6 +65,7 @@ const Pages = () => {
       />
       <Route exact path={'/payment'} component={PaymentPage} />
       <Route exact path={'/payment/success'} component={PaymentSuccessPage} />
+      <Route exact path={'/payment/failure'} component={PaymentFailurePage} />
       <Route exact path={'/message'} component={MessengerPage}/>
 
       <ServiceRequesterRoute
