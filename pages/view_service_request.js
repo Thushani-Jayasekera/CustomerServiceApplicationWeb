@@ -1184,7 +1184,12 @@ const ViewServiceRequestPage = () => {
                     <Form
                       onSubmit={event => {
                         event.preventDefault();
-                        console.log(values);
+                        const currTime = new Date()
+                        const givenTime = new Date(values.rescheduleServiceRequestDate+"T"+values.rescheduleServiceRequestTime)
+                        if(currTime>givenTime){
+                          addToast("Invalid Time",{appearance:"error"})
+                          return
+                        }
                         rescheduleServiceRequest({
                           variables: {
                             rescheduleServiceRequestId: id,

@@ -1,6 +1,11 @@
 import React from "react";
 import { Button, Container, Content, Form } from "react-bulma-components";
 import tw from "twin.macro";
+import * as provinces from "../data/provinces.json";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_SERVICE_TYPES } from "../gql/query";
+import Loader from "./utils/Loader";
+import * as towns from "../data/towns.json";
 const StyledContainer = tw(Container)`
   bg-purple-100
   rounded
@@ -28,18 +33,42 @@ const FilterBox = ({values,setValues,refetch})=>{
       [event.target.name]:event.target.value
     })
   };
+  const servicesQuery = useQuery(GET_ALL_SERVICE_TYPES)
+  if(servicesQuery.loading) return <Loader/>
   return(
     <StyledContainer>
       <Content>
         <StyledH6>Filters</StyledH6>
         <StyledP>Province</StyledP>
-        <Form.Input name={"jobPostingFeedProvince"} onChange={handleChange} value={values.jobPostingFeedProvince}/>
+        <select  name={"jobPostingFeedProvince"}
+                 onChange={handleChange}
+                 required tw={"w-full px-8 py-4 rounded-lg"}
+                 value={values.jobPostingFeedProvince}
+        >
+          {Object.keys(provinces).map((item,key)=>{
+            return <option key={key}>{item}</option>
+          })}
+        </select>
         <StyledP>City</StyledP>
-        <Form.Input name={"jobPostingFeedCity"} onChange={handleChange} value={values.jobPostingFeedCity}/>
+        {/*<Form.Input name={"jobPostingFeedCity"} onChange={handleChange} value={values.jobPostingFeedCity}/>*/}
+        <select  name={"jobPostingFeedCity"}
+                 onChange={handleChange} required tw={"w-full px-8 py-4 rounded-lg"} value={values.jobPostingFeedCity}>
+          {provinces[values.jobPostingFeedProvince].map((item,key)=><option key={key}>{item}</option>)}
+        </select>
         <StyledP>Town</StyledP>
-        <Form.Input name={"jobPostingFeedTown"} onChange={handleChange} value={values.jobPostingFeedTown} />
+        {/*<Form.Input name={"jobPostingFeedTown"} onChange={handleChange} value={values.jobPostingFeedTown} />*/}
+        <select  name={"jobPostingFeedTown"}
+                 placeholder="Town"
+                 onChange={handleChange}
+                 required
+                 tw={"w-full px-8 py-4 rounded-lg"}>
+          {towns[values.jobPostingFeedCity].cities.map((item,key)=><option key={key}>{item}</option>)}
+        </select>
         <StyledP>Category</StyledP>
-        <Form.Input name={"jobPostingFeedCategory"} onChange={handleChange} value={values.jobPostingFeedCategory} />
+        {/*<Form.Input name={"jobPostingFeedCategory"} onChange={handleChange} value={values.jobPostingFeedCategory} />*/}
+        <select name={"jobPostingFeedCategory"} onChange={handleChange} tw={"w-full px-8 py-4 rounded-lg"} value={values.jobPostingFeedCategory}>
+          {servicesQuery.data.viewAllServiceTypes.map((item,key)=><option key={key}>{item.service_name}</option>)}
+        </select>
         <StyledButton color={"success"} onClick={()=>{refetch({...values})}}>Fetch Results</StyledButton>
       </Content>
     </StyledContainer>

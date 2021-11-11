@@ -163,7 +163,14 @@ const AdminSignUp = props => {
           <Form
             onSubmit={event => {
               event.preventDefault();
-              console.log(values);
+              if(values.adminSignUpPassword !== values.adminSignInConfirmPassword){
+                addToast("Passwords didn't match",{appearance:"error"})
+                return
+              }
+              if(values.adminSignUpPassword.length < 8){
+                addToast("Password is weak",{appearance:"error"})
+                return
+              }
               adminSignUp({
                 variables: {
                   ...values
@@ -189,6 +196,12 @@ const AdminSignUp = props => {
               type="password"
               name={'adminSignUpPassword'}
               placeholder="Password"
+              onChange={handleChange}
+            />
+            <Input
+              type="password"
+              name={'adminSignInConfirmPassword'}
+              placeholder="Confirm Password"
               onChange={handleChange}
             />
             <Input
@@ -228,7 +241,8 @@ const AdminSignUp = props => {
               placeholder="Password"
               onChange={handleChange}
             />
-            <A href="#">Forgot your password?</A>
+
+            {/*<A href="#">Forgot your password?</A>*/}
             <Button type="submit" data-testid="signInBtn">
               Sign In
             </Button>

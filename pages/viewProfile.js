@@ -70,39 +70,66 @@ const ViewProfilePage = ({ history }) => {
       <Container>
         <Content>
           <Section>
-            <Level>
-              <Level.Item>
-                <h1> @{data.getUserbyId.username} </h1>
-              </Level.Item>
-              <Level.Item>
-                <h3>{data.getUserbyId.fullname}</h3>
-              </Level.Item>
-              <Level.Item>
-                <h6>
-                  {' '}
-                  <MapPin /> {data.getUserbyId.town} {data.getUserbyId.city}
-                </h6>
-              </Level.Item>
-            </Level>
+
           </Section>
           <Section>
             <Columns>
               <Columns.Column>
                 <Level>
-                  <Box>
-                    <Level.Item>
-                      <img
-                        crossOrigin={'anonymous'}
-                        src={data.getUserbyId.profile_url || profileImg}
-                        width={'256px'}
-                      />
-                    </Level.Item>
-                    <Level.Item className="mx-4">
-                      <p className={'has-text-link'}>
-                        "{data.getUserbyId.bio}"
-                      </p>
-                    </Level.Item>
-                  </Box>
+                  <Level.Side align={"left"}>
+                   <Level.Item>
+                     <Box textAlign={"center"}>
+                         <img
+                           crossOrigin={'anonymous'}
+                           src={data.getUserbyId.profile_url || profileImg}
+                           width={'256px'}
+                         />
+                         <p className={'has-text-link'}>
+                           "{data.getUserbyId.bio}"
+                         </p>
+                     </Box>
+                   </Level.Item>
+                  </Level.Side>
+                  <Level.Item>
+                    <Box style={{width:"60%",borderRadius:"10px"}}>
+                      <Level>
+                        <Level.Side align={"left"}>
+                          <Level.Item>
+                            <h4>Full Name :</h4>
+                          </Level.Item>
+                        </Level.Side>
+                        <Level.Side align={"right"}>
+                          <Level.Item>
+                            <h4>{data.getUserbyId.fullname}</h4>
+                          </Level.Item>
+                        </Level.Side>
+                      </Level>
+                      <Level>
+                        <Level.Side align={"left"}>
+                          <Level.Item>
+                            <h4>Username</h4>
+                          </Level.Item>
+                        </Level.Side>
+                        <Level.Side align={"right"}>
+                          <Level.Item>
+                            <h4>@{data.getUserbyId.username}</h4>
+                          </Level.Item>
+                        </Level.Side>
+                      </Level>
+                      <Level>
+                        <Level.Side align={"left"}>
+                          <Level.Item>
+                            <h4>Location</h4>
+                          </Level.Item>
+                        </Level.Side>
+                        <Level.Side align={"right"}>
+                          <Level.Item>
+                            <h4><MapPin /> {data.getUserbyId.town} {data.getUserbyId.city}</h4>
+                          </Level.Item>
+                        </Level.Side>
+                      </Level>
+                    </Box>
+                  </Level.Item>
                 </Level>
                <Section>
                     <>
@@ -243,43 +270,46 @@ const ViewProfilePage = ({ history }) => {
                 </Box>
 
                 <Section>
-                  <Box class="has-background-info-light" >
-                    <h6>Contact Information</h6>
-                    <ul>
-                      <li>
-                        <Level>
-                          <Level.Side>
-                            <Block textWeight={'bold'}>Contact Num</Block>
-                          </Level.Side>
-                          <Level.Side align={'right'}>
-                            {data.getUserbyId.contactNum}
-                          </Level.Side>
-                        </Level>
-                      </li>
-                      <li>
-                        <Level>
-                          <Level.Side>
-                            <Block textWeight={'bold'}>Address</Block>
-                          </Level.Side>
-                          <Level.Side align={'right'}>
-                            {data.getUserbyId.address}
-                          </Level.Side>
-                        </Level>
-                      </li>
-                      <li>
-                        <Level>
-                          <Level.Side>
-                            <Block textWeight={'bold'}>Email</Block>
-                          </Level.Side>
-                          <Level.Side align={'right'}>
-                            {data.getUserbyId.email}
-                          </Level.Side>
-                        </Level>
-                      </li>
-                    </ul>
+                  <Box class="has-background-info-light" style={{borderRadius:"10px"}} >
+                    <Block px={4} py={4}>
+                      <h6>Contact Information</h6>
+                      <ul>
+                        <li>
+                          <Level>
+                            <Level.Side>
+                              <Block textWeight={'bold'}>Contact Num</Block>
+                            </Level.Side>
+                            <Level.Side align={'right'}>
+                              {data.getUserbyId.contactNum}
+                            </Level.Side>
+                          </Level>
+                        </li>
+                        <li>
+                          <Level>
+                            <Level.Side>
+                              <Block textWeight={'bold'}>Address</Block>
+                            </Level.Side>
+                            <Level.Side align={'right'}>
+                              {data.getUserbyId.address}
+                            </Level.Side>
+                          </Level>
+                        </li>
+                        <li>
+                          <Level>
+                            <Level.Side>
+                              <Block textWeight={'bold'}>Email</Block>
+                            </Level.Side>
+                            <Level.Side align={'right'}>
+                              {data.getUserbyId.email}
+                            </Level.Side>
+                          </Level>
+                        </li>
+                      </ul>
+                    </Block>
                   </Box>
                 </Section>
               </Columns.Column>
+
             </Columns>
           </Section>
         </Content>
