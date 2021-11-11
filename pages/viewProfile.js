@@ -187,21 +187,22 @@ const ViewProfilePage = ({ history }) => {
                     </Section>
                 <Box>
                   <Block textSize={3}>Ratings</Block>
-                  {data.getUserbyId.provider_rating ? (
+                  {data.getUserbyId.rating.providerRating ? (
                     <Level>
                       <Level.Side align={'left'} textWeight={'bold'}>
                         Rating as a provider:
                       </Level.Side>
                       <Level.Side align={'right'}>
                         <Level.Item>
-                          {data.getUserbyId.provider_rating &&
-                            data.getUserbyId.provider_rating > 0 && (
+                          {data.getUserbyId.rating &&
+                            data.getUserbyId.rating.providerRating > 0 && (
                               <ReactStars
                                 edit={false}
-                                value={data.getUserbyId.provider_rating}
+                                value={data.getUserbyId.rating.providerRating}
                                 count={5}
                                 size={36}
                               />
+                             
                             )}
                         </Level.Item>
                       </Level.Side>
@@ -209,7 +210,7 @@ const ViewProfilePage = ({ history }) => {
                   ) : (
                     <>
                       <Level.Side align={'left'} textWeight={'bold'}>
-                        Not a provider of GetitDone
+                        Not rated as a provider of GetitDone
                       </Level.Side>
                     </>
                   )}
@@ -220,11 +221,11 @@ const ViewProfilePage = ({ history }) => {
                       </Level.Side>
                       <Level.Side align={'right'}>
                         <Level.Item>
-                          {data.getUserbyId.requester_rating &&
-                            data.getUserbyId.requester_rating > 0 && (
+                          {data.getUserbyId.rating &&
+                            data.getUserbyId.rating.requesterRating > 0 && (
                               <ReactStars
                                 edit={false}
-                                value={data.getUserbyId.requester_rating}
+                                value={data.getUserbyId.rating.requesterRating}
                                 count={5}
                                 size={36}
                               />
@@ -235,7 +236,7 @@ const ViewProfilePage = ({ history }) => {
                   ) : (
                     <>
                       <Level.Side align={'left'} textWeight={'bold'}>
-                        Not a requester of GetitDone
+                        Not rated as a requester of GetitDone
                       </Level.Side>
                     </>
                   )}
