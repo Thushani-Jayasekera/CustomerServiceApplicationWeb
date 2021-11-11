@@ -113,7 +113,7 @@ function UserManage() {
                 />
                 <LinkTab
                   className={classes.tabs}
-                  label="Suspended Profiles"
+                  label="Locked Profiles"
                   href="/trash"
                   {...a11yProps(1)}
                 />
