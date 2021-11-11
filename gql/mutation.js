@@ -11,6 +11,8 @@ const MAKE_ME_SERVICE_PROVIDER = gql`
     $makeMeServiceProviderCity: String!
     $makeMeServiceProviderTown: String!
     $makeMeServiceProviderBio: String
+      $postalCode: String
+      $profileUrl: String
   ) {
     makeMeServiceProvider(
       fullname: $makeMeServiceProviderFullname
@@ -22,6 +24,8 @@ const MAKE_ME_SERVICE_PROVIDER = gql`
       city: $makeMeServiceProviderCity
       town: $makeMeServiceProviderTown
       bio: $makeMeServiceProviderBio
+      postalCode: $postalCode
+      profile_url: $profileUrl
     ) {
       id
       bio
@@ -29,6 +33,11 @@ const MAKE_ME_SERVICE_PROVIDER = gql`
     }
   }
 `;
+const CHANGE_SERVICE_PROVIDING_STATUS = gql`mutation Mutation {
+  changeServiceProvidingStatus {
+    profile_state
+  }
+}`
 
 const UPDATE_ME = gql`
   mutation Mutation(
@@ -512,5 +521,6 @@ export {
   ADD_NEW_CONVERSATION,
   ADD_REVIEW,
   CONFIRM_CASH_PAYMENT,
-  SEND_MSG
+  SEND_MSG,
+  CHANGE_SERVICE_PROVIDING_STATUS
 };

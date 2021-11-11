@@ -21,14 +21,14 @@ const GET_ME = gql`
       city
       town
       bio
-      service_providing_status
+      profile_state  
       roles
       postalCode
       profile_url  
       rating{
           providerRating
           requesterRating
-      }  
+      }
     }
   }
 `;
