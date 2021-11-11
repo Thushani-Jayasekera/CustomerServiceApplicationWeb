@@ -5,8 +5,11 @@ import tw from "twin.macro";
 import styled from "styled-components"
 import { gql, useMutation, useQuery } from "@apollo/client";
 import  Loader from "../components/utils/Loader";
-import {GET_ME} from "../gql/query";
+import { GET_ALL_SERVICE_TYPES, GET_ME } from "../gql/query";
 import {MAKE_ME_SERVICE_PROVIDER} from "../gql/mutation";
+import { useToasts } from "react-toast-notifications";
+import * as provinces from "../data/provinces.json";
+import * as towns from "../data/towns.json";
 // Styling
 const Container = tw.div`relative flex justify-center`;
 const Content = tw.div`max-w-screen-xl m-0 sm:mx-20 sm:my-16 bg-white text-gray-900 shadow sm:rounded-lg flex justify-center flex-1 items-center`;
@@ -37,15 +40,26 @@ const SubmitButton = styled.button`
 //
 
 const ServiceProviderRegisterPage = ({history})=>{
-  const [values,setValues] = useState({});
+  const {addToast} = useToasts()
+  const [values,setValues] = useState({
+    makeMeServiceProviderProvince:"Northern",
+    makeMeServiceProviderCity:"Jaffna",
+    makeMeServiceProviderTown:"Allaipiddi"
+  });
   const {loading,error,data} = useQuery(GET_ME);
+  const servicesQuery = useQuery(GET_ALL_SERVICE_TYPES)
   const [makeMeServiceProvider,{loading_mutation,error_mutation}] = useMutation(MAKE_ME_SERVICE_PROVIDER,{
     onCompleted:data =>{
-      console.log(data.makeMeServiceProvider);
+      addToast("Successfully send request for service provider account",{appearance:"success"})
       history.push('/')
+    },
+    onError:error=>{
+      addToast(error.message.substr(15),{appearance:"error"})
     }
   })
-  if(loading) {
+  const [image,setImage] = useState({})
+  const [imagePresent,setImagePresent] = useState(false)
+  if(loading || servicesQuery.loading) {
     return <Loader/>
   }
   const handleChange = event=>{
@@ -54,6 +68,38 @@ const ServiceProviderRegisterPage = ({history})=>{
       [event.target.name]:event.target.value
     })
   };
+  const handleSubmit = event=>{
+    event.preventDefault();
+    if (imagePresent){
+      const formData = new FormData()
+      formData.append("file",image)
+      formData.append("upload_preset","huhs8y0f")
+      formData.append("cloud_name","ded0k5ukr")
+      fetch("https://api.cloudinary.com/v1_1/ded0k5ukr/upload",{
+        method:"post",
+        body:formData
+      }).then((resp)=>{
+        resp.json().then(data=>{
+          addToast("Image upload successful",{appearance:"success"})
+          makeMeServiceProvider({
+            variables:{
+              ...values,
+              profileUrl:data.url
+            }
+          })
+        })
+      }).catch((err)=>{
+        addToast("Image upload error",{appearance:"error"})
+        console.log(err)
+      })
+    }else{
+      makeMeServiceProvider({
+        variables:{
+          ...values
+        }
+      })
+    }
+  }
 
   return(
     <Layout>
@@ -70,17 +116,7 @@ const ServiceProviderRegisterPage = ({history})=>{
               <Span>Email : </Span>
               <Span>{data.me.email}</Span>
             </div>            <FormContainer>
-              <Form onSubmit={
-                event=>{
-                  event.preventDefault();
-                  console.log(values);
-                  makeMeServiceProvider({
-                    variables:{
-                      ...values
-                    }
-                  })
-                }
-              }>
+              <Form onSubmit={handleSubmit}>
 
                 <div>
                   <Label>Full Name</Label>
@@ -88,12 +124,11 @@ const ServiceProviderRegisterPage = ({history})=>{
                 </div>
                 <div>
                   <Label>NIC</Label>
-                  <Input type={"text"} name={"makeMeServiceProviderNic"} placeholder={"NIC"} onChange={handleChange}/>
+                  <Input type={"text"} name={"makeMeServiceProviderNic"} placeholder={"NIC"} onChange={handleChange} pattern={"(^[0-9]{9}[vVxX]$)|(^[0-9]{7}[0][0-9]{4}$)"} />
                 </div>                <div>
                  <Label>Profession</Label>
                  <Select  name={"makeMeServiceProviderProfession"} onChange={handleChange}>
-                   <option>Plumber</option>
-                   <option>Electrician</option>
+                   {servicesQuery.data.viewAllServiceTypes.map((item,key)=><option key={key}>{item.user_type}</option>)}
                  </Select>
                 </div>
                 <div>
@@ -101,22 +136,51 @@ const ServiceProviderRegisterPage = ({history})=>{
                   <Input  name={"makeMeServiceProviderAddress"} placeholder={"Address"} onChange={handleChange} />
                 </div>                  <div>
                   <Label>Province</Label>
-                  <Input  name={"makeMeServiceProviderProvince"} placeholder={"Province"} onChange={handleChange} />
+                <select  name={"makeMeServiceProviderProvince"}
+                         onChange={handleChange}
+                         required tw={"w-full px-8 py-4 rounded-lg"}>
+                  {Object.keys(provinces).map((item,key)=>{
+                    return <option key={key}>{item}</option>
+                  })}
+                </select>
                 </div>                <div>
                   <Label>City</Label>
-                  <Input  name={"makeMeServiceProviderCity"} placeholder={"City"} onChange={handleChange} />
+                <select  name={"makeMeServiceProviderCity"}
+                         placeholder="City"
+                         onChange={handleChange} required tw={"w-full px-8 py-4 rounded-lg"}>
+                  {provinces[values.makeMeServiceProviderProvince].map((item,key)=><option key={key}>{item}</option>)}
+                </select>
                 </div>
                 <div>
                   <Label>Town/SubUrb</Label>
-                  <Input  name={"makeMeServiceProviderTown"} placeholder={"Town"} onChange={handleChange} />
+
+                  <select  name={"makeMeServiceProviderTown"}
+                           placeholder="Town"
+                           onChange={handleChange}
+                           required
+                           tw={"w-full px-8 py-4 rounded-lg"}>
+                    {towns[values.makeMeServiceProviderCity].cities.map((item,key)=><option key={key}>{item}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <Label>Postal Code</Label>
+                  <Input  name={"postalCode"} placeholder={"PostalCode"} onChange={handleChange} />
                 </div>
                 <div>
                 <Label>Contact Number</Label>
-                <Input  name={"makeMeServiceProviderContactNumber"} placeholder={"Contact Number"} onChange={handleChange} />
+                <Input  name={"makeMeServiceProviderContactNumber"} placeholder={"Contact Number"} onChange={handleChange} pattern={"^\\+(?:[0-9] ?){6,14}[0-9]$"}
+                        title="Provide phone number in correct format"
+                />
               </div>
                 <div>
                   <Label>Short Bio</Label>
                   <TextArea name={"makeMeServiceProviderBio"} onChange={handleChange} />
+                </div>
+                <div>
+                  <Label>
+                    Profile image (optional, .png,.jpg,.bmp accepted)
+                  </Label>
+                  <Input type={"file"} accept={"image/*"} onChange={(event)=>{setImage(event.target.files[0]);setImagePresent(true)}} />
                 </div>
               <SubmitButton>
                 Send request

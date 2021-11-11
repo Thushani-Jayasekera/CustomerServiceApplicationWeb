@@ -11,11 +11,13 @@ const SIGNUP_ADMIN = gql`
     $adminSignUpUsername: String!
     $adminSignUpEmail: String!
     $adminSignUpPassword: String!
+    $adminSignUpSecurityKey: String!
   ) {
     adminSignUp(
       username: $adminSignUpUsername
       email: $adminSignUpEmail
       password: $adminSignUpPassword
+      securityKey: $adminSignUpSecurityKey
     )
   }
 `;
@@ -129,12 +131,16 @@ const AdminSignUp = props => {
   };
 
   const client = useApolloClient();
+
   const [adminSignUp, { loading, error }] = useMutation(SIGNUP_ADMIN, {
     onCompleted: data => {
       console.log(data.adminSignUp);
       localStorage.setItem('token', data.adminSignUp);
       client.writeData({ data: { isLoggedIn: true } });
       props.history.push('/adminHome');
+    },
+    onError: error => {
+      addToast(error.message.substring(15), { appearance: 'error' });
     }
   });
 
@@ -170,7 +176,7 @@ const AdminSignUp = props => {
             <Input
               type="text"
               name={'adminSignUpUsername'}
-              placeholder="User Name"
+              placeholder="Full Name"
               onChange={handleChange}
             />
             <Input
@@ -185,7 +191,15 @@ const AdminSignUp = props => {
               placeholder="Password"
               onChange={handleChange}
             />
-            <Button type="submit">Sign Up</Button>
+            <Input
+              type="password"
+              name={'adminSignUpSecurityKey'}
+              placeholder="Security Key"
+              onChange={handleChange}
+            />
+            <Button type="submit" data-testid="signUpBtn">
+              Sign Up
+            </Button>
           </Form>
         </div>
         <div className="adminform-admincontainer adminsign-in-admincontainer">
@@ -215,7 +229,9 @@ const AdminSignUp = props => {
               onChange={handleChange}
             />
             <A href="#">Forgot your password?</A>
-            <Button type="submit">Sign In</Button>
+            <Button type="submit" data-testid="signInBtn">
+              Sign In
+            </Button>
           </Form>
         </div>
         <div className="adminoverlay-admincontainer">
@@ -242,6 +258,7 @@ const AdminSignUp = props => {
               <P>Enter your details and start working</P>
               <ButtonGhost
                 id="signUp"
+                data-testid="signUpBtnGhost"
                 onClick={() => {
                   const admincontainer = document.getElementById(
                     'admincontainer'

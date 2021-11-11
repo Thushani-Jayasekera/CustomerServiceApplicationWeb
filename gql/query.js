@@ -21,14 +21,14 @@ const GET_ME = gql`
       city
       town
       bio
-      service_providing_status
+      profile_state  
       roles
       postalCode
       profile_url  
       rating{
           providerRating
           requesterRating
-      }  
+      }
     }
   }
 `;
@@ -58,6 +58,7 @@ const GET_ME_AS_SERVICE_REQUESTER = gql`
       city
       address
       roles
+      contactNum
     }
   }
 `;
@@ -186,6 +187,10 @@ const GET_PROVIDERS_BY_PROFESSION_IN_PROVINCE = gql`
       provider_rating
       provider_review_count
       profile_url
+      rating{
+          providerRating
+          requesterRating
+      } 
     }
   }
 `;
@@ -424,6 +429,10 @@ const GET_USER_BY_ID = gql`
       contactNum
       email
       address
+      rating{
+          providerRating
+          requesterRating
+      } 
 
     }
   }
@@ -805,6 +814,10 @@ const GET_PROFILES = gql`
       provider_rating
       provider_review_count
       profile_state
+      rating{
+          providerRating
+          requesterRating
+      } 
     }
   }
 `;
@@ -889,6 +902,10 @@ query Query($getUserbyIdId4: ID!, $getReviewedRequestsofUserId2: ID) {
       contactNum
       email
       address
+      rating{
+          providerRating
+          requesterRating
+      } 
   }
   getReviewedRequestsofUser(id: $getReviewedRequestsofUserId2) {
     id

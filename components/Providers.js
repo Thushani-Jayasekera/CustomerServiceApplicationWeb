@@ -137,7 +137,7 @@ const Providers=({items, loading,searchTerm,me_id})=>{
                       }
                     >
                       <CardRatingContainer>
-                        <CardRating>{card.provider_rating}</CardRating>
+                        <CardRating>{card.rating.providerRating}</CardRating>
                         <CardReview>({card.provider_review_count})</CardReview>
                       </CardRatingContainer>
                     </CardImageContainer>
