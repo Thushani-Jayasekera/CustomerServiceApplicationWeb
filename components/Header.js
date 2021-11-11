@@ -1,14 +1,14 @@
-import React from "react";
-import { motion } from "framer-motion";
-import tw from "twin.macro";
-import styled from "styled-components";
-import { css } from "styled-components/macro"; //eslint-disable-line
+import React from 'react';
+import { motion } from 'framer-motion';
+import tw from 'twin.macro';
+import styled from 'styled-components';
+import { css } from 'styled-components/macro'; //eslint-disable-line
 
-import useAnimatedNavToggler from "./helpers/useAnimatedNavToggler.js";
+import useAnimatedNavToggler from './helpers/useAnimatedNavToggler.js';
 
 // import logo from "../../images/logo.svg";
-import {Menu as MenuIcon} from "react-feather"
-import {X as CloseIcon} from "react-feather"
+import { Menu as MenuIcon } from 'react-feather';
+import { X as CloseIcon } from 'react-feather';
 const Header = tw.header`
   flex justify-between items-center
   max-w-screen-xl mx-auto
@@ -55,16 +55,22 @@ export const DesktopNavLinks = tw.nav`
   hidden lg:flex flex-1 justify-between items-center
 `;
 
-
 // Check for logged in
-import {useQuery,gql} from "@apollo/client";
+import { useQuery, gql } from '@apollo/client';
 const IS_LOGGED_IN = gql`
-    {
-        isLoggedIn @client
-    }
-`
+  {
+    isLoggedIn @client
+  }
+`;
 // End of logged in check
-export default ({ roundedHeaderButton = false, logoLink, links, className, collapseBreakpointClass = "lg" ,history}) => {
+export default ({
+  roundedHeaderButton = false,
+  logoLink,
+  links,
+  className,
+  collapseBreakpointClass = 'lg',
+  history
+}) => {
   /*
    * This header component accepts an optionals "links" prop that specifies the links to render in the navbar.
    * This links props should be an array of "NavLinks" components which is exported from this file.
@@ -78,45 +84,49 @@ export default ({ roundedHeaderButton = false, logoLink, links, className, colla
    * changing the defaultLinks variable below below.
    * If you manipulate links here, all the styling on the links is already done for you. If you pass links yourself though, you are responsible for styling the links or use the helper styled components that are defined here (NavLink)
    */
-  const {data,client} = useQuery(IS_LOGGED_IN);
+  const { data, client } = useQuery(IS_LOGGED_IN);
 
   const defaultLinks = [
     <NavLinks key={1}>
-
       <NavLink href="/service_requester/selectOption">Find Service</NavLink>
       <NavLink href="/service_requester/createBiddingJob">Create Bidding Job</NavLink>
       <NavLink href="/service_provider/find_jobs">Find Job</NavLink>
       <NavLink href="/add_complaint">Complain</NavLink>
 
-
-      {
-        (data) && data.isLoggedIn ? (
-         <React.Fragment>
-           <NavLink href={"/profile"}>Profile</NavLink>
-           <NavLink tw="lg:ml-12!" href={"/"} onClick={
-             ()=>{
-               localStorage.removeItem('token');
-               client.resetStore();
-               client.writeData({data:{isLoggedIn:false}});
-             } }>
-             LogOut
-           </NavLink>
-
-         </React.Fragment>
-        ):(
-          <React.Fragment>
-            <NavLink href="/login" tw="lg:ml-12!">
-              Login
-            </NavLink>
-            <PrimaryLink css={roundedHeaderButton && tw`rounded-full`} href="/signup">Sign Up</PrimaryLink>
-          </React.Fragment>
-        )
-      }
+      {data && data.isLoggedIn ? (
+        <React.Fragment>
+          <NavLink href={'/profile'}>Profile</NavLink>
+          <NavLink
+            tw="lg:ml-12!"
+            href={'/'}
+            onClick={() => {
+              localStorage.removeItem('token');
+              client.resetStore();
+              client.writeData({ data: { isLoggedIn: false } });
+            }}
+          >
+            LogOut
+          </NavLink>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <NavLink href="/login" tw="lg:ml-12!">
+            Login
+          </NavLink>
+          <PrimaryLink
+            css={roundedHeaderButton && tw`rounded-full`}
+            href="/signup"
+          >
+            Sign Up
+          </PrimaryLink>
+        </React.Fragment>
+      )}
     </NavLinks>
   ];
 
   const { showNavLinks, animation, toggleNavbar } = useAnimatedNavToggler();
-  const collapseBreakpointCss = collapseBreakPointCssMap[collapseBreakpointClass];
+  const collapseBreakpointCss =
+    collapseBreakPointCssMap[collapseBreakpointClass];
 
   const defaultLogoLink = (
     <LogoLink href="/">
@@ -129,19 +139,32 @@ export default ({ roundedHeaderButton = false, logoLink, links, className, colla
   links = links || defaultLinks;
 
   return (
-    <Header className={className || "header-light"}>
+    <Header className={className || 'header-light'}>
       <DesktopNavLinks css={collapseBreakpointCss.desktopNavLinks}>
         {logoLink}
         {links}
       </DesktopNavLinks>
 
-      <MobileNavLinksContainer css={collapseBreakpointCss.mobileNavLinksContainer}>
+      <MobileNavLinksContainer
+        css={collapseBreakpointCss.mobileNavLinksContainer}
+      >
         {logoLink}
-        <MobileNavLinks initial={{ x: "150%", display: "none" }} animate={animation} css={collapseBreakpointCss.mobileNavLinks}>
+        <MobileNavLinks
+          initial={{ x: '150%', display: 'none' }}
+          animate={animation}
+          css={collapseBreakpointCss.mobileNavLinks}
+        >
           {links}
         </MobileNavLinks>
-        <NavToggle onClick={toggleNavbar} className={showNavLinks ? "open" : "closed"}>
-          {showNavLinks ? <CloseIcon tw="w-6 h-6" /> : <MenuIcon tw="w-6 h-6" />}
+        <NavToggle
+          onClick={toggleNavbar}
+          className={showNavLinks ? 'open' : 'closed'}
+        >
+          {showNavLinks ? (
+            <CloseIcon tw="w-6 h-6" />
+          ) : (
+            <MenuIcon tw="w-6 h-6" />
+          )}
         </NavToggle>
       </MobileNavLinksContainer>
     </Header>
