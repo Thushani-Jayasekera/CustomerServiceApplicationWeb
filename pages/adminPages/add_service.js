@@ -151,7 +151,9 @@ const AddService = ({ history }) => {
                   type="file"
                   onChange={e => setImage(e.target.files[0])}
                 ></input>
-                <Button onClick={uploadImage}>Click to Upload Selected</Button>
+                <Button data-testid="FileUploadBtn" onClick={uploadImage}>
+                  Click to Upload Selected
+                </Button>
               </InputContainer>
 
               {uploading ? (
@@ -159,7 +161,12 @@ const AddService = ({ history }) => {
                   Please wait..
                 </SubmitButton>
               ) : (
-                <SubmitButton type="submit" value="Submit" disabled={uploading}>
+                <SubmitButton
+                  data-testid="SubmitBtn"
+                  type="submit"
+                  value="Submit"
+                  disabled={uploading}
+                >
                   ADD SERVICE
                 </SubmitButton>
               )}

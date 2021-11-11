@@ -197,7 +197,9 @@ const AdminSignUp = props => {
               placeholder="Security Key"
               onChange={handleChange}
             />
-            <Button type="submit">Sign Up</Button>
+            <Button type="submit" data-testid="signUpBtn">
+              Sign Up
+            </Button>
           </Form>
         </div>
         <div className="adminform-admincontainer adminsign-in-admincontainer">
@@ -227,7 +229,9 @@ const AdminSignUp = props => {
               onChange={handleChange}
             />
             <A href="#">Forgot your password?</A>
-            <Button type="submit">Sign In</Button>
+            <Button type="submit" data-testid="signInBtn">
+              Sign In
+            </Button>
           </Form>
         </div>
         <div className="adminoverlay-admincontainer">
@@ -254,6 +258,7 @@ const AdminSignUp = props => {
               <P>Enter your details and start working</P>
               <ButtonGhost
                 id="signUp"
+                data-testid="signUpBtnGhost"
                 onClick={() => {
                   const admincontainer = document.getElementById(
                     'admincontainer'
