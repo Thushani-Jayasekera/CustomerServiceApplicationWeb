@@ -97,4 +97,121 @@ describe('Basic Tests', () => {
     });
     cy.contains('User Complaints').should('exist');
   });
+
+  it('User Management page works fine', () => {
+    cy.viewport(1280, 720);
+    // 1. Direct to the Sign in Page
+    cy.visit('http://localhost:1234/AdminSignUp');
+
+    // 2. Directing to the User Management page
+    cy.log('Going to click Sign in with valid inputs');
+    cy.get('[name=adminSignInEmail]').type('testadmin@gmail.com');
+    cy.get('[name=adminSignInPassword]').type('test1234');
+    cy.get('[data-testid="signInBtn"]').click();
+    cy.contains('User Management').click();
+
+    // 3.Check Profiles tab
+    cy.get('#nav-tab-2').click();
+    cy.contains('Visit').should('exist');
+    cy.get('#nav-tab-1').click();
+    cy.contains('Activate').should('exist');
+    cy.get('#nav-tab-0').click();
+    cy.contains('Approve').should('exist');
+
+    // 3.Check Approved Profiles functions
+    cy.get('#nav-tab-2').click();
+    cy.contains('Visit').click();
+    cy.url().should('include', '/viewServiceProvider/');
+    cy.url().then(value => {
+      cy.log('The current real URL is: ', value);
+    });
+    cy.go('back');
+  });
+
+  it('Visit, suspend and remove functionalities work fine under approved profiles', () => {
+    cy.viewport(1280, 720);
+    // 1. Direct to the Sign in Page
+    cy.visit('http://localhost:1234/AdminSignUp');
+
+    // 2. Directing to the User Management page
+    cy.log('Going to click Sign in with valid inputs');
+    cy.get('[name=adminSignInEmail]').type('testadmin@gmail.com');
+    cy.get('[name=adminSignInPassword]').type('test1234');
+    cy.get('[data-testid="signInBtn"]').click();
+    cy.contains('User Management').click();
+
+    // 3.Check Visit Button
+    cy.get('#nav-tab-2').click();
+    cy.contains('Visit').click();
+    cy.url().should('include', '/viewServiceProvider/');
+    cy.url().then(value => {
+      cy.log('The current real URL is: ', value);
+    });
+    cy.go('back');
+
+    // 4.Check Suspend Button
+    cy.get('#nav-tab-2').click();
+    cy.contains('Suspend').click();
+
+    // 5.Check Activate Button
+    cy.get('#nav-tab-1').click();
+    cy.contains('Activate').click();
+    cy.go('back');
+  });
+
+  it('New Service Adding Successful.', () => {
+    cy.viewport(1280, 720);
+    // 1. Direct to the Sign in Page
+    cy.visit('http://localhost:1234/AdminSignUp');
+
+    // 2. Directing to the Add Service page
+    cy.log('Going to click Sign in with valid inputs');
+    cy.get('[name=adminSignInEmail]').type('testadmin@gmail.com');
+    cy.get('[name=adminSignInPassword]').type('test1234');
+    cy.get('[data-testid="signInBtn"]').click();
+    cy.contains('Add Service').click();
+
+    // 3.Check Service Adding
+    cy.get('[name=createServiceServiceName]').type('TestService');
+    cy.get('[name=createServiceUserType]').type('New Tester');
+    cy.get('[name=createServiceDescription]').type('Test Description');
+    const filepath = 'images/TestImage.jpeg';
+    cy.get('input[type="file"]').attachFile(filepath);
+    cy.get('[data-testid="FileUploadBtn"]').click();
+    cy.get('[data-testid="SubmitBtn"]').click();
+  });
+
+  it('Complaint Resolving Successful.', () => {
+    cy.viewport(1280, 720);
+    // 1. Direct to the Sign in Page
+    cy.visit('http://localhost:1234/AdminSignUp');
+
+    // 2. Directing to the Complaints page
+    cy.log('Going to click Sign in with valid inputs');
+    cy.get('[name=adminSignInEmail]').type('testadmin@gmail.com');
+    cy.get('[name=adminSignInPassword]').type('test1234');
+    cy.get('[data-testid="signInBtn"]').click();
+    cy.contains('Complaints').click();
+
+    // 3.Check Complaint resolving
+    cy.contains('Resolved').click();
+    cy.contains('Successfully Removed').should('exist');
+  });
+
+  it.only('Admin Login out works fine.', () => {
+    cy.viewport(1280, 720);
+    // 1. Direct to the Sign in Page
+    cy.visit('http://localhost:1234/AdminSignUp');
+
+    // 2. Directing to the Home Page
+    cy.log('Going to click Sign in with valid inputs');
+    cy.get('[name=adminSignInEmail]').type('testadmin@gmail.com');
+    cy.get('[name=adminSignInPassword]').type('test1234');
+    cy.get('[data-testid="signInBtn"]').click();
+
+    // 3.Check Logging out
+    cy.contains('LogOut').click();
+    cy.contains('using your e-mail').should('exist');
+    cy.contains('GetItDone Admin Panel').should('not.exist');
+  });
 });
