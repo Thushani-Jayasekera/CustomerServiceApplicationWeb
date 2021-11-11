@@ -5,6 +5,7 @@ import {
   Columns,
   Container,
   Content,
+  Button,
   Level,
   Section
 } from 'react-bulma-components';
@@ -12,6 +13,7 @@ import { MapPin } from 'react-feather';
 import profileImg from '../../images/user.jpg';
 import Layout from '../Layout';
 import Header from '../Header';
+import { Link } from 'react-router-dom';
 
 function ViewServiceProvider() {
   const { state } = useLocation();
@@ -32,7 +34,11 @@ function ViewServiceProvider() {
               <Columns.Column>
                 <Level>
                   <Level.Item>
-                    <img src={profileImg} width={'256px'} />
+                    <img
+                      crossOrigin={'anonymous'}
+                      src={state.users.profile_url || profileImg}
+                      width={'256px'}
+                    />
                   </Level.Item>
                 </Level>
               </Columns.Column>
@@ -64,22 +70,83 @@ function ViewServiceProvider() {
                     </Level.Item>
                   </Level.Side>
                 </Level>
+
+                <Level>
+                  <Level.Side align={'right'}>
+                    <Level.Item>
+                      <h6>Profession</h6>
+                    </Level.Item>
+                  </Level.Side>{' '}
+                  <Level.Side align={'right'}>
+                    <Level.Item>
+                      <h6>{state.users.profession || 'Not available'}</h6>
+                    </Level.Item>
+                  </Level.Side>
+                </Level>
                 <Level>
                   <Level.Side align={'left'}>
                     <Level.Item>
-                      <h6>{state.users.profession}</h6>
+                      <h5>Bio</h5>
                     </Level.Item>
                   </Level.Side>
-                </Level>
-                <Level>
                   <Level.Side>
                     <Level.Item>
-                      <p className={'has-text-link'}>{state.users.bio}</p>
+                      <p className={'has-text-link'}>
+                        "{state.users.bio || 'Bio not available'}"
+                      </p>
                     </Level.Item>
                   </Level.Side>
                 </Level>
-                <Level>Rating Area</Level>
-                <Level>Send message</Level>
+
+                <Block textSize={3}>Ratings</Block>
+
+                <Level>
+                  <Level.Side align={'left'} textWeight={'bold'}>
+                    Rating as a provider:
+                  </Level.Side>
+                  <Level.Side align={'right'}>
+                    <Level.Item>
+                      {state.users.rating &&
+                      state.users.rating.providerRating > 0 ? (
+                        <ReactStars
+                          edit={false}
+                          value={state.users.rating.providerRating}
+                          count={5}
+                          size={36}
+                        />
+                      ) : (
+                        <p>Not available</p>
+                      )}
+                    </Level.Item>
+                  </Level.Side>
+                </Level>
+
+                <Level>
+                  <Level.Side align={'left'} textWeight={'bold'}>
+                    Rating as requester:
+                  </Level.Side>
+                  <Level.Side align={'right'}>
+                    <Level.Item>
+                      {state.users.rating &&
+                      state.users.rating.requesterRating > 0 ? (
+                        <ReactStars
+                          edit={false}
+                          value={state.users.rating.requesterRating}
+                          count={5}
+                          size={36}
+                        />
+                      ) : (
+                        <p>Not available</p>
+                      )}
+                    </Level.Item>
+                  </Level.Side>
+                </Level>
+
+                {/* <Level>
+                  <Link to={'/message'}>
+                    <Button>Messaging</Button>
+                  </Link>
+                </Level> */}
                 <Section>
                   <h6>Contact Information</h6>
                   <ul>
