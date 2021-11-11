@@ -8,6 +8,7 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import Loader from '../components/utils/Loader';
 import { GET_ME } from '../gql/query';
 import { ADD_DETAILS } from '../gql/mutation';
+import { useToasts } from "react-toast-notifications";
 // Styling
 const Container = tw.div`relative flex justify-center`;
 const Content = tw.div`max-w-screen-xl m-0 sm:mx-20 sm:my-16 bg-gradient-to-r from-blue-100 via-purple-500 to-blue-500 text-gray-900 shadow sm:rounded-lg flex justify-center flex-1 items-center`;
@@ -37,6 +38,7 @@ const SubmitButton = styled.button`
 //
 
 const AddDetailsPage = ({ history }) => {
+  const {addToast} = useToasts()
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({fullname:'',contactNum:''});
   const { loading, error, data } = useQuery(GET_ME, {
@@ -55,7 +57,11 @@ const AddDetailsPage = ({ history }) => {
     { loading_mutation, error_mutation }
   ] = useMutation(ADD_DETAILS, {
     onCompleted: data => {
+      addToast("Successfully added",{appearance:"success"})
       history.push('/');
+    },
+    onError:error=>{
+      addToast(error.message.substr(15),{appearance:"error"})
     }
   });
 

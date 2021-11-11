@@ -80,7 +80,7 @@ const CommonProfilePage = ()=>{
                 </Level.Item>
                 <Level.Item>
                   <Link to={'/profile/serviceRequestsSent'}>
-                  <Button color={"link"}>Service requests for me </Button>
+                  <Button color={"link"}>Service requests by me </Button>
                   </Link>
                 </Level.Item>
               </Level>
@@ -89,12 +89,14 @@ const CommonProfilePage = ()=>{
               <Level>
                 <Level.Side>
                   <Level.Item>
-                    <h3>{meQuery.data.me.fullname}</h3>
+                    <h3>{meQuery.data.me.fullname || "Not available"}</h3>
                   </Level.Item>
                 </Level.Side>
+                <Level.Side align={"right"}>
                   <Level.Item>
-                    <h6>  <MapPin/> {meQuery.data.me.town} , {meQuery.data.me.city}</h6>
+                    <h6>  {meQuery.data.me.town&&(<MapPin/>)} {meQuery.data.me.town} {meQuery.data.me.city && " , "} {meQuery.data.me.city}</h6>
                   </Level.Item>
+                </Level.Side>
               </Level>
               <Level>
                 <Level.Side>
@@ -106,23 +108,34 @@ const CommonProfilePage = ()=>{
                 </Level.Side>
               </Level>
               <Level>
-                <Level.Side align={"left"}>
+                <Level.Side align={"right"}>
                   <Level.Item>
                     <h6>
-                      {meQuery.data.me.profession}
+                      Profession
+                    </h6>
+                  </Level.Item>
+                </Level.Side>                <Level.Side align={"right"}>
+                  <Level.Item>
+                    <h6>
+                      {meQuery.data.me.profession || "Not available"}
                     </h6>
                   </Level.Item>
                 </Level.Side>
               </Level>
               <Level>
+                <Level.Side align={"left"}>
+                  <Level.Item>
+                    <h5>Bio</h5>
+                  </Level.Item>
+                </Level.Side>
                 <Level.Side>
                   <Level.Item>
-                    <p className={"has-text-link"}>"{meQuery.data.me.bio}"</p>
+                    <p className={"has-text-link"}>"{meQuery.data.me.bio||"Bio not available"}"</p>
                   </Level.Item>
                 </Level.Side>
               </Level>
               <Block  textSize={3}>
-                Rating Area
+                Ratings
               </Block>
               <Level>
                 <Level.Side align={"left"} textWeight={"bold"}>
@@ -131,8 +144,10 @@ const CommonProfilePage = ()=>{
                 <Level.Side align={"right"}>
                   <Level.Item>
                     {
-                      (meQuery.data.me.rating && meQuery.data.me.rating.providerRating > 0) && (
+                      (meQuery.data.me.rating && meQuery.data.me.rating.providerRating > 0) ? (
                         <ReactStars edit={false} value={meQuery.data.me.rating.providerRating} count={5} size={36} />
+                      ):(
+                        <p>Not available</p>
                       )
                     }
 
@@ -140,7 +155,25 @@ const CommonProfilePage = ()=>{
                 </Level.Side>
               </Level>
               <Level>
-                Send message
+                <Level.Side align={"left"} textWeight={"bold"}>
+                  Rating as requester:
+                </Level.Side>
+                <Level.Side align={"right"}>
+                  <Level.Item>
+                    {
+                      (meQuery.data.me.rating && meQuery.data.me.rating.requesterRating > 0) ? (
+                        <ReactStars edit={false} value={meQuery.data.me.rating.requesterRating} count={5} size={36} />
+                      ):(
+                        <p>Not available</p>
+                      )
+                    }
+
+                  </Level.Item>
+                </Level.Side>
+              </Level>              <Level>
+                <Link to={"/message"}>
+                  <Button>Messaging</Button>
+                </Link>
               </Level>
               <Section>
                 <h6>
@@ -155,7 +188,7 @@ const CommonProfilePage = ()=>{
                         </Block>
                       </Level.Side>
                       <Level.Side align={"right"}>
-                        {meQuery.data.me.contactNum}
+                        {meQuery.data.me.contactNum || "Not available"}
                       </Level.Side>
                     </Level>
                   </li>
@@ -167,7 +200,7 @@ const CommonProfilePage = ()=>{
                         </Block>
                       </Level.Side>
                       <Level.Side align={"right"}>
-                        {meQuery.data.me.address}
+                        {meQuery.data.me.address || "Not available"}
                       </Level.Side>
                     </Level>
                   </li>

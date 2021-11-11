@@ -92,6 +92,7 @@ export default ({
       <NavLink href="/service_requester/createBiddingJob">Create Bidding Job</NavLink>
       <NavLink href="/service_provider/find_jobs">Find Job</NavLink>
       <NavLink href="/add_complaint">Complain</NavLink>
+      <NavLink href="/message">Message</NavLink>
 
       {data && data.isLoggedIn ? (
         <React.Fragment>

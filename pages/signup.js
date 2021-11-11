@@ -56,6 +56,7 @@ const IllustrationImage = styled.div`
 
 //Start of graphql
 import {useMutation,useApolloClient,gql} from "@apollo/client";
+import { useToasts } from "react-toast-notifications";
 
 const SIGNUP_USER = gql`
     mutation SignUpMutation($signUpUsername: String!, $signUpEmail: String!, $signUpPassword: String!){
@@ -77,6 +78,7 @@ export default ({
                 }) => {
 
   //Hooks
+  const {addToast} = useToasts()
   const [values,setValues] = useState({});
   const handleChange = event=>{
     setValues({
@@ -90,9 +92,29 @@ export default ({
       console.log(data.signUp);
       localStorage.setItem('token',data.signUp);
       client.writeData({data:{isLoggedIn:true}})
+      addToast("Successfully signed up ", {appearance:"success"})
       history.push('/');
+    },
+    onError:error=>{
+      console.log(error)
+      addToast(error.message.substr(15),{appearance:"error"})
     }
   })
+  const handleSubmit = event=>{
+    event.preventDefault();
+    if(values.signUpPassword !== values.signUpConfirmPassword){
+      addToast("Passwords doesn't match",{appearance:"error"})
+    }else if(values.signUpPassword.length<8){
+      addToast("Password should have at least length of 8 ")
+    }
+    else{
+      signUp({
+        variables:{
+          ...values
+        }
+      }).then(data=>console.log(""))
+    }
+  }
 
   //End of hooks
   return(
@@ -109,20 +131,11 @@ export default ({
                 <DividerTextContainer>
                   <DividerText>Sign up with your email</DividerText>
                 </DividerTextContainer>
-                <Form onSubmit={
-                  event=>{
-                    event.preventDefault();
-                    console.log(values);
-                    signUp({
-                      variables:{
-                        ...values
-                      }
-                    })
-                  }
-                }>
+                <Form onSubmit={handleSubmit}  >
                   <Input type="email" name={"signUpEmail"} placeholder="Email" onChange={handleChange} />
                   <Input type="text" name={"signUpUsername"} placeholder="Username" onChange={handleChange} />
                   <Input type="password" name={"signUpPassword"} placeholder="Password" onChange={handleChange} />
+                  <Input type="password" name={"signUpConfirmPassword"} placeholder="Confirm Password" onChange={handleChange} />
                   <SubmitButton type="submit">
                     <SubmitButtonIcon className="icon" />
                     <span className="text">{submitButtonText}</span>

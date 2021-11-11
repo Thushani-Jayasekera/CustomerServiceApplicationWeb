@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Container, Content, Form, Section } from "react-bulma-components";
+import { Button, Container, Content, Form, Level, Section, Box, Modal, Media } from "react-bulma-components";
 import Layout from "../components/Layout";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
@@ -7,16 +7,20 @@ import { useMutation, useQuery } from "@apollo/client";
 import { GET_ME } from "../gql/query";
 import Loader from "../components/utils/Loader";
 import { handleChangefn } from "../utils";
-import { UPDATE_ME } from "../gql/mutation";
+import { CHANGE_SERVICE_PROVIDING_STATUS, UPDATE_ME } from "../gql/mutation";
 import { useToasts } from "react-toast-notifications";
 import { Widget, WidgetLoader } from "react-cloudinary-upload-widget";
 import UploadWidget from "../components/utils/UploadWidget";
+import MyModal from "../components/MyModal";
+
+
 
 const EditProfilePage = ({history})=>{
   const [values,setValues] = useState({})
   const [image,setImage] = useState({})
   const [imgPresent,setImagePresent] = useState(false)
   const {addToast} = useToasts()
+  const [modalState,setModalState] = useState(false)
   const meQuery = useQuery(GET_ME,{
     onCompleted:(data)=>{
       setValues({
@@ -32,12 +36,28 @@ const EditProfilePage = ({history})=>{
       })
     }
   })
+  const [changeServiceProvidingStatus,changeServiceProvidingStatusState] = useMutation(CHANGE_SERVICE_PROVIDING_STATUS,{
+    onCompleted:(data)=>{
+      addToast("Sucessfully changed status",{appearance:"success"})
+      location.reload()
+    },
+    onError:(error)=>addToast(error.message.substr(15),{appearance:"error"})
+  })
   const [updateMe,stateOfupdateMe] = useMutation(UPDATE_ME,{
     onCompleted:(data)=>{
       addToast("Successfully updated",{appearance:"success"})
       history.push("/profile")
     }
   })
+  const get_button_text = (state)=>{
+    if(state ==="approved"){
+      return "Pause Service"
+    }else if(state === "paused"){
+      return "Resume Service"
+    }else{
+      return undefined
+    }
+  }
   const handleSubmit = (event)=>{
     event.preventDefault()
     if(imgPresent){
@@ -87,6 +107,24 @@ const EditProfilePage = ({history})=>{
         </Section>
         <Section>
           <form onSubmit={handleSubmit}>
+            {
+              meQuery.data.me.roles.includes("service_provider")&&(
+                <Level>
+                  <Level.Item>
+                    {
+                      (get_button_text(meQuery.data.me.profile_state))&&(
+                        <>
+                        <Button color={"danger"} onClick={(event)=>{event.preventDefault();setModalState(true)}}>{get_button_text(meQuery.data.me.profile_state)}</Button>
+                        <MyModal title={"Are you sure?"}  content={"You can't provide status "} modalState={modalState} setModalState={setModalState}
+                                 proceed={changeServiceProvidingStatus}/>
+                        </>
+                      )
+                    }
+
+                  </Level.Item>
+                </Level>
+              )
+            }
             <Form.Field>
               <Form.Label>
                 Full name
@@ -100,7 +138,7 @@ const EditProfilePage = ({history})=>{
                 Contact Number
               </Form.Label>
               <Form.Control>
-                <Form.Input type={"text"} name={"updateMeContactNum"} value={values.updateMeContactNum || ""} onChange={handleChange} />
+                <Form.Input type={"text"} name={"updateMeContactNum"} value={values.updateMeContactNum || ""} onChange={handleChange}  />
               </Form.Control>
             </Form.Field>
             <Form.Field>
