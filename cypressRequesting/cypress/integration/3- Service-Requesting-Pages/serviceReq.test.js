@@ -3,6 +3,7 @@
 
 
 
+
 describe('Homepage',()=>{
     it('should have the correct page title',()=>{
         cy.viewport(1280, 720);
@@ -172,3 +173,4 @@ describe('Profile',()=>{
         
     })
 })
+

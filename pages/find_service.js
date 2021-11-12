@@ -171,6 +171,12 @@ const FindServicePage = ({ history }) => {
               onSubmit={event => {
                 event.preventDefault();
                 console.log(values);
+                const dateTime = new Date(values.createServiceRequestDate+"T"+values.createServiceRequestTime)
+                const currTime = new Date()
+                if(dateTime<currTime){
+                  addToast("Invalid time",{appearance:"error"})
+                  return
+                }
                 createServiceRequest({
                   variables: {
                     ...values,

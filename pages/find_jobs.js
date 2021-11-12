@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { GET_ME_AS_SERVICE_PROVIDER, GET_JOB_POSTING_FEED } from "../gql/query";
+import React, { useEffect, useState } from "react";
+import { GET_ME_AS_SERVICE_PROVIDER, GET_JOB_POSTING_FEED, GET_ALL_SERVICE_TYPES } from "../gql/query";
 import { useQuery } from "@apollo/client";
 import Loader from "../components/utils/Loader";
 import Header from "../components/Header"
@@ -19,22 +19,31 @@ const FindJobsPage = ()=>{
     jobPostingFeedTown:"",
     jobPostingFeedCategory:""
   });
-  const {data,loading,error,fetchMore} = useQuery(GET_ME_AS_SERVICE_PROVIDER)
+
+
+  const {data,loading,error,fetchMore} = useQuery(GET_ME_AS_SERVICE_PROVIDER,{
+    onCompleted:(data)=>{
+      setValues({
+        jobPostingFeedProvince:data.me.province,
+        jobPostingFeedCity:data.me.city,
+        jobPostingFeedTown:data.me.town,
+        jobPostingFeedCategory:""
+      })
+    }
+  })
   const job_query = useQuery(GET_JOB_POSTING_FEED,{
     variables:{
       jobPostingFeedProvince:data.me.province,
       jobPostingFeedCity:data.me.city,
       jobPostingFeedTown:data.me.town,
-      jobPostingFeedCategory:"Plumbing",
       jobPostingFeedCursor:"",
+      jobPostingFeedCategory:""
     },
     fetchPolicy:"cache-and-network",
     nextFetchPolicy:"cache-and-network",
   })
+
   if(loading || job_query.loading) return <Loader/>
-  if(data.me.profile_state === "suspended"){
-    return <p>You are suspended</p>
-  }
   return(
     <Layout>
       <Header roundedHeaderButton={true}/>
@@ -51,7 +60,7 @@ const FindJobsPage = ()=>{
           <Columns.Column>
             {
               (job_query.data && job_query.data.jobPostingFeed.jobPostings.map((obj,i)=>{
-                return(<JobPosting key={i} id={obj.id} heading={obj.description} postedBy={obj.postedBy.username} location={obj.location.town+" , "+obj.location.city}
+                return(<JobPosting key={i} id={obj.id} heading={obj.heading} postedBy={obj.postedBy.username} location={obj.location.town+" , "+obj.location.city}
                                    lowerLimit={obj.budgetRange.lowerLimit} upperLimit={obj.budgetRange.upperLimit} />)
             }))
             }

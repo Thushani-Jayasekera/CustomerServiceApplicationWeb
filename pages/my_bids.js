@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Container, Content, Section } from "react-bulma-components";
+import { Button, Container, Content, Message, Section } from "react-bulma-components";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_MY_BIDS } from "../gql/query";
 import Loader from "../components/utils/Loader";
@@ -130,7 +130,11 @@ const MyBidsPage = ({history})=>{
                                           red_button_fn={get_red_button_fn(bid.state,bid.id)}
                   />
                 })
-              ):(<p>No bids yet</p>)
+              ):(<Message color={"danger"}>
+                <Message.Body>
+                  No bids found
+                </Message.Body>
+              </Message>)
             }
           </Section>
         </Content>
