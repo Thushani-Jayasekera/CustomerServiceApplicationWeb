@@ -135,11 +135,12 @@ const Providers=({items, loading,searchTerm,me_id})=>{
                       imageSrc={
                         card.profile_url?card.profile_url:`${profileImg}`
                       }
+                      crossOrigin={"anonymous"}
                     >
-                      <CardRatingContainer>
-                        <CardRating>{card.rating.providerRating}</CardRating>
-                        <CardReview>({card.provider_review_count})</CardReview>
-                      </CardRatingContainer>
+                      {/*<CardRatingContainer>*/}
+                      {/*  /!*<CardRating>{card.rating.providerRating}</CardRating>*!/*/}
+                      {/*  /!*<CardReview>({card.provider_review_count})</CardReview>*!/*/}
+                      {/*</CardRatingContainer>*/}
                     </CardImageContainer>
                   </Column>
                   <Column>

@@ -191,77 +191,80 @@ const SelectOptionPage = ({ history }) => {
   const currentPosts=items.slice(indexOfFirstPost,indexOfLastPost)
 
   return (
-    <Container>
-      <Header/>
-      <ContentWithPaddingXl>
-        <HeaderRow>
-          <Heading>{heading}</Heading>
-        </HeaderRow>
-        <br/>
-        {/*{city},{province},{rating}*/}
-        <Container>
-        <Columns>
-        
-        <Form.Input
-         type="text"
-         placeholder="Enter Service Provider Name"
-         onChange={event => {
-              setSearchTerm(event.target.value);
-            }}/>
-     <br/>
-     <FeatherIcon icon="filter"/>
-     <Container>
-       <Block>
-       <label>
-         Sort By
-      <select class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
-         name={'searchServiceProviderbyProfessioninProvinceRating'}
-         onChange={handleChange}
-         value={rating}>
-        <option value=''>Rating {rating}</option>
-        <option value='0'>Highest to Lowest</option>
-        <option value='1'>Lowest to Highest</option>
-    </select>
-    </label>
-    </Block>
-    </Container>
-    <Block>
-      <label>
-      <input
-          type="checkbox"
-          className="mx-5"
-          checked={checked}
-          onChange={handleCheck}
-          name={'searchServiceProviderbyProfessioninProvinceProvince'}
-        />
-        View Providers only in my province
-      </label>
-      
-      <label>
-      <input
-          type="checkbox"
-          className="mx-5"
-          checked={citychecked}
-          onChange={handleCityCheck}
-          name={'searchServiceProviderbyProfessioninProvinceCity'}
-        />
-        View Providers only in my city
-      </label>
-      </Block>
- 
-      </Columns>
-      </Container>
-        <Providers items={items} loading={loading} searchTerm={searchTerm} me_id={me_id}/>
+    <Layout>
+      <Container>
+        <Header/>
+        <ContentWithPaddingXl>
+          <HeaderRow>
+            <Heading>{heading}</Heading>
+          </HeaderRow>
+          <br/>
+          {/*{city},{province},{rating}*/}
+          <Container>
+            <Columns>
 
-        
+              <Form.Input
+                type="text"
+                placeholder="Enter Service Provider Name"
+                onChange={event => {
+                  setSearchTerm(event.target.value);
+                }}/>
+              <br/>
+              <FeatherIcon icon="filter"/>
+              <Container>
+                <Block>
+                  <label>
+                    Sort By
+                    <select class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
+                            name={'searchServiceProviderbyProfessioninProvinceRating'}
+                            onChange={handleChange}
+                            value={rating}>
+                      <option value=''>Rating {rating}</option>
+                      <option value='0'>Highest to Lowest</option>
+                      <option value='1'>Lowest to Highest</option>
+                    </select>
+                  </label>
+                </Block>
+              </Container>
+              <Block>
+                <label>
+                  <input
+                    type="checkbox"
+                    className="mx-5"
+                    checked={checked}
+                    onChange={handleCheck}
+                    name={'searchServiceProviderbyProfessioninProvinceProvince'}
+                  />
+                  View Providers only in my province
+                </label>
+
+                <label>
+                  <input
+                    type="checkbox"
+                    className="mx-5"
+                    checked={citychecked}
+                    onChange={handleCityCheck}
+                    name={'searchServiceProviderbyProfessioninProvinceCity'}
+                  />
+                  View Providers only in my city
+                </label>
+              </Block>
+
+            </Columns>
+          </Container>
+          <Providers items={items} loading={loading} searchTerm={searchTerm} me_id={me_id}/>
+
+
 
           {items.length === 0 && (
             <Message color={'danger'} mt={4}>
               <Message.Body>Sorry, No Providers Found as {type}s. Visit us Later!</Message.Body>
             </Message>
           )}
-      </ContentWithPaddingXl>
-    </Container>
+        </ContentWithPaddingXl>
+      </Container>
+    </Layout>
+
   );
 };
 
