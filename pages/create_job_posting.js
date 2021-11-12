@@ -12,12 +12,12 @@ import tw from 'twin.macro';
 import styled from 'styled-components';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import Loader from '../components/utils/Loader';
-import { handleChangefn } from '../utils';
-import * as towns from '../data/towns.json';
-import * as provinces from '../data/provinces.json';
-// import TextField from "@mui/material/TextField";
-//import {ReactComponent as SvgDotPatternIcon} from "../images/dot-pattern.svg"
-// Styling
+
+import { handleChangefn } from "../utils";
+import * as towns from "../data/towns.json"
+import * as provinces from "../data/provinces.json"
+//import TextField from "@mui/material/TextField";
+
 
 const Container = tw.div`relative`;
 const Content = tw.div`max-w-screen-xl mx-auto py-20 lg:py-24`;
