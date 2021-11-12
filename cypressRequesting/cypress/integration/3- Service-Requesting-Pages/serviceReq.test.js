@@ -32,7 +32,7 @@ describe('Find service',()=>{
 
         cy.visit('http://localhost:1234/')
         
-        cy.get('.sc-bZQynM > .sc-bwzfXH > [href="/service_requester/selectOption"]').click();
+        cy.contains('Find Service').click();
 
 
         cy.url().should('include', '/service_requester/selectOption');
@@ -77,28 +77,29 @@ describe('Find service',()=>{
         cy.viewport(1290,720);
 
         cy.visit('http://localhost:1234/service_requester/selectOption/Plumber')
-        cy.get('[href="/user/612c92089d1b2535d4e0a909"] > .Buttons__PrimaryButton-bkyvzu-0').click()
-        cy.url().should('include', '/user/612c92089d1b2535d4e0a909')
+        cy.contains('View Profile').click()
+        cy.url().should('include', '/user/')
     })
 
     it('should visit the reqquest form page when Hire Now is clicked',()=>{
         cy.viewport(1290,720);
 
         cy.visit('http://localhost:1234/service_requester/selectOption/Plumber')
-        cy.get('[href="/service_requester/createRequest/612c92089d1b2535d4e0a909"] > .Buttons__PrimaryButton-bkyvzu-0').click()
-        cy.url().should('include', '/service_requester/createRequest/612c92089d1b2535d4e0a909');
+        cy.contains('Hire Now').click()
+        cy.url().should('include', '/service_requester/createRequest/');
     })
 
     it('should fill the request form and submit properly', ()=>{
+        cy.visit('http://localhost:1234/service_requester/createRequest/612c92089d1b2535d4e0a909')
         cy.url().should('include', '/service_requester/createRequest/612c92089d1b2535d4e0a909');
-        cy.get('#date-input').type('11/12/2021');
+        cy.contains('mm/dd/yyyy').type('11/12/2021');
         cy.get('#time-input').type('06:21 PM');
         cy.get('#min-input').type('1000')
         cy.get('#max-input').type('1500')
         cy.get('select').select("0")
         cy.get('#job-input').type("the job input")
-        cy.get('.sc-ibxdXY').click();
-        cy.url().should('include', '/hireNow/612c92089d1b2535d4e0a909');
+        cy.contains('SUBMIT').click();
+        cy.url().should('include', '/hireNow/');
 
     })
 })
@@ -121,7 +122,7 @@ describe('Profile',()=>{
 
         cy.visit('http://localhost:1234/')
         
-        cy.getcy.get('[href="/profile"]').click();
+        cy.contains('Profile').click();
 
 
         cy.url().should('include', '/profile');
@@ -140,7 +141,7 @@ describe('Profile',()=>{
 
 
         cy.visit('http://localhost:1234/profile')
-        cy.get(':nth-child(5) > :nth-child(2) > a > .is-link').click();
+        cy.contains('requests by').click();
 
 
         cy.url().should('include', '/profile/serviceRequestsSent');
@@ -159,14 +160,14 @@ describe('Profile',()=>{
     it('should be able to visit profile and go to for me request',()=>{
         cy.viewport(1280, 720); 
         cy.visit('http://localhost:1234/profile')
-        cy.get(':nth-child(3) > :nth-child(2) > a > .is-link').click();
+        cy.contains('requests for me').click();
 
     });
 
     it('should click and view a pending request',()=>{
         cy.viewport(1280, 720); 
         cy.visit('http://localhost:1234/profile/serviceRequestsSent')
-        cy.get('.jss3 > .MuiContainer-root > .jss1 > .react-swipeable-view-container > [aria-hidden="false"] > .box > .has-background-link-light > .sc-clNaTc > :nth-child(2) > :nth-child(1) > .columns > a > .button').click()
+        cy.contains('View').click()
 
         
     })
