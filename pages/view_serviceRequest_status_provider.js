@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
 import Layout from '../components/Layout';
 import { motion } from 'framer-motion';
 const _ = require('underscore');
@@ -96,7 +96,9 @@ const CardContent = tw.p`mt-1 text-sm font-medium text-gray-600`;
 const ServiceProviderStatusPage = ({ history }) => {
   const { loading, error, data } = useQuery(GET_ME_AS_SERVICE_PROVIDER);
 
-  const requestsForMe = useQuery(GET_SERVICE_REQUESTS_FOR_ME);
+  const requestsForMe = useQuery(GET_SERVICE_REQUESTS_FOR_ME,{
+    fetchPolicy:'cache-first'
+  });
 
   const { addToast } = useToasts();
   //const[values,setValues]=useState();
@@ -115,7 +117,7 @@ const ServiceProviderStatusPage = ({ history }) => {
   );
 
   if (loading || requestsForMe.loading) return <Loader />;
-
+  //location.reload();
   const acceptedRequests = requestsForMe.data.acceptedServiceRequestsForMe;
   const pendingRequests = requestsForMe.data.pendingServiceRequestsForMe;
   const startedRequests = requestsForMe.data.startedServiceRequestsForMe;
@@ -125,7 +127,7 @@ const ServiceProviderStatusPage = ({ history }) => {
   const reviewedRequests = requestsForMe.data.reviewedServiceRequestsForMe;
   if (error) {
     console.log(error);
-    return <Redirect to={'/'} />};
+   location.reload(); };
   return (
     <Container>
       <Header />

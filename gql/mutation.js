@@ -11,6 +11,8 @@ const MAKE_ME_SERVICE_PROVIDER = gql`
     $makeMeServiceProviderCity: String!
     $makeMeServiceProviderTown: String!
     $makeMeServiceProviderBio: String
+      $postalCode: String
+      $profileUrl: String
   ) {
     makeMeServiceProvider(
       fullname: $makeMeServiceProviderFullname
@@ -22,6 +24,8 @@ const MAKE_ME_SERVICE_PROVIDER = gql`
       city: $makeMeServiceProviderCity
       town: $makeMeServiceProviderTown
       bio: $makeMeServiceProviderBio
+      postalCode: $postalCode
+      profile_url: $profileUrl
     ) {
       id
       bio
@@ -29,15 +33,51 @@ const MAKE_ME_SERVICE_PROVIDER = gql`
     }
   }
 `;
+const CHANGE_SERVICE_PROVIDING_STATUS = gql`mutation Mutation {
+  changeServiceProvidingStatus {
+    profile_state
+  }
+}`
 
+const UPDATE_ME = gql`
+  mutation Mutation(
+    $updateMeFullname: String
+    $updateMeContactNum: String
+    $updateMeAddress: String
+    $updateMeProfession: String
+    $updateMeProvince: String
+    $updateMeCity: String
+    $updateMeTown: String
+    $updateMePostalCode: String
+    $updateMeProfileUrl:String  
+  ) {
+    updateMe(
+      fullname: $updateMeFullname
+      contactNum: $updateMeContactNum
+      address: $updateMeAddress
+      profession: $updateMeProfession
+      province: $updateMeProvince
+      city: $updateMeCity
+      town: $updateMeTown
+      postalCode: $updateMePostalCode
+      profile_url: $updateMeProfileUrl  
+    ) {
+      id
+      username
+      email
+    }
+  }
+`;
 const ADD_DETAILS = gql`
   mutation AddDetailsSR(
+    $registerServiceRequesterFullname: String!
     $registerServiceRequesterContactNum: String!
     $registerServiceRequesterAddress: String!
     $registerServiceRequesterCity: String!
     $registerServiceRequesterPostalCode: String!
   ) {
     registerServiceRequester(
+      fullname: $registerServiceRequesterFullname
       contactNum: $registerServiceRequesterContactNum
       address: $registerServiceRequesterAddress
       city: $registerServiceRequesterCity
@@ -185,20 +225,23 @@ const REJECT_SR = gql`
   }
 `;
 
-
-const COMPLETE_SR=gql`
-mutation CompleteServiceRequestMutation($completeServiceRequestId: ID, $completeServiceRequestFinalAmount: Int) {
-  completeServiceRequest(id: $completeServiceRequestId, finalAmount: $completeServiceRequestFinalAmount) {
-    requester_id
-    provider_id
-    id
-    task
-    state
+const COMPLETE_SR = gql`
+  mutation CompleteServiceRequestMutation(
+    $completeServiceRequestId: ID
+    $completeServiceRequestFinalAmount: String
+  ) {
+    completeServiceRequest(
+      id: $completeServiceRequestId
+      finalAmount: $completeServiceRequestFinalAmount
+    ) {
+      requester_id
+      provider_id
+      id
+      task
+      state
+    }
   }
-}
 `;
-
-
 
 const START_SR = gql`
   mutation StartServiceRequestMutation($startServiceRequestId: ID) {
@@ -208,7 +251,6 @@ const START_SR = gql`
       task
       state
     }
-
   }
 `;
 
@@ -250,18 +292,21 @@ const EDIT_SR = gql`
   mutation EditServiceRequestMutation(
     $editServiceRequestTask: String!
     $editServiceRequestId: ID
-    $editServiceRequestImage1: String
-    $editServiceRequestImage2: String
-    $editServiceRequestImage3: String
   ) {
     editServiceRequest(
       id: $editServiceRequestId
       task: $editServiceRequestTask
-      image1: $editServiceRequestImage1
-      image2: $editServiceRequestImage2
-      image3: $editServiceRequestImage3
     ) {
       task
+    }
+  }
+`;
+
+const CONFIRM_CASH_PAYMENT = gql`
+  mutation ConfirmCashPaymentMutation($confirmCashPaymentId: ID) {
+    confirmCashPayment(id: $confirmCashPaymentId) {
+      id
+      hasPaid
     }
   }
 `;
@@ -315,6 +360,8 @@ const CREATE_SERVICE = gql`
     ) {
       service_name
       description
+      user_type
+      image
     }
   }
 `;
@@ -332,15 +379,15 @@ const MAKE_COMPLAINT = gql`
       title: $makeComplaintTitle
       complaint: $makeComplaintComplaint
     ) {
-      complainer
+      complainer {
+        username
+      }
       victim
       title
       complaint
     }
   }
 `;
-
-
 
 const ACCEPT_JOB_BID = gql`
   mutation Mutation(
@@ -355,6 +402,97 @@ const ACCEPT_JOB_BID = gql`
     }
   }
 `;
+
+const SET_ACCOUNT_STATE = gql`
+  mutation SetProfileStateMutation($providerId: ID, $state: String) {
+    setProfileState(providerID: $providerId, state: $state) {
+      id
+    }
+  }
+`;
+
+const REMOVE_SERVICE_PROVIDER = gql`
+  mutation RemoveServiceProviderMutation($removeServiceProviderId: ID) {
+    removeServiceProvider(id: $removeServiceProviderId) {
+      id
+    }
+  }
+`;
+
+const REMOVE_COMPLAINT = gql`
+  mutation RemoveComplaintMutation($removeComplaintId: ID) {
+    removeComplaint(id: $removeComplaintId)
+  }
+`;
+
+const CHANGE_JOB_BID_STATE = gql`
+  mutation ChangeStateJobBidMutation($jobBidId: ID!, $jobBidState: String!) {
+    changeStateJobBid(jobBidId: $jobBidId, jobBidState: $jobBidState) {
+      id
+      state
+    }
+  }
+`;
+
+const SEND_NEW_MESSAGE = gql`
+  mutation AddMessageMutation($conversationId: ID, $sender: ID, $text: String) {
+    addMessage(conversationID: $conversationId, sender: $sender, text: $text) {
+      id
+      conversationID
+      sender
+      text
+      createdAt
+    }
+  }
+`;
+
+const ADD_NEW_CONVERSATION = gql`
+  mutation NewConverstionMutation(
+    $newConverstionSenderId3: ID
+    $newConverstionRecieverId3: ID
+  ) {
+    newConverstion(
+      senderID: $newConverstionSenderId3
+      recieverID: $newConverstionRecieverId3
+    ) {
+      id
+      members
+      createdAt
+    }
+  }
+`;
+
+const ADD_REVIEW = gql`
+  mutation Mutation(
+    $type: String
+    $addReviewToBidId: ID
+    $rating: Float
+    $review: String
+  ) {
+    addReviewToBid(
+      type: $type
+      id: $addReviewToBidId
+      rating: $rating
+      review: $review
+    ) {
+      id
+      providerReview
+      providerRating
+      requesterReview
+      requesterRating
+    }
+  }
+`;
+
+const SEND_MSG=gql`
+mutation SendMessageMutation($sendMessageBody2: String, $sendMessageTo2: String) {
+  sendMessage(body: $sendMessageBody2, to: $sendMessageTo2) {
+    body
+  }
+}
+
+`;
+
 export {
   MAKE_ME_SERVICE_PROVIDER,
   ADD_DETAILS,
@@ -370,6 +508,19 @@ export {
   FEEDBACK_SR,
   START_SR,
   CUSTOMER_FEEDBACK_SR,
-  MAKE_COMPLAINT,COMPLETE_SR,
-  ACCEPT_JOB_BID
+  MAKE_COMPLAINT,
+  COMPLETE_SR,
+  ACCEPT_JOB_BID,
+  CREATE_SERVICE,
+  SET_ACCOUNT_STATE,
+  UPDATE_ME,
+  REMOVE_SERVICE_PROVIDER,
+  REMOVE_COMPLAINT,
+  CHANGE_JOB_BID_STATE,
+  SEND_NEW_MESSAGE,
+  ADD_NEW_CONVERSATION,
+  ADD_REVIEW,
+  CONFIRM_CASH_PAYMENT,
+  SEND_MSG,
+  CHANGE_SERVICE_PROVIDING_STATUS
 };

@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { ADD_JOB_POSTING } from '../gql/mutation';
-import { GET_ME_AS_SERVICE_REQUESTER } from '../gql/query';
-import {useToasts} from "react-toast-notifications";
+import {
+  GET_ALL_SERVICE_TYPES,
+  GET_ME_AS_SERVICE_REQUESTER
+} from '../gql/query';
+import { useToasts } from 'react-toast-notifications';
 import Layout from '../components/Layout';
 import Header from '../components/Header';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import Loader from '../components/utils/Loader';
+
 import { handleChangefn } from "../utils";
-//import {ReactComponent as SvgDotPatternIcon} from "../images/dot-pattern.svg"
-// Styling
+import * as towns from "../data/towns.json"
+import * as provinces from "../data/provinces.json"
+//import TextField from "@mui/material/TextField";
+
 
 const Container = tw.div`relative`;
 const Content = tw.div`max-w-screen-xl mx-auto py-20 lg:py-24`;
@@ -48,51 +54,67 @@ const SubmitButton = tw.button`w-full sm:w-32 mt-6 py-3 bg-gray-100 text-primary
 
 //TODO// //Prevent from booking servcice requests for user it self
 const CreateJobPostingPage = ({ history }) => {
-  
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState({
+    createJobPostingProvince: 'Northern',
+    createJobPostingCity: 'Jaffna',
+    createJobPostingTown: 'Allaipiddi'
+  });
   const { loading, error, data } = useQuery(GET_ME_AS_SERVICE_REQUESTER);
-  const {addToast} = useToasts()
-  const [
-    createJobPosting,state
-  ] = useMutation(ADD_JOB_POSTING, {
+  const serviceQuery = useQuery(GET_ALL_SERVICE_TYPES, {
     onCompleted: data => {
+      setValues({
+        ...values,
+        createJobPostingCategory: data.viewAllServiceTypes[0].service_name
+      });
+    }
+  });
+  const { addToast } = useToasts();
+  const [createJobPosting, state] = useMutation(ADD_JOB_POSTING, {
+    onCompleted: data => {
+      addToast('Success', { appearance: 'success' });
       history.push('/');
     },
     onError: error1 => {
-      addToast("Error ",{appearance:"error"})
+      addToast('Error ', { appearance: 'error' });
     }
   });
-  if (loading) {
+  if (loading || serviceQuery.loading) {
     return <Loader />;
   }
-  const handleChange = handleChangefn(setValues,values)
-  const handleSubmit = (event)=>{
-    event.preventDefault()
+  const handleChange = handleChangefn(setValues, values);
+  const handleSubmit = event => {
+    event.preventDefault();
+    const lower = parseFloat(values.createJobPostingLowerLimit);
+    const upper = parseFloat(values.createJobPostingUpperLimit);
+    if (lower > upper) {
+      addToast('Upper limit has to be greater than lower limit ', {
+        appearance: 'error'
+      });
+      return;
+    }
     createJobPosting({
-      variables:{
+      variables: {
         ...values,
-        createJobPostingLowerLimit:parseFloat(values.createJobPostingLowerLimit),
-        createJobPostingUpperLimit:parseFloat(values.createJobPostingUpperLimit)
+        createJobPostingLowerLimit: lower,
+        createJobPostingUpperLimit: upper
       }
-    })
+    });
+  };
 
-  }
   return (
     <Container>
-        <Header/>
+      <Header />
       <Content>
         <FormContainer>
           <div tw="mx-auto max-w-4xl">
             <h2>Create job posting</h2>
             <p>Creator {data.me.username}</p>
-            <Form
-              onSubmit={handleSubmit}
-            >
+            <Form onSubmit={handleSubmit}>
               <InputContainer>
                 <Label>Job Title</Label>
                 <Input
                   type="text"
-                  name={"createJobPostingHeading"}
+                  name={'createJobPostingHeading'}
                   placeholder="Job title"
                   onChange={handleChange}
                   required
@@ -109,7 +131,6 @@ const CreateJobPostingPage = ({ history }) => {
               {/*    required*/}
               {/*  />*/}
               {/*</InputContainer>*/}
-
 
               {/*<InputContainer>*/}
               {/*  <Label htmlFor="time-input">Pick a time</Label>*/}
@@ -135,49 +156,65 @@ const CreateJobPostingPage = ({ history }) => {
               {/*</InputContainer>*/}
               <InputContainer>
                 <Label>Province</Label>
-                <Input
-                  type="text"
-                  name={"createJobPostingProvince"}
+                <select
+                  name={'createJobPostingProvince'}
                   placeholder="Province"
                   onChange={handleChange}
                   required
-                />
+                >
+                  {Object.keys(provinces).map((item, key) => {
+                    return <option key={key}>{item}</option>;
+                  })}
+                </select>
               </InputContainer>
               <InputContainer>
                 <Label>City</Label>
-                <Input
-                  type="text"
-                  name={"createJobPostingCity"}
+                <select
+                  name={'createJobPostingCity'}
                   placeholder="City"
                   onChange={handleChange}
                   required
-                />
+                >
+                  {provinces[values.createJobPostingProvince].map(
+                    (item, key) => (
+                      <option key={key}>{item}</option>
+                    )
+                  )}
+                </select>
               </InputContainer>
               <InputContainer>
                 <Label>Town</Label>
-                <Input
-                  type="text"
-                  name={"createJobPostingTown"}
+                <select
+                  name={'createJobPostingTown'}
                   placeholder="Town"
                   onChange={handleChange}
                   required
-                />
+                >
+                  {towns[values.createJobPostingCity].cities.map(
+                    (item, key) => (
+                      <option key={key}>{item}</option>
+                    )
+                  )}
+                </select>
               </InputContainer>
               <InputContainer>
                 <Label>Category</Label>
-                <Input
-                  type="text"
-                  name={"createJobPostingCategory"}
+                <select
+                  name={'createJobPostingCategory'}
                   placeholder="Category"
                   onChange={handleChange}
                   required
-                />
+                >
+                  {serviceQuery.data.viewAllServiceTypes.map((item, key) => (
+                    <option key={key}>{item.service_name}</option>
+                  ))}
+                </select>
               </InputContainer>
 
               <TwoColumn>
                 <Column>
                   <InputContainer>
-                    <Label htmlFor="min-input">Price Range</Label>
+                    <Label htmlFor="min-input">Price Range in (LKR)</Label>
                     <Input
                       id="min-input"
                       type="text"

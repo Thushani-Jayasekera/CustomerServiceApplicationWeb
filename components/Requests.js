@@ -17,18 +17,20 @@ import { css } from 'styled-components/macro'; //eslint-disable-line
 
 import { SectionHeading } from '../components/misc/Headings.js';
 import FeatherIcon from 'feather-icons-react';
-import { Columns, Container, Message } from 'react-bulma-components';
+import { Columns, Container, Message ,Box, Button} from 'react-bulma-components';
 
 import { REJECT_SR, START_SR, COMPLETE_SR } from '../gql/mutation';
-
+import { Image } from "cloudinary-react";
 import { CANCEL_SR } from '../gql/mutation';
 import {
   BrowserRouter as Router,
   Link,
 } from 'react-router-dom';
 import SlideshowWithPagination from 'react-slideshow-with-pagination';
-import reactStars from 'react-rating-stars-component';
-
+import ImagePicker from 'react-image-picker'
+import ReactStars from 'react-rating-stars-component';
+import SmartGallery from 'react-smart-gallery';
+const Row = tw.div`flex flex-col lg:flex-row -mb-10`;
 const HeaderRow = tw.div`flex justify-between items-center flex-col xl:flex-row`;
 const TwoColumn = tw.div`flex flex-col sm:flex-row justify-between`;
 const Column = tw.div`sm:w-5/12 flex flex-col`;
@@ -133,6 +135,7 @@ const Requests = ({ requests, loading, state, user,history }) => {
   if (loading || loading_reject || loading_cancel||loading_start||loading_complete) {
     return <Loader />;
   }
+  
 
   return (
     <>
@@ -145,22 +148,26 @@ const Requests = ({ requests, loading, state, user,history }) => {
           enableMouseEvents={false}
         >
           {requests.map((request, index) => (
-            <CardContainer key={index}>
-              <Card
+            <Box key={index}  >
+           
+              <Box
+                class="has-background-link-light my-0"
                 className="group"
                 href={request.url}
                 initial="rest"
                 whileHover="hover"
                 animate="rest"
+                box-radius={5}
               >
                 <TwoColumn>
+               
                   <Column>
              <Container>
                <br/>
                     <CardText>
                     <Columns>
                         <FeatherIcon icon="tool" />
-                        <CardTitle> {request.task}</CardTitle>
+                        <CardTitle> {request.task.length>57?request.task.substring(0, 57):request.task}...</CardTitle>
                       </Columns>
                       <br />
                       <Columns>
@@ -175,7 +182,11 @@ const Requests = ({ requests, loading, state, user,history }) => {
 
                       
                       {(state==='Reviewed')?<>
-                      <reactStars 
+                      
+                      <FeatherIcon icon="user-check" />
+                      <CardTitle tw="font-style: italic">Customer Review- {request.requestReview.length>57?request.requestReview.substring(0, 57):request.requestReview}...</CardTitle>
+                     
+                      <ReactStars 
                             count={5}
                             onChange={ratingChanged}
                             size={24}
@@ -183,10 +194,7 @@ const Requests = ({ requests, loading, state, user,history }) => {
                             id="star"
                             value={request.requestRating}
                             edit={false}/>
-                      <FeatherIcon icon="user-check" />
-                      <CardTitle tw="font-style: italic">Customer Review- {request.requestReview}</CardTitle>
-                      <FeatherIcon icon="star" />
-                      <CardTitle tw="font-style: italic">Service Rating - {request.requestRating} / 5.0</CardTitle>
+                           
 
                       </>:<></>}
                       <br/>
@@ -195,7 +203,7 @@ const Requests = ({ requests, loading, state, user,history }) => {
                   </Column>
 
                   <Column>
-                    
+                    <div>
 
                  
                      
@@ -213,22 +221,22 @@ const Requests = ({ requests, loading, state, user,history }) => {
                           pathname: `/service_request/${request.id}`
                         }}
                       >
-                        <CardButton2
+                        <Button
                           disabled={state !== 'Pending' || user != 'Provider'}
                           hidden={user != 'Provider'}
-                          className="button is-success  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
+                          className="button is-success  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full my-6 m-5"
                         >
                           View and Accept
-                        </CardButton2>
+                        </Button>
                         </Link>
 
-                        <CardButton2
+                        <Button
                           disabled={
                             (state !== 'Pending' && state !== 'Accepted') ||
                             user != 'Provider'
                           }
                           hidden={user != 'Provider'}
-                          className="button is-danger  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
+                          className="button is-danger  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full my-6 m-5"
                           onClick={event => {
                             rejectServiceRequest({
                               variables: {
@@ -238,7 +246,7 @@ const Requests = ({ requests, loading, state, user,history }) => {
                           }}
                         >
                           {reject}
-                        </CardButton2>
+                        </Button>
                         </Columns>
                         </>
                       ):(<></>)}
@@ -255,22 +263,22 @@ const Requests = ({ requests, loading, state, user,history }) => {
                           pathname: `/service_request/${request.id}`
                         }}
                       >
-                        <CardButton2
+                        <Button
                          
                          
-                          className="button is-info  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
+                          className="button is-info  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full my-6 m-5"
                         >
                           View
-                        </CardButton2>
+                        </Button>
                         </Link>
 
-                        <CardButton2
+                        <Button
                           disabled={
                             (state !== 'Pending' && state !== 'Accepted') ||
                             user != 'Requester'
                           }
                           hidden={user != 'Provider'}
-                          className="button is-danger  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
+                          className="button is-danger  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full my-6 m-5"
                           onClick={event => {
                             cancelServiceRequest({
                               variables: {
@@ -280,7 +288,7 @@ const Requests = ({ requests, loading, state, user,history }) => {
                           }}
                         >
                          {cancel}
-                        </CardButton2>
+                        </Button>
                         </Columns>
                         </>
                       ):(<></>)}
@@ -293,18 +301,18 @@ const Requests = ({ requests, loading, state, user,history }) => {
                           pathname: `/service_request/${request.id}`
                         }}
                       >
-                        <CardButton2 className="button is-info  w-max px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5">
+                        <Button className="button is-info  w-max px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full my-6 m-5">
                           View
-                        </CardButton2>
+                        </Button>
                       </Link>
 
-                      <CardButton2
+                      <Button
                           disabled={
                             (state !== 'Pending' && state !== 'Accepted') ||
                             user != 'Provider'
                           }
                           hidden={user != 'Provider'}
-                          className="button is-danger  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
+                          className="button is-danger  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full my-6 m-5"
                           onClick={event => {
                             rejectServiceRequest({
                               variables: {
@@ -314,12 +322,12 @@ const Requests = ({ requests, loading, state, user,history }) => {
                           }}
                         >
                           {reject}
-                        </CardButton2>
+                        </Button>
 
-                        <CardButton2
+                        <Button
                           disabled={state !== 'Accepted' || user != 'Provider'}
                           hidden={user != 'Provider'}
-                          className="button is-success  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
+                          className="button is-success  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full my-6 m-2"
                           onClick={event=>{
                             startServiceRequest({
                               variables:{
@@ -331,7 +339,7 @@ const Requests = ({ requests, loading, state, user,history }) => {
                           }
                         >
                           Start
-                        </CardButton2>
+                        </Button>
                      
                         </Columns>
                       ):(<></>)}
@@ -344,25 +352,25 @@ const Requests = ({ requests, loading, state, user,history }) => {
                           pathname: `/service_request/${request.id}`
                         }}
                       >
-                        <CardButton2 className="button is-info  w-max px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5">
+                        <Button className="button is-info  w-max px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full my-6 m-5">
                           View
-                        </CardButton2>
+                        </Button>
                       </Link>
+                      <Link
+                        to={{
+                          pathname: `/service_request/${request.id}`
+                        }}
+                      >
 
-                      <CardButton2
+                      <Button
                           disabled={state !== 'Started' || user != 'Provider'}
                           hidden={user != 'Provider'}
-                          className="button is-success  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5"
-                          onClick={event => {
-                            completeServiceRequest({
-                              variables: {
-                                completeServiceRequestId: request.id
-                              }
-                            });
-                          }}
+                          className="button is-success  px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full my-6 m-5"
+                          
                         >
                           Mark Completed
-                        </CardButton2>
+                        </Button>
+                        </Link>
 
                         </Columns>
 
@@ -376,9 +384,9 @@ const Requests = ({ requests, loading, state, user,history }) => {
                           pathname: `/service_request/${request.id}`
                         }}
                       >
-                        <CardButton2 className="button is-info  w-max px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full m-5">
+                        <Button className="button is-info  w-max px-6 py-3 font-bold text-gray-100 hocus:bg-primary-700 hocus:text-gray-200 focus:shadow-outline focus:outline-none transition duration-300 text-sm rounded-full my-6 m-5">
                           View
-                        </CardButton2>
+                        </Button>
                       </Link>
                       </Columns>
                       </>:<></>}
@@ -387,11 +395,11 @@ const Requests = ({ requests, loading, state, user,history }) => {
 
 
 
-                   
+                   </div>
                   </Column>
                 </TwoColumn>
-              </Card>
-            </CardContainer>
+              </Box>
+              </Box>
           ))}
         </SlideshowWithPagination>
       ) : (

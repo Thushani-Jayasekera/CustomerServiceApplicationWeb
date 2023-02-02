@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { CREATE_SERVICE } from '../../gql/mutation';
 import Layout from '../../components/Layout';
-import AdminNavbar from '../../components/AdminNavbar';
+import AdminNavbar from '../../components/adminComponents/AdminNavbar';
 import tw from 'twin.macro';
 import styled from 'styled-components';
 import { gql, useMutation } from '@apollo/client';
 import Loader from '../../components/utils/Loader';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { useToasts } from 'react-toast-notifications';
+import { Button } from 'react-bulma-components';
 
 // *************************************Stylings***************************************
 const Container = tw.div`relative`;
@@ -44,9 +46,37 @@ const SubmitButton = tw.button`w-full sm:w-32 mt-6 py-3 bg-gray-100 text-primary
 
 const AddService = ({ history }) => {
   const [values, setValues] = useState({});
+  const [image, setImage] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const [url, setUrl] = useState('');
+  const { addToast } = useToasts();
+
+  const uploadImage = e => {
+    e.preventDefault();
+    setUploading(true);
+    addToast('Started uploading photo', { appearance: 'info' });
+    const data = new FormData();
+    data.append('file', image);
+    data.append('upload_preset', 'service');
+    data.append('cloud_name', 'dpb0ths5c');
+    fetch('  https://api.cloudinary.com/v1_1/dpb0ths5c/upload', {
+      method: 'post',
+      body: data
+    })
+      .then(resp => resp.json())
+      .then(data => {
+        setUrl(data.url);
+        setUploading(false);
+        addToast('Successfully uploaded photo', { appearance: 'success' });
+      })
+      .catch(err => console.log(err));
+
+    console.log(url);
+  };
 
   const [createService, { loading, error }] = useMutation(CREATE_SERVICE, {
     onCompleted: data => {
+      addToast('Successfully Added new service! ', { appearance: 'success' });
       history.push('/admin/addService');
     }
   });
@@ -67,14 +97,15 @@ const AddService = ({ history }) => {
       <Content>
         <FormContainer>
           <div tw="mx-auto max-w-4xl">
-            <h2>Add New Service</h2>
+            <h2 style={{ textAlign: 'center' }}>Add New Service</h2>
             <Form
               onSubmit={event => {
                 event.preventDefault();
                 console.log(values);
                 createService({
                   variables: {
-                    ...values
+                    ...values,
+                    createServiceImage: url
                   }
                 });
               }}
@@ -118,15 +149,27 @@ const AddService = ({ history }) => {
                 <Label htmlFor="name-input">Add a Display Image</Label>
                 <input
                   type="file"
-                  name={'createServiceImage'}
-                  accept="image/*"
-                  onChange={handleChange}
-                />
+                  onChange={e => setImage(e.target.files[0])}
+                ></input>
+                <Button data-testid="FileUploadBtn" onClick={uploadImage}>
+                  Click to Upload Selected
+                </Button>
               </InputContainer>
 
-              <SubmitButton type="submit" value="Submit">
-                ADD SERVICE
-              </SubmitButton>
+              {uploading ? (
+                <SubmitButton type="submit" value="Submit" disabled={true}>
+                  Please wait..
+                </SubmitButton>
+              ) : (
+                <SubmitButton
+                  data-testid="SubmitBtn"
+                  type="submit"
+                  value="Submit"
+                  disabled={uploading}
+                >
+                  ADD SERVICE
+                </SubmitButton>
+              )}
             </Form>
           </div>
         </FormContainer>

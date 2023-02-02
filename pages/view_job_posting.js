@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Columns, Container, Content, Section, Form, Button } from "react-bulma-components";
+import { Columns, Container, Content, Section, Form, Button, Level, Box } from "react-bulma-components";
 import Layout from "../components/Layout";
 import Header from "../components/Header";
-import {GET_JOB_POSTING} from "../gql/query";
+import { GET_JOB_POSTING, GET_MY_JOB_BID_FOR_POSTING } from "../gql/query";
 import { useMutation, useQuery } from "@apollo/client";
 import Loader from "../components/utils/Loader";
 import tw from "twin.macro";
@@ -29,15 +29,28 @@ const JobPostingPage = ({match})=>{
       addToast("Failed ",{appearance:"error"})
     }
   })
-    if(jobPostingQuery.loading){
+    if(jobPostingQuery.loading ){
       return <Loader/>
     }
     const handleChange = handleChangefn(setValues,values)
     const handleSubmit = (event)=>{
         event.preventDefault()
+        const lower = parseFloat(jobPostingQuery.data.jobPosting.budgetRange.lowerLimit)
+        const upper = parseFloat(jobPostingQuery.data.jobPosting.budgetRange.upperLimit)
+        const amount = parseFloat(values.createJobBidProposedAmount)
+      if(amount<lower || amount>upper){
+        addToast("Invalid amount",{appearance:"error"})
+        return
+      }
+      const currTime = new Date()
+      const givenTime = new Date(values.createJobBidProposedDate+"T"+values.createJobBidProposedTime)
+      if(givenTime<currTime){
+        addToast("Invalid Time",{appearance:"error"})
+        return;
+      }
         jobBid({
           variables:{
-            createJobBidProposedAmount:parseFloat(values.createJobBidProposedAmount),
+            createJobBidProposedAmount:amount,
             createJobBidProposedDate:values.createJobBidProposedDate+"T"+values.createJobBidProposedTime,
             createJobBidJobPosting:match.params.id,
             createJobBidDetailedBreakdown:values.createJobBidDetailedBreakdown
@@ -54,20 +67,36 @@ const JobPostingPage = ({match})=>{
                 </Content>
               </Section>
               <Section>
-                <Content>
-                  <Columns>
-                    <Columns.Column>
-                      {jobPostingQuery.data.jobPosting.postedBy.username}
-                    </Columns.Column>
-                    <Columns.Column>
-                      {jobPostingQuery.data.jobPosting.heading}
-                    </Columns.Column>
-                    <Columns.Column>
-                      {jobPostingQuery.data.jobPosting.budgetRange.lowerLimit}
-                      -
-                      {jobPostingQuery.data.jobPosting.budgetRange.upperLimit}
-                    </Columns.Column>
-                  </Columns>
+                <Content style={{display:"flex"}} justifyContent={"center"}>
+                  <Box style={{width:"50%",borderRadius:"10px",border:"solid black 1px"}}>
+                    <Level>
+                      <Level.Side align={"left"}>
+                        <Level.Item textWeight={"bold"}>User name of the poster</Level.Item>
+                      </Level.Side>
+                      <Level.Side align={"right"}>
+                        <Level.Item>    {jobPostingQuery.data.jobPosting.postedBy.username}</Level.Item>
+                      </Level.Side>
+                    </Level>
+                    <Level>
+                    <Level.Side align={"left"}>
+                      <Level.Item textWeight={"bold"}>Heading</Level.Item>
+                    </Level.Side>
+                    <Level.Side align={"right"}>
+                      <Level.Item>   {jobPostingQuery.data.jobPosting.heading}</Level.Item>
+                    </Level.Side>
+                  </Level>
+                    <Level>
+                      <Level.Side align={"left"}>
+                        <Level.Item textWeight={"bold"}>Budget</Level.Item>
+                      </Level.Side>
+                      <Level.Side align={"right"}>
+                        <Level.Item> {jobPostingQuery.data.jobPosting.budgetRange.lowerLimit}LKR
+                          -
+                          {jobPostingQuery.data.jobPosting.budgetRange.upperLimit}</Level.Item>LKR
+                      </Level.Side>
+                    </Level>
+
+                  </Box>
                 </Content>
               </Section>
               <Section>
@@ -76,7 +105,7 @@ const JobPostingPage = ({match})=>{
                   <Form.Field>
                     <Form.Label>Proposed Amount</Form.Label>
                     <Form.Control>
-                      <Form.Input onChange={handleChange} name={"createJobBidProposedAmount"}/>
+                      <Form.Input onChange={handleChange} name={"createJobBidProposedAmount"} />
                     </Form.Control>
                   </Form.Field>
                   <Form.Field>

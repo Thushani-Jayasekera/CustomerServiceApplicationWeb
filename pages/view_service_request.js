@@ -36,10 +36,19 @@ import {
   FEEDBACK_SR,
   REJECT_SR,
   RESCHEDULE_SR,
-  START_SR
+  START_SR,
+  CONFIRM_CASH_PAYMENT
 } from '../gql/mutation';
 import { ValuesOfCorrectType } from 'graphql/validation/rules/ValuesOfCorrectType';
 import ReactStars from 'react-rating-stars-component';
+import { NetworkStatus } from '@apollo/client';
+import { Image as CDNImage } from 'cloudinary-react';
+import {
+  CheckoutParams,
+  CurrencyType,
+  Customer,
+  PayhereCheckout
+} from 'payhere-js-sdk';
 
 //const Container = tw.div`relative`;
 const Content2 = tw.div`max-w-screen-xl mx-auto py-20 lg:py-24`;
@@ -92,20 +101,38 @@ const CustomerName = tw.p`mt-5 text-gray-900 font-semibold uppercase text-sm tra
 const ViewServiceRequestPage = () => {
   const { id } = useParams(0);
   const [values, setValues] = useState();
-  const [status,setStatus]=useState();
-  const [rating,setRating]=useState();
+  const [status, setStatus] = useState();
+  const [rating, setRating] = useState();
   const [view, setView] = useState({ renderView: 0 });
   //const [user,setUser]=useState({});
 
   const now = new Date();
+
   now.setMinutes(now.getMinutes() + 25);
   console.log(now);
-  const sr_request_query = useQuery(GET_ME_USER_BY_ID_SR_DETAILS, {
-    variables: {
-      getServiceRequestByIdId: `${id}`
+  const { data, loading, error, refetch, networkStatus } = useQuery(
+    GET_ME_USER_BY_ID_SR_DETAILS,
+    {
+      variables: {
+        getServiceRequestByIdId: `${id}`
+      },
+      notifyOnNetworkStatusChange: true
     }
-  });
+  );
 
+
+
+  let dd = now.getDate();
+  let mm = now.getMonth() + 1; //January is 0 so need to add 1 to make it 1!
+  const yyyy = now.getFullYear();
+  if (dd < 10) {
+    dd = '0' + dd;
+  }
+  if (mm < 10) {
+    mm = '0' + mm;
+  }
+
+  const todayMin = yyyy + '-' + mm + '-' + dd;
   //console.log(data_provider);
 
   const { addToast } = useToasts();
@@ -120,6 +147,7 @@ const ViewServiceRequestPage = () => {
           renderView: 0
         });
         history.push(`/service_request/${id}`);
+        location.reload();
       },
       onError: error => {
         addToast('Failed ', { appearance: 'error' });
@@ -138,6 +166,7 @@ const ViewServiceRequestPage = () => {
           renderView: 0
         });
         history.push(`/service_request/${id}`);
+        location.reload();
       },
       onError: error => {
         addToast('Failed ', { appearance: 'error' });
@@ -156,31 +185,52 @@ const ViewServiceRequestPage = () => {
           renderView: 0
         });
         history.push(`/service_request/${id}`);
+        location.reload();
       },
       onError: error => {
         addToast('Failed ', { appearance: 'error' });
       }
     }
   );
-  const [completeServiceRequest, { loading_complete, error_complete }] = useMutation(
-    COMPLETE_SR,
+
+  const [confirmCashPayment, { loading_pay, error_pay }] = useMutation(
+    CONFIRM_CASH_PAYMENT,
     {
       onCompleted: data => {
-        addToast('Successfully completed the request', {
+        addToast('Paid', {
           appearance: 'success'
         });
         setView({
           renderView: 0
         });
-
         history.push(`/service_request/${id}`);
+        location.reload();
       },
       onError: error => {
-        console.log(error);
         addToast('Failed ', { appearance: 'error' });
       }
     }
   );
+  const [
+    completeServiceRequest,
+    { loading_complete, error_complete }
+  ] = useMutation(COMPLETE_SR, {
+    onCompleted: data => {
+      addToast('Successfully completed the request', {
+        appearance: 'success'
+      });
+      setView({
+        renderView: 0
+      });
+
+      history.push(`/service_request/${id}`);
+      location.reload();
+    },
+    onError: error => {
+      console.log(error);
+      addToast('Failed ', { appearance: 'error' });
+    }
+  });
 
   const [acceptServiceRequest, { loading_accept, error_accept }] = useMutation(
     ACCEPT_SR,
@@ -193,6 +243,7 @@ const ViewServiceRequestPage = () => {
           renderView: 0
         });
         history.push(`/service_request/${id}`);
+        location.reload();
       },
       onError: error => {
         addToast('Failed ', { appearance: 'error' });
@@ -211,6 +262,7 @@ const ViewServiceRequestPage = () => {
         renderView: 0
       });
       history.push(`/service_request/${id}`);
+      location.reload();
     },
     onError: error => {
       addToast('Failed ', { appearance: 'error' });
@@ -226,6 +278,7 @@ const ViewServiceRequestPage = () => {
           renderView: 0
         });
         history.push(`/service_request/${id}`);
+        location.reload();
       },
       onError: error => {
         addToast('Failed ', { appearance: 'error' });
@@ -233,46 +286,49 @@ const ViewServiceRequestPage = () => {
     }
   );
 
-  const [feedbackServiceRequest, { loading_feedback, error_feedback }] = useMutation(
-    FEEDBACK_SR,
-    {
-      onCompleted: data => {
-        addToast('Successfully reviewed the request', { appearance: 'success' });
-        setView({
-          renderView: 0
-        });
-        setStatus('Reviewed')
-        history.push(`/service_request/${id}`);
-      },
-      onError: error => {
-        console.log(error);
-        addToast('Failed ', { appearance: 'error' });
-      }
+  const [
+    feedbackServiceRequest,
+    { loading_feedback, error_feedback }
+  ] = useMutation(FEEDBACK_SR, {
+    onCompleted: data => {
+      addToast('Successfully reviewed the request', { appearance: 'success' });
+      setView({
+        renderView: 0
+      });
+      setStatus('Reviewed');
+      history.push(`/service_request/${id}`);
+      location.reload();
+    },
+    onError: error => {
+      console.log(error);
+      addToast('Failed ', { appearance: 'error' });
     }
-  );
+  });
 
-  const [customerfeedbackServiceRequest, { loading_Cfeedback, error_Cfeedback }] = useMutation(
-    CUSTOMER_FEEDBACK_SR,
-    {
-      onCompleted: data => {
-        addToast('Successfully reviewed the customer', { appearance: 'success' });
-        setView({
-          renderView: 0
-        });
-        setStatus('Reviewed')
-        history.push(`/service_request/${id}`);
-      },
-      onError: error => {
-        console.log(error);
-        addToast('Failed ', { appearance: 'error' });
-      }
+  const [
+    customerfeedbackServiceRequest,
+    { loading_Cfeedback, error_Cfeedback }
+  ] = useMutation(CUSTOMER_FEEDBACK_SR, {
+    onCompleted: data => {
+      addToast('Successfully reviewed the customer', { appearance: 'success' });
+      setView({
+        renderView: 0
+      });
+      setStatus('Reviewed');
+      history.push(`/service_request/${id}`);
+      location.reload();
+    },
+    onError: error => {
+      console.log(error);
+      addToast('Failed ', { appearance: 'error' });
     }
-  );
+  });
 
   //const providerDetails=data_provider.getUserbyId;
-  if (sr_request_query.loading) return <Loader />;
+  if (networkStatus === NetworkStatus.refetch) return <Loader />;
+  if (loading) return <Loader />;
 
-  const data_serviceRequest = sr_request_query.data;
+  const data_serviceRequest = data;
   console.log(data_serviceRequest);
   const serviceReqDetails = data_serviceRequest.getServiceRequestByID;
 
@@ -292,11 +348,11 @@ const ViewServiceRequestPage = () => {
 
   const dayName = days[date.getDay()];
   console.log(date.getDay());
+  let showDay;
   showDay = `${serviceReqDetails.date}, ${dayName}`;
   const myDetails = data_serviceRequest.me;
 
   const handleChange = event => {
-    
     setValues({
       ...values,
       [event.target.name]: event.target.value
@@ -310,6 +366,7 @@ const ViewServiceRequestPage = () => {
         cancelServiceRequestId: id
       }
     });
+    refetch();
   };
 
   const rejectRequest = event => {
@@ -319,6 +376,7 @@ const ViewServiceRequestPage = () => {
         rejectServiceRequestId: id
       }
     });
+    refetch();
   };
 
   const startRequest = event => {
@@ -328,15 +386,19 @@ const ViewServiceRequestPage = () => {
         startServiceRequestId: id
       }
     });
+    refetch();
   };
 
   const completeRequest = event => {
     setValues({});
     completeServiceRequest({
       variables: {
-        completeServiceRequestId: id
+        completeServiceRequestId: id,
+        completeServiceRequestFinalAmount:
+          values.completeServiceRequestFinalAmount
       }
     });
+    refetch();
   };
 
   const acceptRequest = event => {
@@ -347,14 +409,23 @@ const ViewServiceRequestPage = () => {
         acceptServiceRequestEstimate: values.acceptServiceRequestEstimate
       }
     });
+    refetch();
+  };
+
+  const requestCashPayment = event => {
+    setValues({});
+    confirmCashPayment({
+      variables: {
+        confirmCashPaymentId: id
+      }
+    });
+    refetch();
   };
 
   const ratingChanged = newRating => {
     setRating(newRating);
     console.log(newRating);
   };
-
-
 
   ///////////////////////////////////////////////////////////////
   const clickDetails = event => {
@@ -372,7 +443,35 @@ const ViewServiceRequestPage = () => {
       renderView: 2
     });
   };
-
+  const get_payment_function = (request_id, request_amount) => event => {
+    event.preventDefault();
+    try {
+      const customer = new Customer({
+        first_name: data.me.fullname,
+        last_name: data.me.fullname,
+        phone: data.me.contactNum,
+        email: data.me.email,
+        address: data.me.address,
+        city: data.me.city,
+        country: 'Sri Lanka'
+      });
+      const checkoutData = new CheckoutParams({
+        returnUrl: `https://customerserviceapplication.netlify.app/payment/success`,
+        cancelUrl: `https://customerserviceapplication.netlify.app/payment/success`,
+        notifyUrl: `https://customerserviceapplication.herokuapp.com/payment/notify_sr`,
+        order_id: 'R' + request_id,
+        itemTitle: 'Test',
+        currency: CurrencyType.LKR,
+        amount: request_amount
+      });
+      const checkout = new PayhereCheckout(customer, checkoutData, error =>
+        alert(error)
+      );
+      checkout.start();
+    } catch (e) {
+      console.log(e);
+    }
+  };
   ////////////////////////////////////////////////////////////////
   {
     switch (view.renderView) {
@@ -407,7 +506,7 @@ const ViewServiceRequestPage = () => {
                         serviceReqDetails.state === 'Rejected' ||
                         serviceReqDetails.state === 'Completed' ||
                         serviceReqDetails.state === 'Reviewed' ||
-                        serviceReqDetails.state === 'Started' 
+                        serviceReqDetails.state === 'Started'
                       }
                     >
                       Reschedule
@@ -431,7 +530,8 @@ const ViewServiceRequestPage = () => {
                       disabled={
                         serviceReqDetails.date + 'T' + serviceReqDetails.time <
                           now.toISOString().substr(0, 16) ||
-                        (serviceReqDetails.state !== 'Pending'&& serviceReqDetails.state !== 'Accepted')
+                        (serviceReqDetails.state !== 'Pending' &&
+                          serviceReqDetails.state !== 'Accepted')
                       }
                     >
                       Cancel
@@ -442,9 +542,16 @@ const ViewServiceRequestPage = () => {
                       className="button is-success is-centered is-medium mx-4 my-2 px-6"
                       disabled={
                         serviceReqDetails.state === 'Pending' ||
+                        serviceReqDetails.state === 'Accepted' ||
                         serviceReqDetails.state === 'Canceled' ||
-                        serviceReqDetails.state === 'Rejected'
+                        serviceReqDetails.state === 'Rejected' ||
+                        serviceReqDetails.state === 'Started' ||
+                        serviceReqDetails.hasPaid === true
                       }
+                      onClick={get_payment_function(
+                        serviceReqDetails.id,
+                        serviceReqDetails.finalAmount
+                      )}
                     >
                       Make Payment
                     </Button>
@@ -479,9 +586,7 @@ const ViewServiceRequestPage = () => {
                         rounded
                         className="button is-info is-medium mx-4 my-2 px-6"
                         onClick={startRequest}
-                        disabled={
-                          serviceReqDetails.state!=='Accepted'
-                        }
+                        disabled={serviceReqDetails.state !== 'Accepted'}
                       >
                         Start
                       </Button>
@@ -494,21 +599,39 @@ const ViewServiceRequestPage = () => {
                           serviceReqDetails.date +
                             'T' +
                             serviceReqDetails.time <
-                          now.toISOString().substr(0, 16) || serviceReqDetails.state==='Completed'||serviceReqDetails.state==='Started'||serviceReqDetails.state==='Reviewed'
+                            now.toISOString().substr(0, 16) ||
+                          serviceReqDetails.state === 'Completed' ||
+                          serviceReqDetails.state === 'Started' ||
+                          serviceReqDetails.state === 'Reviewed'
                         }
                       >
                         Reject
                       </Button>
+
+                      <Actions>
+                        <input
+                          type="text"
+                          placeholder="Enter final service charge"
+                          name={'completeServiceRequestFinalAmount'}
+                          onChange={handleChange}
+                        />
+                        <Button
+                          rounded
+                          className="button is-success is-medium mx-4 my-2 px-6"
+                          onClick={completeRequest}
+                          disabled={serviceReqDetails.state !== 'Started'}
+                        >
+                          Completed
+                        </Button>
+                      </Actions>
                       <Button
-                      rounded
-                      className="button is-success is-medium mx-4 my-2 px-6"
-                      onClick={completeRequest}
-                      disabled={
-                        serviceReqDetails.state!=='Started'
-                      }
-                    >
-                      Mark Completed
-                    </Button>
+                        rounded
+                        className="button is-success is-small mx-5 mt-5 px-6"
+                        onClick={requestCashPayment}
+                        disabled={serviceReqDetails.hasPaid}
+                      >
+                        Confirm cash Payment
+                      </Button>
                     </Columns>
                   </>
                 )}
@@ -571,9 +694,33 @@ const ViewServiceRequestPage = () => {
                         </td>
                       </tr>
                       <tr>
-                        <td>Total Amount Paid to date</td>
-                        <td>{serviceReqDetails.task}</td>
+                        <td>Final Amount</td>
+                        <td>
+                          {' '}
+                          {serviceReqDetails.finalAmount
+                            ? `${serviceReqDetails.finalAmount} LKR`
+                            : 'Not entered Yet'}
+                        </td>
                       </tr>
+                      <tr>
+                        <td>Payment status</td>
+                        <td>
+                          {' '}
+                          {serviceReqDetails.hasPaid === true
+                            ? `Paid`
+                            : 'No Payment Made Yet'}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Payment Method</td>
+                        <td>
+                          {' '}
+                          {serviceReqDetails.payMethod === '0'
+                            ? `Card`
+                            : 'Cash'}
+                        </td>
+                      </tr>
+
                       <tr>
                         <td>Status of Request</td>
                         <td>
@@ -598,7 +745,8 @@ const ViewServiceRequestPage = () => {
                             >
                               {serviceReqDetails.state}
                             </Button>
-                          ) : serviceReqDetails.state === 'Completed'|| serviceReqDetails.state === 'Reviewed' ? (
+                          ) : serviceReqDetails.state === 'Completed' ||
+                            serviceReqDetails.state === 'Reviewed' ? (
                             <Button
                               rounded
                               className="button is-success is-small mx-5 px-6"
@@ -617,198 +765,315 @@ const ViewServiceRequestPage = () => {
                       </tr>
                     </tbody>
                   </Table>
-                  {serviceReqDetails.state === 'Completed' && myDetails.id === requester_id && status!=='Reviewed'? (
+                  <Columns alignItems="center" alignContent="center">
+                    {serviceReqDetails.image1 ? (
+                      <CDNImage
+                        crossOrigin={'anonymous'}
+                        cloudName="dpb0ths5c"
+                        publicId={serviceReqDetails.image1}
+                        width={'400'}
+                        height={'400'}
+                        margin={5}
+                      />
+                    ) : (
+                      <></>
+                    )}
+
+                    {serviceReqDetails.image2 ? (
+                      <CDNImage
+                        crossOrigin={'anonymous'}
+                        cloudName="dpb0ths5c"
+                        publicId={serviceReqDetails.image2}
+                        width={'400'}
+                        height={'400'}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                  </Columns>
+                  {serviceReqDetails.state === 'Completed' ||
+                  serviceReqDetails.state === 'Reviewed' ? (
                     <>
-                      <FormContainer>
-                    <div tw="mx-auto max-w-4xl">
-                      <h2>Add Review</h2>
-                     <Form
-                      onSubmit={event => {
-                        event.preventDefault();
-                        console.log(values);
-                        feedbackServiceRequest({
-                          variables: {
-                            feedbackServiceRequestId: id,
-                            feedbackServiceRequestRequestRating:
-                              rating,
-                              feedbackServiceRequestRequestReview:
-                              values.feedbackServiceRequestRequestReview
-                          }
-                        });
-                      }}
-                    >
-                    <Columns>
-                    <h5>How much do you rate the service?  - {rating}/5</h5>
-                    </Columns>
-                      <ReactStars
-                        count={5}
-                        onChange={ratingChanged}
-                        size={24}
-                        activeColor="#ffd700"
-                        id="star"
-                      />
-                      
-                      
-                     
-                      <InputContainer tw="flex-1">
-                      <Label htmlFor="review-input">Share your experience </Label>
-                      <TextArea
-                        id="review-input"
-                        name={'feedbackServiceRequestRequestReview'}
-                        placeholder="Add your Review Here!"
-                        onChange={handleChange}
-                        required
-                      />
-                    </InputContainer>
-                    <SubmitButton type="submit" value="Submit">
-                        Submit Review
-                      </SubmitButton>
-                      </Form>
-                      </div>
-                      </FormContainer>
+                      {myDetails.id === requester_id ? (
+                        <>
+                          {serviceReqDetails.state !== 'Reviewed' ? (
+                            <>
+                              <>
+                                <FormContainer>
+                                  <div tw="mx-auto max-w-4xl">
+                                    <h2>Add Review</h2>
+                                    <Form
+                                      onSubmit={event => {
+                                        event.preventDefault();
+                                        console.log(values);
+                                        feedbackServiceRequest({
+                                          variables: {
+                                            feedbackServiceRequestId: id,
+                                            feedbackServiceRequestRequestRating: rating,
+                                            feedbackServiceRequestRequestReview:
+                                              values.feedbackServiceRequestRequestReview
+                                          }
+                                        });
+                                      }}
+                                    >
+                                      <Columns>
+                                        <h5>
+                                          How much do you rate the service? -{' '}
+                                          {rating}/5
+                                        </h5>
+                                      </Columns>
+                                      <ReactStars
+                                        count={5}
+                                        onChange={ratingChanged}
+                                        size={24}
+                                        activeColor="#ffd700"
+                                        id="star"
+                                      />
+
+                                      <InputContainer tw="flex-1">
+                                        <Label htmlFor="review-input">
+                                          Share your experience{' '}
+                                        </Label>
+                                        <TextArea
+                                          id="review-input"
+                                          name={
+                                            'feedbackServiceRequestRequestReview'
+                                          }
+                                          placeholder="Add your Review Here!"
+                                          onChange={handleChange}
+                                          required
+                                        />
+                                      </InputContainer>
+                                      <SubmitButton
+                                        type="submit"
+                                        value="Submit"
+                                      >
+                                        Submit Review
+                                      </SubmitButton>
+                                    </Form>
+                                  </div>
+                                </FormContainer>
+                              </>
+
+                              {serviceReqDetails.customerRating ? (
+                                <>
+                                  <TestimonialContainer>
+                                    <Testimonial>
+                                      <Quote>
+                                        "{serviceReqDetails.customerReview}"
+                                      </Quote>
+                                      <ReactStars
+                                        count={5}
+                                        onChange={ratingChanged}
+                                        size={24}
+                                        activeColor="#ffd700"
+                                        id="star"
+                                        value={serviceReqDetails.customerRating}
+                                        edit={false}
+                                      />
+                                      <CustomerName>
+                                        - PROVIDER TO CUSTOMER FEEDBACK
+                                      </CustomerName>
+                                    </Testimonial>
+                                  </TestimonialContainer>
+                                </>
+                              ) : (
+                                <></>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              <TestimonialContainer>
+                                <Testimonial>
+                                  <Quote>
+                                    "{serviceReqDetails.requestReview}"
+                                  </Quote>
+                                  <ReactStars
+                                    count={5}
+                                    onChange={ratingChanged}
+                                    size={24}
+                                    activeColor="#ffd700"
+                                    id="star"
+                                    value={serviceReqDetails.requestRating}
+                                    edit={false}
+                                  />
+                                  <CustomerName>
+                                    - CUSTOMER FEEDBACK
+                                  </CustomerName>
+                                </Testimonial>
+                              </TestimonialContainer>
+
+                              {serviceReqDetails.customerReview ? (
+                                <>
+                                  <TestimonialContainer>
+                                    <Testimonial>
+                                      <Quote>
+                                        "{serviceReqDetails.customerReview}"
+                                      </Quote>
+                                      <ReactStars
+                                        count={5}
+                                        onChange={ratingChanged}
+                                        size={24}
+                                        activeColor="#ffd700"
+                                        id="star"
+                                        value={serviceReqDetails.customerRating}
+                                        edit={false}
+                                      />
+                                      <CustomerName>
+                                        - PROVIDER TO CUSTOMER FEEDBACK
+                                      </CustomerName>
+                                    </Testimonial>
+                                  </TestimonialContainer>
+                                </>
+                              ) : (
+                                <></>
+                              )}
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          {serviceReqDetails.customerRating ? (
+                            <>
+                              <TestimonialContainer>
+                                <Testimonial>
+                                  <Quote>
+                                    "{serviceReqDetails.customerReview}"
+                                  </Quote>
+                                  <ReactStars
+                                    count={5}
+                                    onChange={ratingChanged}
+                                    size={24}
+                                    activeColor="#ffd700"
+                                    id="star"
+                                    value={serviceReqDetails.customerRating}
+                                    edit={false}
+                                  />
+                                  <CustomerName>
+                                    - PROVIDER TO CUSTOMER FEEDBACK
+                                  </CustomerName>
+                                </Testimonial>
+                              </TestimonialContainer>
+                              {serviceReqDetails.requestReview?<>
+                                <TestimonialContainer>
+                                    <Testimonial>
+                                      <Quote>
+                                        "{serviceReqDetails.requestReview}"
+                                      </Quote>
+                                      <ReactStars
+                                        count={5}
+                                        onChange={ratingChanged}
+                                        size={24}
+                                        activeColor="#ffd700"
+                                        id="star"
+                                        value={serviceReqDetails.requestRating}
+                                        edit={false}
+                                      />
+                                      <CustomerName>
+                                        - CUSTOMER FEEDBACK
+                                      </CustomerName>
+                                    </Testimonial>
+                                  </TestimonialContainer>
+
+                              </>:<></>}
+                            </>
+                          ) : (
+                            <>
+                              <FormContainer>
+                                <div tw="mx-auto max-w-4xl">
+                                  <h2>Add Review about your customer</h2>
+                                  <Form
+                                    onSubmit={event => {
+                                      event.preventDefault();
+                                      console.log(values);
+                                      customerfeedbackServiceRequest({
+                                        variables: {
+                                          customerfeedbackServiceRequestId: id,
+                                          customerfeedbackServiceRequestCustomerRating: rating,
+                                          customerfeedbackServiceRequestCustomerReview:
+                                            values.customerfeedbackServiceRequestRequestReview
+                                        }
+                                      });
+                                    }}
+                                  >
+                                    <Columns>
+                                      <h5>
+                                        How much do you rate your customer? -{' '}
+                                        {rating}/5
+                                      </h5>
+                                    </Columns>
+                                    <ReactStars
+                                      count={5}
+                                      onChange={ratingChanged}
+                                      size={24}
+                                      activeColor="#ffd700"
+                                      id="star"
+                                    />
+
+                                    <InputContainer tw="flex-1">
+                                      <Label htmlFor="review-input">
+                                        Share your experience{' '}
+                                      </Label>
+                                      <TextArea
+                                        id="review-input"
+                                        name={
+                                          'customerfeedbackServiceRequestRequestReview'
+                                        }
+                                        placeholder="Add your Review Here!"
+                                        onChange={handleChange}
+                                        required
+                                      />
+                                    </InputContainer>
+                                    <SubmitButton type="submit" value="Submit">
+                                      Submit Review
+                                    </SubmitButton>
+                                  </Form>
+                                </div>
+                              </FormContainer>
+                              {serviceReqDetails.requestReview?<>
+                                <TestimonialContainer>
+                                    <Testimonial>
+                                      <Quote>
+                                        "{serviceReqDetails.requestReview}"
+                                      </Quote>
+                                      <ReactStars
+                                        count={5}
+                                        onChange={ratingChanged}
+                                        size={24}
+                                        activeColor="#ffd700"
+                                        id="star"
+                                        value={serviceReqDetails.requestRating}
+                                        edit={false}
+                                      />
+                                      <CustomerName>
+                                        - CUSTOMER FEEDBACK
+                                      </CustomerName>
+                                    </Testimonial>
+                                  </TestimonialContainer>
+
+                              </>:<></>}
+                            </>
+                          )}
+                        </>
+                      )}
                     </>
                   ) : (
-                    <>
-                    {status==='Reviewed'?(
-                      <Message color={'success'}>
-                      <Message.Body>
-                        Thank you for your feedback!
-                      </Message.Body>
-                    </Message>
-                    ) :(
-                      <>
-                    {status!=='Completed' &&  status!=='Started' && status!=='Reviewed' && serviceReqDetails.state!=='Reviewed'  && myDetails.id === requester_id?(
-                      <Message color={'warning'}>
-                        <Message.Body>
-                          You can cancel/ reschedule / reject a request only 20
-                          minuites before the scheduled time
-                        </Message.Body>
-                      </Message>
-                    ):(<>{
-                      serviceReqDetails.state==='Reviewed' && myDetails.id === requester_id?(<>
-                          <TestimonialContainer >
-                          <Testimonial>
-                            <Image src={''} />
-                            <Quote>"{serviceReqDetails.requestReview}"</Quote>
-                            <ReactStars 
-                            count={5}
-                            onChange={ratingChanged}
-                            size={24}
-                            activeColor="#ffd700"
-                            id="star"
-                            value={serviceReqDetails.requestRating}
-                            edit={false}/>
-                            <CustomerName>- CUSTOMER FEEDBACK</CustomerName>
-                          </Testimonial>
-                        </TestimonialContainer>
-                        </>):(<></>)}
-                    </>)
-                    }
-                    </>
-                    )
-                  }
-                  
-                    </>
+                    <></>
                   )}
+                  {status !== 'Completed' &&
+                          status !== 'Started' &&
+                          status !== 'Reviewed' &&
+                          serviceReqDetails.state !== 'Reviewed'
+                           ? (
+                            <Message color={'warning'}>
+                              <Message.Body>
+                                You can cancel/ reschedule / reject a request
+                                only 20 minuites before the scheduled time
+                              </Message.Body>
+                            </Message>
+                          ) : (
+                            <></>)}
 
-
-
-              {serviceReqDetails.state === 'Completed' && myDetails.id === provider_id && status!=='Reviewed' && serviceReqDetails.state!=='Reviewed'? (
-                    <>
-                      <FormContainer>
-                    <div tw="mx-auto max-w-4xl">
-                      <h2>Add Review about your customer</h2>
-                     <Form
-                      onSubmit={event => {
-                        event.preventDefault();
-                        console.log(values);
-                        customerfeedbackServiceRequest({
-                          variables: {
-                            customerfeedbackServiceRequestId: id,
-                            customerfeedbackServiceRequestCustomerRating:
-                              rating,
-                              customerfeedbackServiceRequestCustomerReview:
-                              values.customerfeedbackServiceRequestRequestReview
-                          }
-                        });
-                      }}
-                    >
-                    <Columns>
-                    <h5>How much do you rate your customer?  - {rating}/5</h5>
-                    </Columns>
-                      <ReactStars
-                        count={5}
-                        onChange={ratingChanged}
-                        size={24}
-                        activeColor="#ffd700"
-                        id="star"
-                      />
-                      
-                      
-                     
-                      <InputContainer tw="flex-1">
-                      <Label htmlFor="review-input">Share your experience </Label>
-                      <TextArea
-                        id="review-input"
-                        name={'customerfeedbackServiceRequestRequestReview'}
-                        placeholder="Add your Review Here!"
-                        onChange={handleChange}
-                        required
-                      />
-                    </InputContainer>
-                    <SubmitButton type="submit" value="Submit">
-                        Submit Review
-                      </SubmitButton>
-                      </Form>
-                      </div>
-                      </FormContainer>
-                    </>
-                  ) : (
-                    <>
-                    {status==='Reviewed'?(
-                      <Message color={'success'}>
-                      <Message.Body>
-                        Thank you for your feedback!
-                      </Message.Body>
-                    </Message>
-                    
-                    ) :(
-                      <>
-                    {status!=='Completed' &&  status!=='Started' && status!=='Reviewed' && serviceReqDetails.state!=='Reviewed' && myDetails.id === provider_id?(
-                      <Message color={'warning'}>
-                        <Message.Body>
-                          You can cancel/ reschedule / reject a request only 20
-                          minuites before the scheduled time
-                        </Message.Body>
-                      </Message>
-                    ):(<>{
-                      serviceReqDetails.state==='Reviewed'&& myDetails.id === provider_id?(<>
-                        <TestimonialContainer >
-                          <Testimonial>
-                            <Image src={''} />
-                            <Quote>"{serviceReqDetails.requestReview}"</Quote>
-                            <ReactStars 
-                            count={5}
-                            onChange={ratingChanged}
-                            size={24}
-                            activeColor="#ffd700"
-                            id="star"
-                            value={serviceReqDetails.requestRating}
-                            edit={false}/>
-                            <CustomerName>- CUSTOMER FEEDBACK</CustomerName>
-                          </Testimonial>
-                        </TestimonialContainer>
-                        </>):(<></>)}
-                    </>)
-                    }
-                    </>)
-                    }
-                    </>
-                  )}
-                
-                  
-                  
-                  
                 </Content>
               </Section>
             </Container>
@@ -894,16 +1159,22 @@ const ViewServiceRequestPage = () => {
                     >
                       Reject
                     </Button>
-                    <Button
-                      rounded
-                      className="button is-success is-medium mx-4 my-2 px-6"
-                      onClick={completeRequest}
-                      disabled={
-                        serviceReqDetails.state!=='Started'
-                      }
-                    >
-                      Mark Completed
-                    </Button>
+                    <Actions>
+                      <input
+                        type="text"
+                        placeholder="Enter final service charge"
+                        name={'completeServiceRequestFinalAmount'}
+                        onChange={handleChange}
+                      />
+                      <Button
+                        rounded
+                        className="button is-success is-medium mx-4 my-2 px-6"
+                        onClick={completeRequest}
+                        disabled={serviceReqDetails.state !== 'Started'}
+                      >
+                        Completed
+                      </Button>
+                    </Actions>
                   </>
                 )}
 
@@ -913,7 +1184,12 @@ const ViewServiceRequestPage = () => {
                     <Form
                       onSubmit={event => {
                         event.preventDefault();
-                        console.log(values);
+                        const currTime = new Date()
+                        const givenTime = new Date(values.rescheduleServiceRequestDate+"T"+values.rescheduleServiceRequestTime)
+                        if(currTime>givenTime){
+                          addToast("Invalid Time",{appearance:"error"})
+                          return
+                        }
                         rescheduleServiceRequest({
                           variables: {
                             rescheduleServiceRequestId: id,
@@ -923,6 +1199,7 @@ const ViewServiceRequestPage = () => {
                               values.rescheduleServiceRequestTime
                           }
                         });
+                        refetch();
                       }}
                     >
                       <InputContainer>
@@ -934,6 +1211,7 @@ const ViewServiceRequestPage = () => {
                           placeholder="E.g. john@mail.com"
                           onChange={handleChange}
                           required
+                          min={todayMin}
                         />
                       </InputContainer>
 
@@ -1052,15 +1330,10 @@ const ViewServiceRequestPage = () => {
                           variables: {
                             editServiceRequestId: id,
                             editServiceRequestTask:
-                              values.editServiceRequestTask,
-                            editServiceRequestImage1:
-                              values.editServiceRequestImage1,
-                            editServiceRequestImage2:
-                              values.editServiceRequestImage2,
-                            editServiceRequestImage3:
-                              values.editServiceRequestImage3
+                              values.editServiceRequestTask
                           }
                         });
+                        refetch();
                       }}
                     >
                       <InputContainer tw="flex-1">
@@ -1071,29 +1344,7 @@ const ViewServiceRequestPage = () => {
                           placeholder="E.g. Details about the service request"
                           onChange={handleChange}
                           required
-                        />
-                      </InputContainer>
-                      <InputContainer tw="flex-1">
-                        <Label htmlFor="name-input">
-                          Three Images of the issue you are facing (Optional)
-                        </Label>
-                        <input
-                          type="file"
-                          name={'editServiceRequestImage1'}
-                          accept="image/*"
-                          onChange={handleChange}
-                        />
-                        <input
-                          type="file"
-                          name={'editServiceRequestImage2'}
-                          accept="image/*"
-                          onChange={handleChange}
-                        />
-                        <input
-                          type="file"
-                          name={'editServiceRequestImage3'}
-                          accept="image/*"
-                          onChange={handleChange}
+                          
                         />
                       </InputContainer>
 

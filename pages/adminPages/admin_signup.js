@@ -11,11 +11,13 @@ const SIGNUP_ADMIN = gql`
     $adminSignUpUsername: String!
     $adminSignUpEmail: String!
     $adminSignUpPassword: String!
+    $adminSignUpSecurityKey: String!
   ) {
     adminSignUp(
       username: $adminSignUpUsername
       email: $adminSignUpEmail
       password: $adminSignUpPassword
+      securityKey: $adminSignUpSecurityKey
     )
   }
 `;
@@ -46,17 +48,6 @@ function Copyright() {
 const H1 = styled.h1`
   font-weight: bold;
   margin: 0;
-`;
-
-const Body = styled.div`
-  background: #f6f5f7;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  font-family: 'Montserrat', sans-serif;
-  height: 100vh;
-  margin: -20px 0 50px;
 `;
 
 const P = styled.p`
@@ -140,12 +131,16 @@ const AdminSignUp = props => {
   };
 
   const client = useApolloClient();
+
   const [adminSignUp, { loading, error }] = useMutation(SIGNUP_ADMIN, {
     onCompleted: data => {
       console.log(data.adminSignUp);
       localStorage.setItem('token', data.adminSignUp);
       client.writeData({ data: { isLoggedIn: true } });
       props.history.push('/adminHome');
+    },
+    onError: error => {
+      addToast(error.message.substring(15), { appearance: 'error' });
     }
   });
 
@@ -162,13 +157,20 @@ const AdminSignUp = props => {
   });
 
   return (
-    <Body>
+    <body className="adminSignupBody">
       <div className="admincontainer" id="admincontainer">
         <div className="adminform-admincontainer adminsign-up-admincontainer">
           <Form
             onSubmit={event => {
               event.preventDefault();
-              console.log(values);
+              if(values.adminSignUpPassword !== values.adminSignInConfirmPassword){
+                addToast("Passwords didn't match",{appearance:"error"})
+                return
+              }
+              if(values.adminSignUpPassword.length < 8){
+                addToast("Password is weak",{appearance:"error"})
+                return
+              }
               adminSignUp({
                 variables: {
                   ...values
@@ -181,7 +183,7 @@ const AdminSignUp = props => {
             <Input
               type="text"
               name={'adminSignUpUsername'}
-              placeholder="User Name"
+              placeholder="Full Name"
               onChange={handleChange}
             />
             <Input
@@ -196,7 +198,21 @@ const AdminSignUp = props => {
               placeholder="Password"
               onChange={handleChange}
             />
-            <Button type="submit">Sign Up</Button>
+            <Input
+              type="password"
+              name={'adminSignInConfirmPassword'}
+              placeholder="Confirm Password"
+              onChange={handleChange}
+            />
+            <Input
+              type="password"
+              name={'adminSignUpSecurityKey'}
+              placeholder="Security Key"
+              onChange={handleChange}
+            />
+            <Button type="submit" data-testid="signUpBtn">
+              Sign Up
+            </Button>
           </Form>
         </div>
         <div className="adminform-admincontainer adminsign-in-admincontainer">
@@ -225,8 +241,11 @@ const AdminSignUp = props => {
               placeholder="Password"
               onChange={handleChange}
             />
-            <A href="#">Forgot your password?</A>
-            <Button type="submit">Sign In</Button>
+
+            {/*<A href="#">Forgot your password?</A>*/}
+            <Button type="submit" data-testid="signInBtn">
+              Sign In
+            </Button>
           </Form>
         </div>
         <div className="adminoverlay-admincontainer">
@@ -253,6 +272,7 @@ const AdminSignUp = props => {
               <P>Enter your details and start working</P>
               <ButtonGhost
                 id="signUp"
+                data-testid="signUpBtnGhost"
                 onClick={() => {
                   const admincontainer = document.getElementById(
                     'admincontainer'
@@ -267,7 +287,7 @@ const AdminSignUp = props => {
         </div>
       </div>
       <Copyright />
-    </Body>
+    </body>
   );
 };
 

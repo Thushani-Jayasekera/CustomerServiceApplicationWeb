@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Container, Content, Section } from "react-bulma-components";
+import { Button, Container, Content, Message, Section } from "react-bulma-components";
 import { useQuery } from "@apollo/client";
 import { GET_MY_JOB_POSTINGS } from "../gql/query";
 import Loader from "../components/utils/Loader";
@@ -36,10 +36,18 @@ const MyJobPostingsPage = ()=>{
                   <Button onClick={switchState("open")}>Open Jobs</Button>
                   <Button onClick={switchState("bid_selected")} >Bid selected Jobs</Button>
                   <Button onClick={switchState("closed")}>Closed Jobs</Button>
+                  <Button onClick={switchState("completed")}>Completed</Button>
                 </Button.Group>
               </Container>
             </Section>
           </Content>
+          {(myJobPostingQuery.data.getMyJobPostings.length === 0)&&(
+            <Message color={"danger"}>
+              <Message.Body>
+                No jobs found
+              </Message.Body>
+            </Message>)
+          }
               {myJobPostingQuery.data.getMyJobPostings.map((obj,key)=>{
                 return <LongPanel key={key} link={`/myJobPostings/${obj.id}`} main_text={obj.heading} lower_left_main={obj.category} lower_right={
                   `LKR ${obj.budgetRange.lowerLimit} - LKR ${obj.budgetRange.upperLimit}`
